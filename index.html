@@ -140,12 +140,12 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">2</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">4</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -202,8 +202,202 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/19/ENGLISH/">
+    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="Songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
 
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">强化学习</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <i class="fa fa-thumb-tack"></i>
+            <font color=green>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-21 12:13:19 / 修改时间：14:50:13" itemprop="dateCreated datePublished" datetime="2020-11-21T12:13:19+08:00">2020-11-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>强化学习的基本要素，我们对其分别进行定义：</p>
+<ul>
+<li>智能体（Agent）：可以采取行动的智能个体；例如，可以完成投递的无人机，或者在视频游戏中朝目标行动的超级马里奥。强化学习算法就是一个智能体。</li>
+<li>行动（Action）：在电子游戏中，行动可能包括向右奔跑或者向左奔跑，向高出处跳或者向低处跳，下蹲或者站住不动。在股市中，行动可能包括买入，卖出或者持有任何有价证券或者它们的变体。在处理空中飞行的无人机时，行动可能包括三维空间中的很多速度和加速度。</li>
+<li>环境（Environment）：指的就是智能体行走于其中的世界。这个环境将智能体当前的状态和行动作为输入，输出是智能体的奖励和下一步的状态。</li>
+<li>状态（State，S）：一个状态就是智能体所处的具体即时状态；也就是说，一个具体的地方和时刻，这是一个具体的即时配置。</li>
+<li>奖励（Reward，R）：奖励是我们衡量某个智能体的行动成败的反馈。例如，在视频游戏中，当马里奥碰到金币的时候，它就会赢得分数。面对任何既定的状态，智能体要以行动的形式向环境输出，然后环境会返回这个智能体的一个新状态和奖励。它们可以有效地评估该智能体的行动。</li>
+</ul>
+<p>所以，环境就是能够将当前状态下采取的动作转换成下一个状态和奖励的函数；环境是一个我们只能看到输入输出的黑盒子。智能体是将新的状态和奖励转换成下一个行动的函数。我们可以知悉智能体的函数，但是我们无法知悉环境的函数。强化学习相当于智能体在尝试逼近这个环境的函数，这样我们就能够向黑盒子环境发送最大化奖励的行动了。</p>
+
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/21/%E8%BE%B9%E6%A1%86/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="Songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/21/%E8%BE%B9%E6%A1%86/" class="post-title-link" itemprop="url">边框</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-21 13:42:11 / 修改时间：14:45:27" itemprop="dateCreated datePublished" datetime="2020-11-21T13:42:11+08:00">2020-11-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/11/21/%E8%BE%B9%E6%A1%86/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/21/%E8%BE%B9%E6%A1%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>边框样式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/11/21/%E8%BE%B9%E6%A1%86/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/19/ENGLISH/">
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/face.jpg">
       <meta itemprop="name" content="Songsong">
@@ -220,6 +414,8 @@
         </h2>
 
         <div class="post-meta">
+
+          
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
@@ -286,6 +482,7 @@
       <footer class="post-footer">
         <div class="post-eof"></div>
       </footer>
+
   </article>
   
   
@@ -296,7 +493,6 @@
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/18/hello-world/">
-
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/face.jpg">
       <meta itemprop="name" content="Songsong">
@@ -313,6 +509,8 @@
         </h2>
 
         <div class="post-meta">
+
+          
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
@@ -385,6 +583,7 @@
       <footer class="post-footer">
         <div class="post-eof"></div>
       </footer>
+
   </article>
   
   
@@ -458,14 +657,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -515,7 +714,7 @@
     </main>
 
     <footer class="footer">
-      <div class="footer-inner">
+      <div class="" style="text-align:center;">
         
 
         
@@ -603,9 +802,9 @@
 
 
 
-  
+      
 
-  
+      
 
 
 <script>
