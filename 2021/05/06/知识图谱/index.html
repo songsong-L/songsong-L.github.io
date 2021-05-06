@@ -22,30 +22,58 @@
     var CONFIG = {"hostname":"songsong-l.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="我就是我，不一样的烟火">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Songsong的垃圾堆">
-<meta property="og:url" content="http://songsong-l.github.io/index.html">
+  <meta name="description" content="如何从零开始搭建知识图谱？发布时间: 18-07-0223:43 \1. 概论 随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识图谱">
+<meta property="og:url" content="http://songsong-l.github.io/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/index.html">
 <meta property="og:site_name" content="Songsong的垃圾堆">
-<meta property="og:description" content="我就是我，不一样的烟火">
+<meta property="og:description" content="如何从零开始搭建知识图谱？发布时间: 18-07-0223:43 \1. 概论 随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3">
+<meta property="og:image" content="http://t10.baidu.com/it/u=3524701362,4051137342&fm=173&app=25&f=JPEG?w=640&h=331&s=05B0EC32552245090070A459020040F3">
+<meta property="og:image" content="http://t10.baidu.com/it/u=3848596317,2706783691&fm=173&app=25&f=JPEG?w=640&h=275&s=CC90E81A9FE144824AE598C2020070B3">
+<meta property="og:image" content="http://t11.baidu.com/it/u=2261386009,2555456406&fm=173&app=25&f=JPEG?w=640&h=262&s=0C40FC128BF074821CE900DA0200D0B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=2616873605,1175169232&fm=173&app=25&f=JPEG?w=640&h=233&s=CC90E81ADFD548C20070F0CA010010B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=712907711,4221552733&fm=173&app=25&f=JPEG?w=639&h=242&s=0AAE7C2287846D435ADD35CA0000C0B1">
+<meta property="og:image" content="http://t11.baidu.com/it/u=626952808,2562026971&fm=173&app=25&f=JPEG?w=639&h=227&s=0470E432BDB04C035450E4D8000060B3">
+<meta property="og:image" content="http://t11.baidu.com/it/u=1461973663,1466794736&fm=173&app=25&f=JPEG?w=639&h=184&s=6AAE3C624B6249321EFDB4CA000080B1">
+<meta property="og:image" content="http://t10.baidu.com/it/u=4101688044,1856892679&fm=173&app=25&f=JPEG?w=640&h=289&s=C006DC1A85C46D43095554CA020050B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=1965742121,2969045495&fm=173&app=25&f=JPEG?w=639&h=219&s=0AAA7E228B8049431A7DB4CA0000E0B1">
+<meta property="og:image" content="http://t10.baidu.com/it/u=2903476509,3457739770&fm=173&app=25&f=JPEG?w=639&h=272&s=8DB0EC128F904CC054516C56020080F2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=33644744,766651579&fm=173&app=25&f=JPEG?w=640&h=250&s=4AAC3C628FD04CC25C7505DE000080B1">
+<meta property="og:image" content="http://t11.baidu.com/it/u=1843334557,961909614&fm=173&app=25&f=JPEG?w=640&h=272&s=25B2EC32CB604C0348C070D80000D0B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=2571953264,527713124&fm=173&app=25&f=JPEG?w=639&h=328&s=4D803C72137061824840F8C8020030F3">
+<meta property="og:image" content="http://t12.baidu.com/it/u=226327970,1562893738&fm=173&app=25&f=JPEG?w=640&h=318&s=CDA0AC520530F42949E80D52020040F2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=302720116,1354414349&fm=173&app=25&f=JPEG?w=640&h=322&s=69203C720F70448A506130D2000080B1">
+<meta property="og:image" content="http://t11.baidu.com/it/u=2086250224,504274614&fm=173&app=25&f=JPEG?w=640&h=355&s=A012EC325F0254C2566F58D80200D0B2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=1060578160,1139020907&fm=173&app=25&f=JPEG?w=639&h=364&s=2032EC325F0264C0446978DA020050B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=3828566894,715445935&fm=173&app=25&f=JPEG?w=640&h=325&s=05F2EC329B8340C208C13D52020080F2">
+<meta property="og:image" content="http://t10.baidu.com/it/u=480692214,290401441&fm=173&app=25&f=JPEG?w=640&h=327&s=61728472DF324580425830D90200C0B2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=3112136647,1918214170&fm=173&app=25&f=JPEG?w=640&h=392&s=A036EC328F026EC05CFCCDDA0200D0B3">
+<meta property="og:image" content="http://t12.baidu.com/it/u=621530735,2369132207&fm=173&app=25&f=JPEG?w=639&h=302&s=6172A47297F3658044C084CE000010B2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=2915145958,428470587&fm=173&app=25&f=JPEG?w=639&h=229&s=617284721134F6217FFE45D90200D0B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=819872987,394960907&fm=173&app=25&f=JPEG?w=640&h=278&s=1832EC12093153825FF4C54B0300F0B1">
+<meta property="article:published_time" content="2021-05-06T13:16:06.000Z">
+<meta property="article:modified_time" content="2021-05-06T13:16:50.435Z">
 <meta property="article:author" content="Songsong">
+<meta property="article:tag" content="学习">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3">
 
-<link rel="canonical" href="http://songsong-l.github.io/">
+<link rel="canonical" href="http://songsong-l.github.io/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Songsong的垃圾堆</title>
+  <title>知识图谱 | Songsong的垃圾堆</title>
   
 
 
@@ -196,9 +224,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -213,10 +242,9 @@
       <meta itemprop="name" content="Songsong的垃圾堆">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" class="post-title-link" itemprop="url">知识图谱</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          知识图谱
+        </h1>
 
         <div class="post-meta">
 
@@ -245,6 +273,13 @@
             </span>
 
           
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
   
   <span class="post-meta-item">
     
@@ -269,7 +304,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="如何从零开始搭建知识图谱？"><a href="#如何从零开始搭建知识图谱？" class="headerlink" title="如何从零开始搭建知识图谱？"></a>如何从零开始搭建知识图谱？</h2><p>发布时间: 18-07-0223:43</p>
+        <h2 id="如何从零开始搭建知识图谱？"><a href="#如何从零开始搭建知识图谱？" class="headerlink" title="如何从零开始搭建知识图谱？"></a>如何从零开始搭建知识图谱？</h2><p>发布时间: 18-07-0223:43</p>
 <p>\1. 概论</p>
 <p>随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场。</p>
 <p><img src="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3" alt="img"></p>
@@ -359,773 +394,55 @@
 <p>知识图谱领域一个最重要的话题是知识的推理。 而且知识的推理是走向强人工智能的必经之路。但很遗憾的，目前很多语义网络的角度讨论的推理技术（比如基于深度学习，概率统计）很难在实际的垂直应用中落地。其实目前最有效的方式还是基于一些规则的方法论，除非我们有非常庞大的数据集。</p>
 <p>最后，还是要强调一点，<strong>知识图谱工程本身还是业务为重心，以数据为中心。不要低估业务和数据的重要性。</strong></p>
 
-      
     </div>
 
     <div>
       
+        <div>
+    
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+    
+</div>
+      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
+          </div>
 
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">强化学习</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <i class="fa fa-thumb-tack"></i>
-            <font color=green>置顶</font>
-            <span class="post-meta-divider">|</span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-11-21 12:13:19 / 修改时间：14:50:13" itemprop="dateCreated datePublished" datetime="2020-11-21T12:13:19+08:00">2020-11-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>强化学习的基本要素，我们对其分别进行定义：</p>
-<ul>
-<li>智能体（Agent）：可以采取行动的智能个体；例如，可以完成投递的无人机，或者在视频游戏中朝目标行动的超级马里奥。强化学习算法就是一个智能体。</li>
-<li>行动（Action）：在电子游戏中，行动可能包括向右奔跑或者向左奔跑，向高出处跳或者向低处跳，下蹲或者站住不动。在股市中，行动可能包括买入，卖出或者持有任何有价证券或者它们的变体。在处理空中飞行的无人机时，行动可能包括三维空间中的很多速度和加速度。</li>
-<li>环境（Environment）：指的就是智能体行走于其中的世界。这个环境将智能体当前的状态和行动作为输入，输出是智能体的奖励和下一步的状态。</li>
-<li>状态（State，S）：一个状态就是智能体所处的具体即时状态；也就是说，一个具体的地方和时刻，这是一个具体的即时配置。</li>
-<li>奖励（Reward，R）：奖励是我们衡量某个智能体的行动成败的反馈。例如，在视频游戏中，当马里奥碰到金币的时候，它就会赢得分数。面对任何既定的状态，智能体要以行动的形式向环境输出，然后环境会返回这个智能体的一个新状态和奖励。它们可以有效地评估该智能体的行动。</li>
-</ul>
-<p>所以，环境就是能够将当前状态下采取的动作转换成下一个状态和奖励的函数；环境是一个我们只能看到输入输出的黑盒子。智能体是将新的状态和奖励转换成下一个行动的函数。我们可以知悉智能体的函数，但是我们无法知悉环境的函数。强化学习相当于智能体在尝试逼近这个环境的函数，这样我们就能够向黑盒子环境发送最大化奖励的行动了。</p>
-
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2021/04/21/%E9%9F%B3%E6%A0%87/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/%E9%9F%B3%E6%A0%87/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-21 12:56:24" itemprop="dateCreated datePublished" datetime="2021-04-21T12:56:24+08:00">2021-04-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-06 21:19:33" itemprop="dateModified" datetime="2021-05-06T21:19:33+08:00">2021-05-06</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/04/21/%E9%9F%B3%E6%A0%87/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/21/%E9%9F%B3%E6%A0%87/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>title: 知识图谱<br>categories: 英语<br>tags: 学习</p>
-<ul>
-<li><strong>/e/ 和 /æ/ ，</strong>两个音标在日常生活中常常容易搞错，关键的区别在于<strong>口型的大小</strong>。</li>
-</ul>
-<blockquote>
-<p>  <strong>/e/</strong>      <strong>/æ/</strong></p>
-<p>  b<strong>e</strong>d 床    b<strong>a</strong>d 坏的</p>
-<p>  r<strong>e</strong>d 红色   r<strong>a</strong>t 老鼠</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ə/</strong> 时，<strong>嘴巴放松</strong>，微微打开一点，比刚才的**/e/<strong>开口小。和拼音的</strong>e<strong>相比，发音更</strong>短促**，不能拖音。</li>
-</ul>
-<blockquote>
-<p>  <strong>/e/</strong>      <strong>/ə/</strong></p>
-<p> <strong>e</strong>ffort 努力    <strong>a</strong>fford 承担</p>
-<p> l<strong>e</strong>t 让     pil<strong>o</strong>t 飞行员</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ɜːr/</strong> 时，先发长元音**/ɜ:/<strong>，再快速过渡到</strong>卷舌音/r/**。</li>
-</ul>
-<blockquote>
-<p><strong>/ɜːr/</strong>      <strong>/e/</strong></p>
-<p>h<strong>ear</strong>d 听见    h<strong>ea</strong>d 头</p>
-<p>l<strong>ear</strong>n 学习    l<strong>e</strong>sson 课程</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ʌ/</strong> 时，不能把嘴张得太大，只要打开到**/ɑː/的一半大小<strong>就可以，发音要</strong>短促有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/ɑː/</strong>      <strong>/ʌ/</strong></p>
-<p>   b<strong>o</strong>dy 身体   b<strong>u</strong>ddy 伙伴</p>
-<p> l<strong>a</strong>tte 拿铁    l<strong>o</strong>ve 爱</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ʊ/</strong> 时，嘴唇不需要像**/uː/<strong>那样用力圈成小圆，只需要微微地让</strong>双唇往前突一下<strong>，发音要</strong>短促有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/u:/</strong>      <strong>/ʊ/</strong></p>
-<p>  f<strong>oo</strong>d 食物    g<strong>oo</strong>d 好的</p>
-<p>   p<strong>oo</strong>l 泳池    p<strong>u</strong>t 放下</p>
-</blockquote>
-<ul>
-<li>发 <strong>/i:/</strong> 时，<strong>拖长发音</strong>，同时<strong>把嘴角向两边拉</strong>。发 <strong>/ɪ/**时，</strong>微微打开一点<strong>嘴巴，舌尖向下</strong>抵在下齿<strong>那里发音，发音要</strong>短而有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/i:/</strong>      <strong>/ɪ/</strong></p>
-<p>  <strong>ea</strong>t 吃     <strong>i</strong>t 它</p>
-<p> l<strong>ea</strong>ve 离开    l<strong>i</strong>ve 居住</p>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2021/04/10/%E5%90%B4%E6%81%A9%E8%BE%BE/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/10/%E5%90%B4%E6%81%A9%E8%BE%BE/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-10 12:43:07" itemprop="dateCreated datePublished" datetime="2021-04-10T12:43:07+08:00">2021-04-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-13 15:10:46" itemprop="dateModified" datetime="2021-04-13T15:10:46+08:00">2021-04-13</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/04/10/%E5%90%B4%E6%81%A9%E8%BE%BE/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/10/%E5%90%B4%E6%81%A9%E8%BE%BE/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="What-you-need-to-remember"><a href="#What-you-need-to-remember" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>• <strong>np.exp(x)</strong> works for any np.array x and applies the exponential function<br>to every coordinate<br>• the <strong>sigmoid</strong> function and its gradient<br>• <strong>image2vector</strong> is commonly used in deep learning<br>• <strong>np.reshape</strong> is widely used. In the future, you’ll see that keeping your<br>matrix/vector dimensions straight will go toward eliminating a lot of<br>bugs.<br>• numpy has efficient built-in functions<br>• <strong>broadcasting</strong> is extremely useful</p>
-<h1 id="What-to-remember"><a href="#What-to-remember" class="headerlink" title="What to remember:"></a>What to remember:</h1><p>• <strong>Vectorization</strong> is very important in deep learning. It provides computa-<br>tional efficiency and clarity.<br>• You have reviewed the L1 and L2 <strong>loss</strong>.<br>• You are familiar with many numpy functions such as np.sum, np.dot,<br>np.multiply, np.maximum, etc…</p>
-<h1 id="What-you-need-to-remember-1"><a href="#What-you-need-to-remember-1" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>Common steps for <strong>pre-processing</strong> a new dataset are:<br>• Figure out the dimensions and shapes of the problem (m_train, m_test, num_px,<br>…)<br>• Reshape the datasets such that each example is now a vector of size (num_px *<br>num_px * 3, 1)<br>• <strong>Standardize</strong> the data</p>
-<h1 id="What-to-remember-You’ve-implemented-several-functions-that"><a href="#What-to-remember-You’ve-implemented-several-functions-that" class="headerlink" title="What to remember: You’ve implemented several functions that:"></a>What to remember: You’ve implemented several functions that:</h1><p>• <strong>Initialize</strong> (w,b)<br>• <strong>Optimize</strong> the loss iteratively to learn parameters (w,b):<br>– computing the cost and its <strong>gradient</strong><br>– <strong>updating</strong> the parameters using gradient descent<br>• Use the learned (w,b) to <strong>predict</strong> the labels for a given set of examples</p>
-<h1 id="What-to-remember-from-this-assignment"><a href="#What-to-remember-from-this-assignment" class="headerlink" title="What to remember from this assignment:"></a>What to remember from this assignment:</h1><ol>
-<li><strong>Preprocessing</strong> the dataset is important.</li>
-<li>You implemented each function separately: initialize(), propagate(), optimize().<br>Then you built a model().</li>
-<li>Tuning the learning rate (which is an example of a ”<strong>hyperparameter</strong>”) can make a<br>big difference to the algorithm</li>
-</ol>
-<h1 id="What-you-should-remember"><a href="#What-you-should-remember" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• The weights W<sup>[l]</sup> should be <strong>initialized</strong> randomly to break symmetry.<br>• It is however okay to initialize the biases b<sup>[l]</sup> to zeros. Symmetry is still<br>broken so long as W<sup>[l]</sup> is initialized randomly.</p>
-<p>• Initializing weights to very large random values does not work well.</p>
-<p>• Hopefully intializing with <strong>small random values</strong> does better. </p>
-<h1 id="What-you-should-remember-from-this-assignment"><a href="#What-you-should-remember-from-this-assignment" class="headerlink" title="What you should remember from this assignment:"></a>What you should remember from this assignment:</h1><p>• Different initializations lead to different results<br>• Random initialization is used to break symmetry and make sure different<br>hidden units can learn different things<br>• Don’t intialize to values that are too large<br>• He initialization works well for networks with ReLU activations.</p>
-<p><u><font color=red>Gradient Descent =&gt; Stochastic Gradient Descent (SGD) =&gt;mini-batch Gradient Descent</font></u></p>
-<p><font color=red><u>SGD is equivalent to mini-batch gradient descent where each mini-batch has just 1 example.</u></font></p>
-<h1 id="What-you-should-remember-1"><a href="#What-you-should-remember-1" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• The difference between <strong>gradient descent, mini-batch gradient descent and stochastic</strong><br><strong>gradient descent</strong> is the number of examples you use to perform one update step.<br>• You have to tune a learning rate <strong>hyperparameter</strong> α.<br>• With a well-turned mini-batch size, usually it outperforms either gradient descent<br>or stochastic gradient descent (particularly when the training set is large).</p>
-<h1 id="What-you-should-remember-2"><a href="#What-you-should-remember-2" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• Shuffling and Partitioning are the two steps required to build mini-batches<br>• Powers of two are often chosen to be the mini-batch size, e.g., 16, 32, 64, 128.</p>
-
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2021/01/02/tensorflow/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/02/tensorflow/" class="post-title-link" itemprop="url">tensorflow</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-01-02 22:02:19 / 修改时间：22:33:14" itemprop="dateCreated datePublished" datetime="2021-01-02T22:02:19+08:00">2021-01-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/01/02/tensorflow/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/02/tensorflow/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1-tf-clip-by-value"><a href="#1-tf-clip-by-value" class="headerlink" title="1.tf.clip_by_value"></a>1.tf.clip_by_value</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tf.clip_by_value(   </span><br><span class="line">    t,    </span><br><span class="line">    clip_value_min, </span><br><span class="line">    clip_value_max,   </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>Returns:<code>A clipped Tensor.</code></p>
-<p>输入一个张量t，把t中的每一个元素的值都压缩在clip_value_min和clip_value_max之间。小于min的让它等于min，大于max的元素的值等于max。</p>
-<h1 id="2-tf-clip-by-norm"><a href="#2-tf-clip-by-norm" class="headerlink" title="2.tf.clip_by_norm"></a>2.tf.clip_by_norm</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tf.clip_by_norm(  </span><br><span class="line">    t,    </span><br><span class="line">    clip_norm,    </span><br><span class="line">    axes=<span class="literal">None</span>,  </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>Returns:<code>A clipped Tensor.</code></p>
-<p>指对梯度进行裁剪，通过控制梯度的最大范式，防止梯度爆炸的问题，是一种比较常用的梯度规约的方式。</p>
-<ul>
-<li><p><strong>t</strong>: 输入tensor，也可以是list</p>
-</li>
-<li><p><strong>clip_norm</strong>: 一个具体的数，如果<br>$$<br>l_2norm(t)≤l_2norm(clipnorm)<br>$$<br> 则t不变化；否则<br>$$<br>t=\frac{t∗clipnorm}{l_2norm(t)}<br>$$</p>
-</li>
-</ul>
-<h1 id="3-minimize"><a href="#3-minimize" class="headerlink" title="3.minimize()"></a>3.minimize()</h1><p>  由源代码可以知道<code>minimize()</code>实际上包含了两个步骤，即</p>
-<p>  <code>compute_gradients</code>,用于计算梯度，</p>
-<p>  和</p>
-<p>  <code>apply_gradients</code>，用于使用计算得到的梯度来更新对应的variable。</p>
-<h1 id="4-EXAMPLE"><a href="#4-EXAMPLE" class="headerlink" title="4.EXAMPLE"></a>4.EXAMPLE</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">x = tf.Variable(initial_value=<span class="number">50.</span>, dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">w = tf.Variable(initial_value=<span class="number">10.</span>, dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">y = w*x</span><br><span class="line"></span><br><span class="line">opt = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)</span><br><span class="line">grads_vals = opt.compute_gradients(y, [w])</span><br><span class="line"></span><br><span class="line"><span class="comment">#list包括的是：梯度和更新变量的元组对</span></span><br><span class="line">capped_gvs = [(tf.clip_by_value(grad, <span class="number">2</span>, <span class="number">2</span>), var)</span><br><span class="line">             <span class="keyword">for</span> grad, var <span class="keyword">in</span> grads_vals]</span><br><span class="line"></span><br><span class="line"> <span class="comment">#执行对应变量的更新梯度操作</span></span><br><span class="line">training_op = opt.apply_gradients(capped_gvs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):  </span><br><span class="line">        print(sess.run(grads_vals))</span><br><span class="line">        print(sess.run(capped_gvs))</span><br><span class="line">        sess.run(training_op)</span><br><span class="line">        print(sess.run([x, w, y]))</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<blockquote>
-<p>[(50.0, 10.0)]<br>[(2.0, 10.0)]<br>[50.0, 9.0, 450.0]<br>[(50.0, 9.0)]<br>[(2.0, 9.0)]<br>[50.0, 8.0, 400.0]<br>[(50.0, 8.0)]<br>[(2.0, 8.0)]<br>[50.0, 7.0, 350.0]<br>[(50.0, 7.0)]<br>[(2.0, 7.0)]<br>[50.0, 6.0, 300.0]<br>[(50.0, 6.0)]<br>[(2.0, 6.0)]</p>
-<p>…</p>
-<p>…</p>
-</blockquote>
-
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/21/%E8%BE%B9%E6%A1%86/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/21/%E8%BE%B9%E6%A1%86/" class="post-title-link" itemprop="url">边框</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-11-21 13:42:11 / 修改时间：14:45:27" itemprop="dateCreated datePublished" datetime="2020-11-21T13:42:11+08:00">2020-11-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/11/21/%E8%BE%B9%E6%A1%86/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/21/%E8%BE%B9%E6%A1%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>边框样式。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/11/21/%E8%BE%B9%E6%A1%86/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    <div>
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/19/ENGLISH/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/19/ENGLISH/" class="post-title-link" itemprop="url">ENGLISH</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-11-19 17:55:10 / 修改时间：17:23:35" itemprop="dateCreated datePublished" datetime="2020-11-19T17:55:10+08:00">2020-11-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%8B%B1%E8%AF%AD/" itemprop="url" rel="index"><span itemprop="name">英语</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/11/19/ENGLISH/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/19/ENGLISH/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这是一些单词。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/11/19/ENGLISH/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/21/%E9%9F%B3%E6%A0%87/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
 
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong-l.github.io/2020/11/18/hello-world/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/18/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-11-18 22:55:10" itemprop="dateCreated datePublished" datetime="2020-11-18T22:55:10+08:00">2020-11-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-19 17:19:08" itemprop="dateModified" datetime="2020-11-19T17:19:08+08:00">2020-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">测试</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/11/18/hello-world/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/18/hello-world/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/11/18/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-
   
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -1172,6 +489,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">如何从零开始搭建知识图谱？</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
