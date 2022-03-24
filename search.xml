@@ -134,45 +134,6 @@
       </categories>
   </entry>
   <entry>
-    <title>边框</title>
-    <url>/2020/11/21/%E8%BE%B9%E6%A1%86/</url>
-    <content><![CDATA[  <p style=border-style:none>无边框</p>
-  <p style=border-style:dotted>点线式边框</p>
-  <p style=border-style:dashed>破折线式边框</p>
-  <p style=border-style:solid>直线式边框</p>
-  <p style=border-style:double>双线式边框</p>
-  <p style=border-style:groove>槽线式边框</p>
-  <p style=border-style:ridge>脊线式边框</p>
-  <p style=border-style:inset>内嵌效果的边框</p>
-  <p style=border-style:outset>突起效果的边框</p>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>强化学习</title>
-    <url>/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p>强化学习的基本要素，我们对其分别进行定义：</p>
-<ul>
-<li>智能体（Agent）：可以采取行动的智能个体；例如，可以完成投递的无人机，或者在视频游戏中朝目标行动的超级马里奥。强化学习算法就是一个智能体。<a id="more"></a></li>
-<li>行动（Action）：在电子游戏中，行动可能包括向右奔跑或者向左奔跑，向高出处跳或者向低处跳，下蹲或者站住不动。在股市中，行动可能包括买入，卖出或者持有任何有价证券或者它们的变体。在处理空中飞行的无人机时，行动可能包括三维空间中的很多速度和加速度。</li>
-<li>环境（Environment）：指的就是智能体行走于其中的世界。这个环境将智能体当前的状态和行动作为输入，输出是智能体的奖励和下一步的状态。</li>
-<li>状态（State，S）：一个状态就是智能体所处的具体即时状态；也就是说，一个具体的地方和时刻，这是一个具体的即时配置。</li>
-<li>奖励（Reward，R）：奖励是我们衡量某个智能体的行动成败的反馈。例如，在视频游戏中，当马里奥碰到金币的时候，它就会赢得分数。面对任何既定的状态，智能体要以行动的形式向环境输出，然后环境会返回这个智能体的一个新状态和奖励。它们可以有效地评估该智能体的行动。</li>
-</ul>
-<p>所以，环境就是能够将当前状态下采取的动作转换成下一个状态和奖励的函数；环境是一个我们只能看到输入输出的黑盒子。智能体是将新的状态和奖励转换成下一个行动的函数。我们可以知悉智能体的函数，但是我们无法知悉环境的函数。强化学习相当于智能体在尝试逼近这个环境的函数，这样我们就能够向黑盒子环境发送最大化奖励的行动了。</p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>tensorflow</title>
     <url>/2021/01/02/tensorflow/</url>
     <content><![CDATA[<h1 id="1-tf-clip-by-value"><a href="#1-tf-clip-by-value" class="headerlink" title="1.tf.clip_by_value"></a>1.tf.clip_by_value</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.clip_by_value(   </span><br><span class="line">    t,    </span><br><span class="line">    clip_value_min, </span><br><span class="line">    clip_value_max,   </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
@@ -212,7 +173,9 @@
   <entry>
     <title>吴恩达神经网络</title>
     <url>/2021/06/06/%E5%90%B4%E6%81%A9%E8%BE%BE/</url>
-    <content><![CDATA[<h1 id="What-you-need-to-remember"><a href="#What-you-need-to-remember" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>• <strong>np.exp(x)</strong> works for any np.array x and applies the exponential function<br>to every coordinate<br>• the <strong>sigmoid</strong> function and its gradient<br>• <strong>image2vector</strong> is commonly used in deep learning<br>• <strong>np.reshape</strong> is widely used. In the future, you’ll see that keeping your<br>matrix/vector dimensions straight will go toward eliminating a lot of<br>bugs.<br>• numpy has efficient built-in functions<br>• <strong>broadcasting</strong> is extremely useful</p>
+    <content><![CDATA[<h1 id="What-you-need-to-remember"><a href="#What-you-need-to-remember" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>• <strong>np.exp(x)</strong> works for any np.array x and applies the exponential function<br>to every coordinate<br>• the <strong>sigmoid</strong> function and its gradient</p>
+<a id="more"></a>
+<p>• <strong>image2vector</strong> is commonly used in deep learning<br>• <strong>np.reshape</strong> is widely used. In the future, you’ll see that keeping your<br>matrix/vector dimensions straight will go toward eliminating a lot of<br>bugs.<br>• numpy has efficient built-in functions<br>• <strong>broadcasting</strong> is extremely useful</p>
 <h1 id="What-to-remember"><a href="#What-to-remember" class="headerlink" title="What to remember:"></a>What to remember:</h1><p>• <strong>Vectorization</strong> is very important in deep learning. It provides computa-<br>tional efficiency and clarity.<br>• You have reviewed the L1 and L2 <strong>loss</strong>.<br>• You are familiar with many numpy functions such as np.sum, np.dot,<br>np.multiply, np.maximum, etc…</p>
 <h1 id="What-you-need-to-remember-1"><a href="#What-you-need-to-remember-1" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>Common steps for <strong>pre-processing</strong> a new dataset are:<br>• Figure out the dimensions and shapes of the problem (m_train, m_test, num_px,<br>…)<br>• Reshape the datasets such that each example is now a vector of size (num_px *<br>num_px * 3, 1)<br>• <strong>Standardize</strong> the data</p>
 <h1 id="What-to-remember-You’ve-implemented-several-functions-that"><a href="#What-to-remember-You’ve-implemented-several-functions-that" class="headerlink" title="What to remember: You’ve implemented several functions that:"></a>What to remember: You’ve implemented several functions that:</h1><p>• <strong>Initialize</strong> (w,b)<br>• <strong>Optimize</strong> the loss iteratively to learn parameters (w,b):<br>– computing the cost and its <strong>gradient</strong><br>– <strong>updating</strong> the parameters using gradient descent<br>• Use the learned (w,b) to <strong>predict</strong> the labels for a given set of examples</p>
@@ -238,62 +201,39 @@
       </tags>
   </entry>
   <entry>
-    <title>发音</title>
-    <url>/2021/06/06/%E9%9F%B3%E6%A0%87/</url>
-    <content><![CDATA[<ul>
-<li><strong>/e/ 和 /æ/ ，</strong>两个音标在日常生活中常常容易搞错，关键的区别在于<strong>口型的大小</strong>。</li>
-</ul>
-<blockquote>
-<p>  <strong>/e/</strong>      <strong>/æ/</strong></p>
-<p>  b<strong>e</strong>d 床    b<strong>a</strong>d 坏的</p>
-<p>  r<strong>e</strong>d 红色   r<strong>a</strong>t 老鼠</p>
-</blockquote>
+    <title>强化学习</title>
+    <url>/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p>强化学习的基本要素，我们对其分别进行定义：</p>
 <ul>
-<li>发 <strong>/ə/</strong> 时，<strong>嘴巴放松</strong>，微微打开一点，比刚才的**/e/<strong>开口小。和拼音的</strong>e<strong>相比，发音更</strong>短促**，不能拖音。</li>
+<li>智能体（Agent）：可以采取行动的智能个体；例如，可以完成投递的无人机，或者在视频游戏中朝目标行动的超级马里奥。强化学习算法就是一个智能体。<a id="more"></a></li>
+<li>行动（Action）：在电子游戏中，行动可能包括向右奔跑或者向左奔跑，向高出处跳或者向低处跳，下蹲或者站住不动。在股市中，行动可能包括买入，卖出或者持有任何有价证券或者它们的变体。在处理空中飞行的无人机时，行动可能包括三维空间中的很多速度和加速度。</li>
+<li>环境（Environment）：指的就是智能体行走于其中的世界。这个环境将智能体当前的状态和行动作为输入，输出是智能体的奖励和下一步的状态。</li>
+<li>状态（State，S）：一个状态就是智能体所处的具体即时状态；也就是说，一个具体的地方和时刻，这是一个具体的即时配置。</li>
+<li>奖励（Reward，R）：奖励是我们衡量某个智能体的行动成败的反馈。例如，在视频游戏中，当马里奥碰到金币的时候，它就会赢得分数。面对任何既定的状态，智能体要以行动的形式向环境输出，然后环境会返回这个智能体的一个新状态和奖励。它们可以有效地评估该智能体的行动。</li>
 </ul>
-<blockquote>
-<p>  <strong>/e/</strong>      <strong>/ə/</strong></p>
-<p> <strong>e</strong>ffort 努力    <strong>a</strong>fford 承担</p>
-<p> l<strong>e</strong>t 让     pil<strong>o</strong>t 飞行员</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ɜːr/</strong> 时，先发长元音**/ɜ:/<strong>，再快速过渡到</strong>卷舌音/r/**。</li>
-</ul>
-<blockquote>
-<p><strong>/ɜːr/</strong>      <strong>/e/</strong></p>
-<p>h<strong>ear</strong>d 听见    h<strong>ea</strong>d 头</p>
-<p>l<strong>ear</strong>n 学习    l<strong>e</strong>sson 课程</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ʌ/</strong> 时，不能把嘴张得太大，只要打开到**/ɑː/的一半大小<strong>就可以，发音要</strong>短促有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/ɑː/</strong>      <strong>/ʌ/</strong></p>
-<p>   b<strong>o</strong>dy 身体   b<strong>u</strong>ddy 伙伴</p>
-<p> l<strong>a</strong>tte 拿铁    l<strong>o</strong>ve 爱</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ʊ/</strong> 时，嘴唇不需要像**/uː/<strong>那样用力圈成小圆，只需要微微地让</strong>双唇往前突一下<strong>，发音要</strong>短促有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/u:/</strong>      <strong>/ʊ/</strong></p>
-<p>  f<strong>oo</strong>d 食物    g<strong>oo</strong>d 好的</p>
-<p>   p<strong>oo</strong>l 泳池    p<strong>u</strong>t 放下</p>
-</blockquote>
-<ul>
-<li>发 <strong>/i:/</strong> 时，<strong>拖长发音</strong>，同时<strong>把嘴角向两边拉</strong>。发 <strong>/ɪ/**时，</strong>微微打开一点<strong>嘴巴，舌尖向下</strong>抵在下齿<strong>那里发音，发音要</strong>短而有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/i:/</strong>      <strong>/ɪ/</strong></p>
-<p>  <strong>ea</strong>t 吃     <strong>i</strong>t 它</p>
-<p> l<strong>ea</strong>ve 离开    l<strong>i</strong>ve 居住</p>
-</blockquote>
-<ul>
-<li></li>
-</ul>
+<p>所以，环境就是能够将当前状态下采取的动作转换成下一个状态和奖励的函数；环境是一个我们只能看到输入输出的黑盒子。智能体是将新的状态和奖励转换成下一个行动的函数。我们可以知悉智能体的函数，但是我们无法知悉环境的函数。强化学习相当于智能体在尝试逼近这个环境的函数，这样我们就能够向黑盒子环境发送最大化奖励的行动了。</p>
 ]]></content>
       <categories>
-        <category>英语</category>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>边框</title>
+    <url>/2020/11/21/%E8%BE%B9%E6%A1%86/</url>
+    <content><![CDATA[  <p style=border-style:none>无边框</p>
+  <p style=border-style:dotted>点线式边框</p>
+  <p style=border-style:dashed>破折线式边框</p>
+  <p style=border-style:solid>直线式边框</p>
+  <p style=border-style:double>双线式边框</p>
+  <p style=border-style:groove>槽线式边框</p>
+  <p style=border-style:ridge>脊线式边框</p>
+  <p style=border-style:inset>内嵌效果的边框</p>
+  <p style=border-style:outset>突起效果的边框</p>]]></content>
+      <categories>
+        <category>前端</category>
       </categories>
       <tags>
         <tag>学习</tag>
@@ -305,8 +245,8 @@
     <content><![CDATA[<h2 id="如何从零开始搭建知识图谱？"><a href="#如何从零开始搭建知识图谱？" class="headerlink" title="如何从零开始搭建知识图谱？"></a>如何从零开始搭建知识图谱？</h2><p>发布时间: 18-07-0223:43</p>
 <p>\1. 概论</p>
 <p>随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场。</p>
-<p><img src="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3" alt="img"></p>
 <a id="more"></a>
+<p><img src="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3" alt="img"></p>
 <p>\2. 知识抽取</p>
 <p>知识图谱的构建是后续应用的基础，而且构建的前提是需要把数据从不同的数据源中抽取出来。对于垂直领域的知识图谱来说，<strong>它们的数据源主要来自两种渠道：一种是业务本身的数据，这部分数据通常包含在公司内的数据库表并以结构化的方式存储；另一种是网络上公开、抓取的数据，这些数据通常是以网页的形式存在所以是非结构化的数据。</strong></p>
 <p>前者一般只需要简单预处理即可以作为后续 AI 系统的输入，但后者一般需要借助于自然语言处理等技术来提取出结构化信息。比如在上面的搜索例子里，Bill Gates 和 Malinda Gate 的关系就可以从非结构化数据中提炼出来，比如维基百科等数据源。</p>
@@ -395,6 +335,70 @@
 ]]></content>
       <categories>
         <category>AI</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>发音</title>
+    <url>/2021/06/06/%E9%9F%B3%E6%A0%87/</url>
+    <content><![CDATA[<ul>
+<li><strong>/e/ 和 /æ/ ，</strong>两个音标在日常生活中常常容易搞错，关键的区别在于<strong>口型的大小</strong>。</li>
+</ul>
+<blockquote>
+<p>  <strong>/e/</strong>      <strong>/æ/</strong></p>
+<p>  b<strong>e</strong>d 床    b<strong>a</strong>d 坏的</p>
+<p>  r<strong>e</strong>d 红色   r<strong>a</strong>t 老鼠</p>
+</blockquote>
+<a id="more"></a>
+
+<ul>
+<li>发 <strong>/ə/</strong> 时，<strong>嘴巴放松</strong>，微微打开一点，比刚才的**/e/<strong>开口小。和拼音的</strong>e<strong>相比，发音更</strong>短促**，不能拖音。</li>
+</ul>
+<blockquote>
+<p>  <strong>/e/</strong>      <strong>/ə/</strong></p>
+<p> <strong>e</strong>ffort 努力    <strong>a</strong>fford 承担</p>
+<p> l<strong>e</strong>t 让     pil<strong>o</strong>t 飞行员</p>
+</blockquote>
+<ul>
+<li>发 <strong>/ɜːr/</strong> 时，先发长元音**/ɜ:/<strong>，再快速过渡到</strong>卷舌音/r/**。</li>
+</ul>
+<blockquote>
+<p><strong>/ɜːr/</strong>      <strong>/e/</strong></p>
+<p>h<strong>ear</strong>d 听见    h<strong>ea</strong>d 头</p>
+<p>l<strong>ear</strong>n 学习    l<strong>e</strong>sson 课程</p>
+</blockquote>
+<ul>
+<li>发 <strong>/ʌ/</strong> 时，不能把嘴张得太大，只要打开到**/ɑː/的一半大小<strong>就可以，发音要</strong>短促有力**。</li>
+</ul>
+<blockquote>
+<p>  <strong>/ɑː/</strong>      <strong>/ʌ/</strong></p>
+<p>   b<strong>o</strong>dy 身体   b<strong>u</strong>ddy 伙伴</p>
+<p> l<strong>a</strong>tte 拿铁    l<strong>o</strong>ve 爱</p>
+</blockquote>
+<ul>
+<li>发 <strong>/ʊ/</strong> 时，嘴唇不需要像**/uː/<strong>那样用力圈成小圆，只需要微微地让</strong>双唇往前突一下<strong>，发音要</strong>短促有力**。</li>
+</ul>
+<blockquote>
+<p>  <strong>/u:/</strong>      <strong>/ʊ/</strong></p>
+<p>  f<strong>oo</strong>d 食物    g<strong>oo</strong>d 好的</p>
+<p>   p<strong>oo</strong>l 泳池    p<strong>u</strong>t 放下</p>
+</blockquote>
+<ul>
+<li>发 <strong>/i:/</strong> 时，<strong>拖长发音</strong>，同时<strong>把嘴角向两边拉</strong>。发 <strong>/ɪ/**时，</strong>微微打开一点<strong>嘴巴，舌尖向下</strong>抵在下齿<strong>那里发音，发音要</strong>短而有力**。</li>
+</ul>
+<blockquote>
+<p>  <strong>/i:/</strong>      <strong>/ɪ/</strong></p>
+<p>  <strong>ea</strong>t 吃     <strong>i</strong>t 它</p>
+<p> l<strong>ea</strong>ve 离开    l<strong>i</strong>ve 居住</p>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>英语</category>
       </categories>
       <tags>
         <tag>学习</tag>
