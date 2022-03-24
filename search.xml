@@ -1,6 +1,277 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>知识图谱</title>
+    <url>/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/</url>
+    <content><![CDATA[<h2 id="如何从零开始搭建知识图谱？"><a href="#如何从零开始搭建知识图谱？" class="headerlink" title="如何从零开始搭建知识图谱？"></a>如何从零开始搭建知识图谱？</h2><p>发布时间: 18-07-0223:43</p>
+<p>\1. 概论</p>
+<p>随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场。</p>
+<a id="more"></a>
+<p><img src="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3" alt="img"></p>
+<p>\2. 知识抽取</p>
+<p>知识图谱的构建是后续应用的基础，而且构建的前提是需要把数据从不同的数据源中抽取出来。对于垂直领域的知识图谱来说，<strong>它们的数据源主要来自两种渠道：一种是业务本身的数据，这部分数据通常包含在公司内的数据库表并以结构化的方式存储；另一种是网络上公开、抓取的数据，这些数据通常是以网页的形式存在所以是非结构化的数据。</strong></p>
+<p>前者一般只需要简单预处理即可以作为后续 AI 系统的输入，但后者一般需要借助于自然语言处理等技术来提取出结构化信息。比如在上面的搜索例子里，Bill Gates 和 Malinda Gate 的关系就可以从非结构化数据中提炼出来，比如维基百科等数据源。</p>
+<p><img src="http://t10.baidu.com/it/u=3524701362,4051137342&fm=173&app=25&f=JPEG?w=640&h=331&s=05B0EC32552245090070A459020040F3" alt="img"></p>
+<p>信息抽取的难点在于处理非结构化数据。在下面的图中，我们给出了一个实例。左边是一段非结构化的英文文本，右边是从这些文本中抽取出来的实体和关系。在构建类似的图谱过程当中，主要涉及以下几个方面的自然语言处理技术：</p>
+<p>a. 实体命名识别（Name Entity Recognition）b. 关系抽取（Relation Extraction）c. 实体统一（Entity Resolution）d. 指代消解（Coreference Resolution）</p>
+<p>下面针对每一项技术解决的问题做简单的描述，以至于这些是具体怎么实现的，不在这里一一展开。</p>
+<p><img src="http://t10.baidu.com/it/u=3848596317,2706783691&fm=173&app=25&f=JPEG?w=640&h=275&s=CC90E81A9FE144824AE598C2020070B3" alt="img"></p>
+<p>首先是实体命名识别，就是从文本里提取出实体并对每个实体做分类 / 打标签：比如从上述文本里，我们可以提取出实体 -“NYC”，并标记实体类型为 “Location”；我们也可以从中提取出“Virgil’s BBQ”，并标记实体类型为“Restarant”。这种过程称之为实体命名识别，这是一项相对比较成熟的技术，有一些现成的工具可以用来做这件事情。其次，我们可以通过关系抽取技术，把实体间的关系从文本中提取出来，比如实体“hotel”和“Hilton property”之间的关系为“in”；“hotel”和“Time Square”的关系为“near”等等。</p>
+<p><img src="http://t11.baidu.com/it/u=2261386009,2555456406&fm=173&app=25&f=JPEG?w=640&h=262&s=0C40FC128BF074821CE900DA0200D0B2" alt="img"></p>
+<p>另外，在实体命名识别和关系抽取过程中，有两个比较棘手的问题：一个是实体统一，也就是说有些实体写法上不一样，但其实是指向同一个实体。比如“NYC”和“New York”表面上是不同的字符串，但其实指的都是纽约这个城市，需要合并。实体统一不仅可以减少实体的种类，也可以降低图谱的稀疏性（Sparsity）；另一个问题是指代消解，也是文本中出现的“it”, “he”, “she”这些词到底指向哪个实体，比如在本文里两个被标记出来的“it”都指向“hotel”这个实体。</p>
+<p><img src="http://t12.baidu.com/it/u=2616873605,1175169232&fm=173&app=25&f=JPEG?w=640&h=233&s=CC90E81ADFD548C20070F0CA010010B2" alt="img"></p>
+<p>实体统一和指代消解问题相对于前两个问题更具有挑战性。</p>
+<p>\3. 知识图谱的存储</p>
+<p><strong>知识图谱主要有两种存储方式：一种是基于 RDF 的存储；另一种是基于图数据库的存储。</strong>它们之间的区别如下图所示。RDF 一个重要的设计原则是数据的易发布以及共享，图数据库则把重点放在了高效的图查询和搜索上。其次，RDF 以三元组的方式来存储数据而且不包含属性信息，但图数据库一般以属性图为基本的表示形式，所以实体和关系可以包含属性，这就意味着更容易表达现实的业务场景。</p>
+<p><img src="http://t12.baidu.com/it/u=712907711,4221552733&fm=173&app=25&f=JPEG?w=639&h=242&s=0AAE7C2287846D435ADD35CA0000C0B1" alt="img"></p>
+<p>根据最新的统计（2018 年上半年），图数据库仍然是增长最快的存储系统。相反，关系型数据库的增长基本保持在一个稳定的水平。同时，我们也列出了常用的图数据库系统以及他们最新使用情况的排名。 其中 Neo4j 系统目前仍是使用率最高的图数据库，它拥有活跃的社区，而且系统本身的查询效率高，但唯一的不足就是不支持准分布式。相反，OrientDB 和 JanusGraph（原 Titan）支持分布式，但这些系统相对较新，社区不如 Neo4j 活跃，这也就意味着使用过程当中不可避免地会遇到一些刺手的问题。如果选择使用 RDF 的存储系统，Jena 或许一个比较不错的选择。</p>
+<p><img src="http://t11.baidu.com/it/u=626952808,2562026971&fm=173&app=25&f=JPEG?w=639&h=227&s=0470E432BDB04C035450E4D8000060B3" alt="img"></p>
+<p>\4. 金融知识图谱的搭建</p>
+<p>接下来我们看一个实际的具体案例，讲解怎么一步步搭建可落地的金融风控领域的知识图谱系统。 首先需要说明的一点是，有可能不少人认为搭建一个知识图谱系统的重点在于算法和开发。但事实并不是想象中的那样，<strong>其实最重要的核心在于对业务的理解以及对知识图谱本身的设计</strong>，这就类似于对于一个业务系统，数据库表的设计尤其关键，而且这种设计绝对离不开对业务的深入理解以及对未来业务场景变化的预估。 当然，在这里我们先不讨论数据的重要性。</p>
+<p><img src="http://t11.baidu.com/it/u=1461973663,1466794736&fm=173&app=25&f=JPEG?w=639&h=184&s=6AAE3C624B6249321EFDB4CA000080B1" alt="img"></p>
+<p>一个完整的知识图谱的构建包含以下几个步骤：<strong>1. 定义具体的业务问题 2. 数据的收集 &amp; 预处理 3. 知识图谱的设计 4. 把数据存入知识图谱 5. 上层应用的开发，以及系统的评估。</strong>下面我们就按照这个流程来讲一下每个步骤所需要做的事情以及需要思考的问题。</p>
+<p>4.1 定义具体的业务问题</p>
+<p>在 P2P 网贷环境下，最核心的问题是风控，也就是怎么去评估一个借款人的风险。在线上的环境下，欺诈风险尤其为严重，而且很多这种风险隐藏在复杂的关系网络之中，而且知识图谱正好是为这类问题所设计的，所以我们“有可能”期待它能在欺诈，这个问题上带来一些价值。</p>
+<p><img src="http://t10.baidu.com/it/u=4101688044,1856892679&fm=173&app=25&f=JPEG?w=640&h=289&s=C006DC1A85C46D43095554CA020050B2" alt="img"></p>
+<p>在进入下一个话题的讨论之前，<strong>要明确的一点是，对于自身的业务问题到底需不需要知识图谱系统的支持。</strong>因为在很多的实际场景，即使对关系的分析有一定的需求，实际上也可以利用传统数据库来完成分析的。所以为了避免使用知识图谱而选择知识图谱，以及更好的技术选型，以下给出了几点总结，供参考。</p>
+<p><img src="http://t12.baidu.com/it/u=1965742121,2969045495&fm=173&app=25&f=JPEG?w=639&h=219&s=0AAA7E228B8049431A7DB4CA0000E0B1" alt="img"></p>
+<p>4.2 数据收集 &amp; 预处理</p>
+<p>下一步就是要确定数据源以及做必要的数据预处理。针对于数据源，我们需要考虑以下几点：1. 我们已经有哪些数据？ 2. 虽然现在没有，但有可能拿到哪些数据？ 3. 其中哪部分数据可以用来降低风险？ 4. 哪部分数据可以用来构建知识图谱？在这里需要说明的一点是，并不是所有跟反欺诈相关的数据都必须要进入知识图谱，对于这部分的一些决策原则在接下来的部分会有比较详细的介绍。</p>
+<p>对于反欺诈，有几个数据源是我们很容易想得到的，包括用户的基本信息、行为数据、运营商数据、网络上的公开信息等等。假设我们已经有了一个数据源的列表清单，则下一步就要看哪些数据需要进一步的处理，比如对于非结构化数据我们或多或少都需要用到跟自然语言处理相关的技术。 用户填写的基本信息基本上会存储在业务表里，除了个别字段需要进一步处理，很多字段则直接可以用于建模或者添加到知识图谱系统里。对于行为数据来说，我们则需要通过一些简单的处理，并从中提取有效的信息比如“用户在某个页面停留时长”等等。 对于网络上公开的网页数据，则需要一些信息抽取相关的技术。</p>
+<p>举个例子，对于用户的基本信息，我们很可能需要如下的操作。一方面，用户信息比如姓名、年龄、学历等字段可以直接从结构化数据库中提取并使用。但另一方面，对于填写的公司名来说，我们有可能需要做进一步的处理。比如部分用户填写“北京贪心科技有限公司”，另外一部分用户填写“北京望京贪心科技有限公司”，其实指向的都是同一家公司。所以，这时候我们需要做公司名的对齐，用到的技术细节可以参考前面讲到的实体对齐技术。</p>
+<p><img src="http://t10.baidu.com/it/u=2903476509,3457739770&fm=173&app=25&f=JPEG?w=639&h=272&s=8DB0EC128F904CC054516C56020080F2" alt="img"></p>
+<p>4.3 知识图谱的设计</p>
+<p>图谱的设计是一门艺术，不仅要对业务有很深的理解、也需要对未来业务可能的变化有一定预估，从而设计出最贴近现状并且性能高效的系统。在知识图谱设计的问题上，我们肯定会面临以下几个常见的问题：<strong>1. 需要哪些实体、关系和属性？ 2. 哪些属性可以做为实体，哪些实体可以作为属性？ 3. 哪些信息不需要放在知识图谱中？</strong></p>
+<p>基于这些常见的问题，我们从以往的设计经验中抽象出了一系列的设计原则。这些设计原则就类似于传统数据库设计中的范式，来引导相关人员设计出更合理的知识图谱系统，同时保证系统的高效性。</p>
+<p><img src="http://t12.baidu.com/it/u=33644744,766651579&fm=173&app=25&f=JPEG?w=640&h=250&s=4AAC3C628FD04CC25C7505DE000080B1" alt="img"></p>
+<p>接下来，我们举几个简单的例子来说明其中的一些原则。 首先是，业务原则（Business Principle），它的含义是 “<strong>一切要从业务逻辑出发，并且通过观察知识图谱的设计也很容易推测其背后业务的逻辑，而且设计时也要想好未来业务可能的变化</strong>”。</p>
+<p>举个例子，可以观察一下下面这个图谱，并试问自己背后的业务逻辑是什么。通过一番观察，其实也很难看出到底业务流程是什么样的。做个简单的解释，这里的实体 -“申请”意思就是 application，如果对这个领域有所了解，其实就是进件实体。在下面的图中，申请和电话实体之间的“has_phone”，“parent phone”是什么意思呢？</p>
+<p><img src="http://t11.baidu.com/it/u=1843334557,961909614&fm=173&app=25&f=JPEG?w=640&h=272&s=25B2EC32CB604C0348C070D80000D0B2" alt="img"></p>
+<p>接下来再看一下下面的图，跟之前的区别在于我们把申请人从原有的属性中抽取出来并设置成了一个单独的实体。在这种情况下，整个业务逻辑就变得很清晰，我们很容易看出张三申请了两个贷款，而且张三拥有两个手机号，在申请其中一个贷款的时候他填写了父母的电话号。总而言之，一个好的设计很容易让人看到业务本身的逻辑。</p>
+<p><img src="http://t12.baidu.com/it/u=2571953264,527713124&fm=173&app=25&f=JPEG?w=639&h=328&s=4D803C72137061824840F8C8020030F3" alt="img"></p>
+<p>接下来再看一个原则叫做效率原则（Efficiency Principle）。<strong>效率原则让知识图谱尽量轻量化、并决定哪些数据放在知识图谱，哪些数据不需要放在知识图谱</strong>。在这里举一个简单的类比，在经典的计算机存储系统中，我们经常会谈论到内存和硬盘，内存作为高效的访问载体，作为所有程序运行的关键。这种存储上的层次结构设计源于数据的局部性 -“locality”，也就是说经常被访问到的数据集中在某一个区块上，所以这部分数据可以放到内存中来提升访问的效率。 类似的逻辑也可以应用到知识图谱的设计上：我们把常用的信息存放在知识图谱中，把那些访问频率不高，对关系分析无关紧要的信息放在传统的关系型数据库当中。 <strong>效率原则的核心在于把知识图谱设计成小而轻的存储载体。</strong></p>
+<p><img src="http://t12.baidu.com/it/u=226327970,1562893738&fm=173&app=25&f=JPEG?w=640&h=318&s=CDA0AC520530F42949E80D52020040F2" alt="img"></p>
+<p>比如在下面的知识图谱中，我们完全可以把一些信息比如“年龄”，“家乡”放到传统的关系型数据库当中，因为这些数据对于：a. 分析关系来说没有太多作用 b. 访问频率低，放在知识图谱上反而影响效率</p>
+<p><img src="http://t11.baidu.com/it/u=302720116,1354414349&fm=173&app=25&f=JPEG?w=640&h=322&s=69203C720F70448A506130D2000080B1" alt="img"></p>
+<p>另外，从分析原则（Analytics Principle）的角度，我们不需要把跟关系分析无关的实体放在图谱当中；从冗余原则（Redundancy Principle）的角度，有些重复性信息、高频信息可以放到传统数据库当中。</p>
+<p>4.4 把数据存入知识图谱</p>
+<p>存储上我们要面临存储系统的选择，但由于我们设计的知识图谱带有属性，图数据库可以作为首选。但至于选择哪个图数据库也要看业务量以及对效率的要求。如果数据量特别庞大，则 Neo4j 很可能满足不了业务的需求，这时候不得不去选择支持准分布式的系统比如 OrientDB, JanusGraph 等，或者通过效率、冗余原则把信息存放在传统数据库中，从而减少知识图谱所承载的信息量。 通常来讲，对于 10 亿节点以下规模的图谱来说 Neo4j 已经足够了。</p>
+<p>4.5 上层应用的开发</p>
+<p>等我们构建好知识图谱之后，接下来就要使用它来解决具体的问题。对于风控知识图谱来说，首要任务就是挖掘关系网络中隐藏的欺诈风险。<strong>从算法的角度来讲，有两种不同的场景：一种是基于规则的；另一种是基于概率的。</strong>鉴于目前 AI 技术的现状，基于规则的方法论还是在垂直领域的应用中占据主导地位，但随着数据量的增加以及方法论的提升，基于概率的模型也将会逐步带来更大的价值。</p>
+<p>4.5.1 基于规则的方法论</p>
+<p>首先，我们来看几个基于规则的应用，分别是不一致性验证、基于规则的特征提取、基于模式的判断。</p>
+<p><strong>不一致性验证</strong></p>
+<p>为了判断关系网络中存在的风险，一种简单的方法就是做不一致性验证，也就是通过一些规则去找出潜在的矛盾点。这些规则是以人为的方式提前定义好的，所以在设计规则这个事情上需要一些业务的知识。比如在下面的这个图中，李明和李飞两个人都注明了同样的公司电话，但实际上从数据库中判断这俩人其实在不同的公司上班，这就是一个矛盾点。 类似的规则其实可以有很多，不在这里一一列出。</p>
+<p><img src="http://t11.baidu.com/it/u=2086250224,504274614&fm=173&app=25&f=JPEG?w=640&h=355&s=A012EC325F0254C2566F58D80200D0B2" alt="img"></p>
+<p><strong>基于规则提取特征</strong></p>
+<p>我们也可以基于规则从知识图谱中提取一些特征，而且这些特征一般基于深度的搜索比如 2 度，3 度甚至更高维度。比如我们可以问一个这样的问题：“申请人二度关系里有多少个实体触碰了黑名单？”，从图中我们很容观察到二度关系中有两个实体触碰了黑名单（黑名单由红色来标记）。等这些特征被提取之后，一般可以作为风险模型的输入。在此还是想说明一点，如果特征并不涉及深度的关系，其实传统的关系型数据库则足以满足需求。</p>
+<p><img src="http://t11.baidu.com/it/u=1060578160,1139020907&fm=173&app=25&f=JPEG?w=639&h=364&s=2032EC325F0264C0446978DA020050B2" alt="img"></p>
+<p><strong>基于模式的判断</strong></p>
+<p>这种方法比较适用于找出团体欺诈，它的核心在于通过一些模式来找到有可能存在风险的团体或者子图（sub-graph），然后对这部分子图做进一步的分析。 这种模式有很多种，在这里举几个简单的例子。 比如在下图中，三个实体共享了很多其他的信息，我们可以看做是一个团体，并对其做进一步的分析。</p>
+<p><img src="http://t12.baidu.com/it/u=3828566894,715445935&fm=173&app=25&f=JPEG?w=640&h=325&s=05F2EC329B8340C208C13D52020080F2" alt="img"></p>
+<p>再比如，我们也可以从知识图谱中找出强连通图，并把它标记出来，然后做进一步风险分析。强连通图意味着每一个节点都可以通过某种路径达到其他的点，也就说明这些节点之间有很强的关系。</p>
+<p><img src="http://t10.baidu.com/it/u=480692214,290401441&fm=173&app=25&f=JPEG?w=640&h=327&s=61728472DF324580425830D90200C0B2" alt="img"></p>
+<p>4.5.2 基于概率的方法</p>
+<p>除了基于规则的方法，也可以使用概率统计的方法。 比如社区挖掘、标签传播、聚类等技术都属于这个范畴。 对于这类技术，在本文里不做详细的讲解，感兴趣的读者可以参考相关文献。</p>
+<p>社区挖掘算法的目的在于从图中找出一些社区。对于社区，我们可以有多种定义，但直观上可以理解为社区内节点之间关系的密度要明显大于社区之间的关系密度。下面的图表示社区发现之后的结果，图中总共标记了三个不同的社区。一旦我们得到这些社区之后，就可以做进一步的风险分析。</p>
+<p>由于社区挖掘是基于概率的方法论，好处在于不需要人为地去定义规则，特别是对于一个庞大的关系网络来说，定义规则这事情本身是一件很复杂的事情。</p>
+<p><img src="http://t11.baidu.com/it/u=3112136647,1918214170&fm=173&app=25&f=JPEG?w=640&h=392&s=A036EC328F026EC05CFCCDDA0200D0B3" alt="img"></p>
+<p>标签传播算法的核心思想在于节点之间信息的传递。这就类似于，跟优秀的人在一起自己也会逐渐地变优秀是一个道理。因为通过这种关系会不断地吸取高质量的信息，最后使得自己也会不知不觉中变得更加优秀。具体细节不在这里做更多解释。</p>
+<p>相比规则的方法论，基于概率的方法的缺点在于：需要足够多的数据。如果数据量很少，而且整个图谱比较稀疏（Sparse），基于规则的方法可以成为我们的首选。尤其是对于金融领域来说，数据标签会比较少，这也是为什么基于规则的方法论还是更普遍地应用在金融领域中的主要原因。</p>
+<p>4.5.3 基于动态网络的分析</p>
+<p>以上所有的分析都是基于静态的关系图谱。所谓的静态关系图谱，意味着我们不考虑图谱结构本身随时间的变化，只是聚焦在当前知识图谱结构上。然而，我们也知道图谱的结构是随时间变化的，而且这些变化本身也可以跟风险有所关联。</p>
+<p>在下面的图中，我们给出了一个知识图谱 T 时刻和 T+1 时刻的结构，我们很容易看出在这两个时刻中间，图谱结构（或者部分结构）发生了很明显的变化，这其实暗示着潜在的风险。那怎么去判断这些结构上的变化呢？ 感兴趣的读者可以查阅跟“dynamic network mining”相关的文献。</p>
+<p><img src="http://t12.baidu.com/it/u=621530735,2369132207&fm=173&app=25&f=JPEG?w=639&h=302&s=6172A47297F3658044C084CE000010B2" alt="img"></p>
+<p>\5. 知识图谱在其他行业中的应用</p>
+<p>除了金融领域，知识图谱的应用可以涉及到很多其他的行业，包括医疗、教育、证券投资、推荐等等。其实，只要有关系存在，则有知识图谱可发挥价值的地方。 在这里简单举几个垂直行业中的应用。</p>
+<p>比如对于教育行业，我们经常谈论个性化教育、因材施教的理念。其核心在于理解学生当前的知识体系，而且这种知识体系依赖于我们所获取到的数据比如交互数据、评测数据、互动数据等等。为了分析学习路径以及知识结构，我们则需要针对于一个领域的概念知识图谱，简单来讲就是概念拓扑结构。在下面的图中，我们给出了一个非常简单的概念图谱：比如为了学习逻辑回归则需要先理解线性回归；为了学习 CNN，得对神经网络有所理解等等。所有对学生的评测、互动分析都离不开概念图谱这个底层的数据。</p>
+<p><img src="http://t11.baidu.com/it/u=2915145958,428470587&fm=173&app=25&f=JPEG?w=639&h=229&s=617284721134F6217FFE45D90200D0B2" alt="img"></p>
+<p>在证券领域，我们经常会关心比如“一个事件发生了，对哪些公司产生什么样的影响？” 比如有一个负面消息是关于公司 1 的高管，而且我们知道公司 1 和公司 2 有种很密切的合作关系，公司 2 有个主营产品是由公司 3 提供的原料基础上做出来的。</p>
+<p><img src="http://t12.baidu.com/it/u=819872987,394960907&fm=173&app=25&f=JPEG?w=640&h=278&s=1832EC12093153825FF4C54B0300F0B1" alt="img"></p>
+<p>其实有了这样的一个知识图谱，我们很容易回答哪些公司有可能会被这次的负面事件所影响。当然，仅仅是“有可能”，具体会不会有强相关性必须由数据来验证。所以在这里，知识图谱的好处就是把我们所需要关注的范围很快给我们圈定。接下来的问题会更复杂一些，比如既然我们知道公司 3 有可能被这次事件所影响，那具体影响程度有多大？ 对于这个问题，光靠知识图谱是很难回答的，必须要有一个影响模型、以及需要一些历史数据才能在知识图谱中做进一步推理以及计算。</p>
+<p>\6. 实践上的几点建议</p>
+<p>首先，知识图谱是一个比较新的工具，它的主要作用还是在于分析关系，尤其是深度的关系。所以在业务上，首先要确保它的必要性，其实很多问题可以用非知识图谱的方式来解决。</p>
+<p>知识图谱领域一个最重要的话题是知识的推理。 而且知识的推理是走向强人工智能的必经之路。但很遗憾的，目前很多语义网络的角度讨论的推理技术（比如基于深度学习，概率统计）很难在实际的垂直应用中落地。其实目前最有效的方式还是基于一些规则的方法论，除非我们有非常庞大的数据集。</p>
+<p>最后，还是要强调一点，<strong>知识图谱工程本身还是业务为重心，以数据为中心。不要低估业务和数据的重要性。</strong></p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>强化学习</title>
+    <url>/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p>强化学习的基本要素，我们对其分别进行定义：</p>
+<ul>
+<li>智能体（Agent）：可以采取行动的智能个体；例如，可以完成投递的无人机，或者在视频游戏中朝目标行动的超级马里奥。强化学习算法就是一个智能体。<a id="more"></a></li>
+<li>行动（Action）：在电子游戏中，行动可能包括向右奔跑或者向左奔跑，向高出处跳或者向低处跳，下蹲或者站住不动。在股市中，行动可能包括买入，卖出或者持有任何有价证券或者它们的变体。在处理空中飞行的无人机时，行动可能包括三维空间中的很多速度和加速度。</li>
+<li>环境（Environment）：指的就是智能体行走于其中的世界。这个环境将智能体当前的状态和行动作为输入，输出是智能体的奖励和下一步的状态。</li>
+<li>状态（State，S）：一个状态就是智能体所处的具体即时状态；也就是说，一个具体的地方和时刻，这是一个具体的即时配置。</li>
+<li>奖励（Reward，R）：奖励是我们衡量某个智能体的行动成败的反馈。例如，在视频游戏中，当马里奥碰到金币的时候，它就会赢得分数。面对任何既定的状态，智能体要以行动的形式向环境输出，然后环境会返回这个智能体的一个新状态和奖励。它们可以有效地评估该智能体的行动。</li>
+</ul>
+<p>所以，环境就是能够将当前状态下采取的动作转换成下一个状态和奖励的函数；环境是一个我们只能看到输入输出的黑盒子。智能体是将新的状态和奖励转换成下一个行动的函数。我们可以知悉智能体的函数，但是我们无法知悉环境的函数。强化学习相当于智能体在尝试逼近这个环境的函数，这样我们就能够向黑盒子环境发送最大化奖励的行动了。</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>吴恩达神经网络</title>
+    <url>/2021/06/06/%E5%90%B4%E6%81%A9%E8%BE%BE/</url>
+    <content><![CDATA[<h1 id="What-you-need-to-remember"><a href="#What-you-need-to-remember" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>• <strong>np.exp(x)</strong> works for any np.array x and applies the exponential function<br>to every coordinate<br>• the <strong>sigmoid</strong> function and its gradient</p>
+<a id="more"></a>
+<p>• <strong>image2vector</strong> is commonly used in deep learning<br>• <strong>np.reshape</strong> is widely used. In the future, you’ll see that keeping your<br>matrix/vector dimensions straight will go toward eliminating a lot of<br>bugs.<br>• numpy has efficient built-in functions<br>• <strong>broadcasting</strong> is extremely useful</p>
+<h1 id="What-to-remember"><a href="#What-to-remember" class="headerlink" title="What to remember:"></a>What to remember:</h1><p>• <strong>Vectorization</strong> is very important in deep learning. It provides computa-<br>tional efficiency and clarity.<br>• You have reviewed the L1 and L2 <strong>loss</strong>.<br>• You are familiar with many numpy functions such as np.sum, np.dot,<br>np.multiply, np.maximum, etc…</p>
+<h1 id="What-you-need-to-remember-1"><a href="#What-you-need-to-remember-1" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>Common steps for <strong>pre-processing</strong> a new dataset are:<br>• Figure out the dimensions and shapes of the problem (m_train, m_test, num_px,<br>…)<br>• Reshape the datasets such that each example is now a vector of size (num_px *<br>num_px * 3, 1)<br>• <strong>Standardize</strong> the data</p>
+<h1 id="What-to-remember-You’ve-implemented-several-functions-that"><a href="#What-to-remember-You’ve-implemented-several-functions-that" class="headerlink" title="What to remember: You’ve implemented several functions that:"></a>What to remember: You’ve implemented several functions that:</h1><p>• <strong>Initialize</strong> (w,b)<br>• <strong>Optimize</strong> the loss iteratively to learn parameters (w,b):<br>– computing the cost and its <strong>gradient</strong><br>– <strong>updating</strong> the parameters using gradient descent<br>• Use the learned (w,b) to <strong>predict</strong> the labels for a given set of examples</p>
+<h1 id="What-to-remember-from-this-assignment"><a href="#What-to-remember-from-this-assignment" class="headerlink" title="What to remember from this assignment:"></a>What to remember from this assignment:</h1><ol>
+<li><strong>Preprocessing</strong> the dataset is important.</li>
+<li>You implemented each function separately: initialize(), propagate(), optimize().<br>Then you built a model().</li>
+<li>Tuning the learning rate (which is an example of a ”<strong>hyperparameter</strong>”) can make a<br>big difference to the algorithm</li>
+</ol>
+<h1 id="What-you-should-remember"><a href="#What-you-should-remember" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• The weights W<sup>[l]</sup> should be <strong>initialized</strong> randomly to break symmetry.<br>• It is however okay to initialize the biases b<sup>[l]</sup> to zeros. Symmetry is still<br>broken so long as W<sup>[l]</sup> is initialized randomly.</p>
+<p>• Initializing weights to very large random values does not work well.</p>
+<p>• Hopefully intializing with <strong>small random values</strong> does better. </p>
+<h1 id="What-you-should-remember-from-this-assignment"><a href="#What-you-should-remember-from-this-assignment" class="headerlink" title="What you should remember from this assignment:"></a>What you should remember from this assignment:</h1><p>• Different initializations lead to different results<br>• Random initialization is used to break symmetry and make sure different<br>hidden units can learn different things<br>• Don’t intialize to values that are too large<br>• He initialization works well for networks with ReLU activations.</p>
+<p><u><font color=red>Gradient Descent =&gt; Stochastic Gradient Descent (SGD) =&gt;mini-batch Gradient Descent</font></u></p>
+<p><font color=red><u>SGD is equivalent to mini-batch gradient descent where each mini-batch has just 1 example.</u></font></p>
+<h1 id="What-you-should-remember-1"><a href="#What-you-should-remember-1" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• The difference between <strong>gradient descent, mini-batch gradient descent and stochastic</strong><br><strong>gradient descent</strong> is the number of examples you use to perform one update step.<br>• You have to tune a learning rate <strong>hyperparameter</strong> α.<br>• With a well-turned mini-batch size, usually it outperforms either gradient descent<br>or stochastic gradient descent (particularly when the training set is large).</p>
+<h1 id="What-you-should-remember-2"><a href="#What-you-should-remember-2" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• Shuffling and Partitioning are the two steps required to build mini-batches<br>• Powers of two are often chosen to be the mini-batch size, e.g., 16, 32, 64, 128.</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>发音</title>
+    <url>/2021/06/06/%E9%9F%B3%E6%A0%87/</url>
+    <content><![CDATA[<ul>
+<li><strong>/e/ 和 /æ/ ，</strong>两个音标在日常生活中常常容易搞错，关键的区别在于<strong>口型的大小</strong>。</li>
+</ul>
+<blockquote>
+<p>  <strong>/e/</strong>      <strong>/æ/</strong></p>
+<p>  b<strong>e</strong>d 床    b<strong>a</strong>d 坏的</p>
+<p>  r<strong>e</strong>d 红色   r<strong>a</strong>t 老鼠</p>
+</blockquote>
+<a id="more"></a>
+
+<ul>
+<li>发 <strong>/ə/</strong> 时，<strong>嘴巴放松</strong>，微微打开一点，比刚才的**/e/<strong>开口小。和拼音的</strong>e<strong>相比，发音更</strong>短促**，不能拖音。</li>
+</ul>
+<blockquote>
+<p>  <strong>/e/</strong>      <strong>/ə/</strong></p>
+<p> <strong>e</strong>ffort 努力    <strong>a</strong>fford 承担</p>
+<p> l<strong>e</strong>t 让     pil<strong>o</strong>t 飞行员</p>
+</blockquote>
+<ul>
+<li>发 <strong>/ɜːr/</strong> 时，先发长元音**/ɜ:/<strong>，再快速过渡到</strong>卷舌音/r/**。</li>
+</ul>
+<blockquote>
+<p><strong>/ɜːr/</strong>      <strong>/e/</strong></p>
+<p>h<strong>ear</strong>d 听见    h<strong>ea</strong>d 头</p>
+<p>l<strong>ear</strong>n 学习    l<strong>e</strong>sson 课程</p>
+</blockquote>
+<ul>
+<li>发 <strong>/ʌ/</strong> 时，不能把嘴张得太大，只要打开到**/ɑː/的一半大小<strong>就可以，发音要</strong>短促有力**。</li>
+</ul>
+<blockquote>
+<p>  <strong>/ɑː/</strong>      <strong>/ʌ/</strong></p>
+<p>   b<strong>o</strong>dy 身体   b<strong>u</strong>ddy 伙伴</p>
+<p> l<strong>a</strong>tte 拿铁    l<strong>o</strong>ve 爱</p>
+</blockquote>
+<ul>
+<li>发 <strong>/ʊ/</strong> 时，嘴唇不需要像**/uː/<strong>那样用力圈成小圆，只需要微微地让</strong>双唇往前突一下<strong>，发音要</strong>短促有力**。</li>
+</ul>
+<blockquote>
+<p>  <strong>/u:/</strong>      <strong>/ʊ/</strong></p>
+<p>  f<strong>oo</strong>d 食物    g<strong>oo</strong>d 好的</p>
+<p>   p<strong>oo</strong>l 泳池    p<strong>u</strong>t 放下</p>
+</blockquote>
+<ul>
+<li>发 <strong>/i:/</strong> 时，<strong>拖长发音</strong>，同时<strong>把嘴角向两边拉</strong>。发 <strong>/ɪ/**时，</strong>微微打开一点<strong>嘴巴，舌尖向下</strong>抵在下齿<strong>那里发音，发音要</strong>短而有力**。</li>
+</ul>
+<blockquote>
+<p>  <strong>/i:/</strong>      <strong>/ɪ/</strong></p>
+<p>  <strong>ea</strong>t 吃     <strong>i</strong>t 它</p>
+<p> l<strong>ea</strong>ve 离开    l<strong>i</strong>ve 居住</p>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>英语</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tensorflow</title>
+    <url>/2021/01/02/tensorflow/</url>
+    <content><![CDATA[<h1 id="1-tf-clip-by-value"><a href="#1-tf-clip-by-value" class="headerlink" title="1.tf.clip_by_value"></a>1.tf.clip_by_value</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.clip_by_value(   </span><br><span class="line">    t,    </span><br><span class="line">    clip_value_min, </span><br><span class="line">    clip_value_max,   </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>Returns:<code>A clipped Tensor.</code></p>
+<p>输入一个张量t，把t中的每一个元素的值都压缩在clip_value_min和clip_value_max之间。小于min的让它等于min，大于max的元素的值等于max。</p>
+<h1 id="2-tf-clip-by-norm"><a href="#2-tf-clip-by-norm" class="headerlink" title="2.tf.clip_by_norm"></a>2.tf.clip_by_norm</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.clip_by_norm(  </span><br><span class="line">    t,    </span><br><span class="line">    clip_norm,    </span><br><span class="line">    axes=<span class="literal">None</span>,  </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>Returns:<code>A clipped Tensor.</code></p>
+<p>指对梯度进行裁剪，通过控制梯度的最大范式，防止梯度爆炸的问题，是一种比较常用的梯度规约的方式。</p>
+<ul>
+<li><p><strong>t</strong>: 输入tensor，也可以是list</p>
+</li>
+<li><p><strong>clip_norm</strong>: 一个具体的数，如果<br>$$<br>l_2norm(t)≤l_2norm(clipnorm)<br>$$<br> 则t不变化；否则<br>$$<br>t=\frac{t∗clipnorm}{l_2norm(t)}<br>$$</p>
+</li>
+</ul>
+<h1 id="3-minimize"><a href="#3-minimize" class="headerlink" title="3.minimize()"></a>3.minimize()</h1><p>  由源代码可以知道<code>minimize()</code>实际上包含了两个步骤，即</p>
+<p>  <code>compute_gradients</code>,用于计算梯度，</p>
+<p>  和</p>
+<p>  <code>apply_gradients</code>，用于使用计算得到的梯度来更新对应的variable。</p>
+<h1 id="4-EXAMPLE"><a href="#4-EXAMPLE" class="headerlink" title="4.EXAMPLE"></a>4.EXAMPLE</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">x = tf.Variable(initial_value=<span class="number">50.</span>, dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">w = tf.Variable(initial_value=<span class="number">10.</span>, dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">y = w*x</span><br><span class="line"></span><br><span class="line">opt = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)</span><br><span class="line">grads_vals = opt.compute_gradients(y, [w])</span><br><span class="line"></span><br><span class="line"><span class="comment">#list包括的是：梯度和更新变量的元组对</span></span><br><span class="line">capped_gvs = [(tf.clip_by_value(grad, <span class="number">2</span>, <span class="number">2</span>), var)</span><br><span class="line">             <span class="keyword">for</span> grad, var <span class="keyword">in</span> grads_vals]</span><br><span class="line"></span><br><span class="line"> <span class="comment">#执行对应变量的更新梯度操作</span></span><br><span class="line">training_op = opt.apply_gradients(capped_gvs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):  </span><br><span class="line">        print(sess.run(grads_vals))</span><br><span class="line">        print(sess.run(capped_gvs))</span><br><span class="line">        sess.run(training_op)</span><br><span class="line">        print(sess.run([x, w, y]))</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<blockquote>
+<p>[(50.0, 10.0)]<br>[(2.0, 10.0)]<br>[50.0, 9.0, 450.0]<br>[(50.0, 9.0)]<br>[(2.0, 9.0)]<br>[50.0, 8.0, 400.0]<br>[(50.0, 8.0)]<br>[(2.0, 8.0)]<br>[50.0, 7.0, 350.0]<br>[(50.0, 7.0)]<br>[(2.0, 7.0)]<br>[50.0, 6.0, 300.0]<br>[(50.0, 6.0)]<br>[(2.0, 6.0)]</p>
+<p>…</p>
+<p>…</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>边框</title>
+    <url>/2020/11/21/%E8%BE%B9%E6%A1%86/</url>
+    <content><![CDATA[  <p style=border-style:none>无边框</p>
+  <p style=border-style:dotted>点线式边框</p>
+  <p style=border-style:dashed>破折线式边框</p>
+  <p style=border-style:solid>直线式边框</p>
+  <p style=border-style:double>双线式边框</p>
+  <p style=border-style:groove>槽线式边框</p>
+  <p style=border-style:ridge>脊线式边框</p>
+  <p style=border-style:inset>内嵌效果的边框</p>
+  <p style=border-style:outset>突起效果的边框</p>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ENGLISH</title>
     <url>/2020/11/19/ENGLISH/</url>
     <content><![CDATA[<a id="more"></a>
@@ -132,276 +403,5 @@
       <categories>
         <category>测试</category>
       </categories>
-  </entry>
-  <entry>
-    <title>tensorflow</title>
-    <url>/2021/01/02/tensorflow/</url>
-    <content><![CDATA[<h1 id="1-tf-clip-by-value"><a href="#1-tf-clip-by-value" class="headerlink" title="1.tf.clip_by_value"></a>1.tf.clip_by_value</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.clip_by_value(   </span><br><span class="line">    t,    </span><br><span class="line">    clip_value_min, </span><br><span class="line">    clip_value_max,   </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>Returns:<code>A clipped Tensor.</code></p>
-<p>输入一个张量t，把t中的每一个元素的值都压缩在clip_value_min和clip_value_max之间。小于min的让它等于min，大于max的元素的值等于max。</p>
-<h1 id="2-tf-clip-by-norm"><a href="#2-tf-clip-by-norm" class="headerlink" title="2.tf.clip_by_norm"></a>2.tf.clip_by_norm</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.clip_by_norm(  </span><br><span class="line">    t,    </span><br><span class="line">    clip_norm,    </span><br><span class="line">    axes=<span class="literal">None</span>,  </span><br><span class="line">    name=<span class="literal">None</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>Returns:<code>A clipped Tensor.</code></p>
-<p>指对梯度进行裁剪，通过控制梯度的最大范式，防止梯度爆炸的问题，是一种比较常用的梯度规约的方式。</p>
-<ul>
-<li><p><strong>t</strong>: 输入tensor，也可以是list</p>
-</li>
-<li><p><strong>clip_norm</strong>: 一个具体的数，如果<br>$$<br>l_2norm(t)≤l_2norm(clipnorm)<br>$$<br> 则t不变化；否则<br>$$<br>t=\frac{t∗clipnorm}{l_2norm(t)}<br>$$</p>
-</li>
-</ul>
-<h1 id="3-minimize"><a href="#3-minimize" class="headerlink" title="3.minimize()"></a>3.minimize()</h1><p>  由源代码可以知道<code>minimize()</code>实际上包含了两个步骤，即</p>
-<p>  <code>compute_gradients</code>,用于计算梯度，</p>
-<p>  和</p>
-<p>  <code>apply_gradients</code>，用于使用计算得到的梯度来更新对应的variable。</p>
-<h1 id="4-EXAMPLE"><a href="#4-EXAMPLE" class="headerlink" title="4.EXAMPLE"></a>4.EXAMPLE</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">x = tf.Variable(initial_value=<span class="number">50.</span>, dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">w = tf.Variable(initial_value=<span class="number">10.</span>, dtype=<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">y = w*x</span><br><span class="line"></span><br><span class="line">opt = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)</span><br><span class="line">grads_vals = opt.compute_gradients(y, [w])</span><br><span class="line"></span><br><span class="line"><span class="comment">#list包括的是：梯度和更新变量的元组对</span></span><br><span class="line">capped_gvs = [(tf.clip_by_value(grad, <span class="number">2</span>, <span class="number">2</span>), var)</span><br><span class="line">             <span class="keyword">for</span> grad, var <span class="keyword">in</span> grads_vals]</span><br><span class="line"></span><br><span class="line"> <span class="comment">#执行对应变量的更新梯度操作</span></span><br><span class="line">training_op = opt.apply_gradients(capped_gvs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):  </span><br><span class="line">        print(sess.run(grads_vals))</span><br><span class="line">        print(sess.run(capped_gvs))</span><br><span class="line">        sess.run(training_op)</span><br><span class="line">        print(sess.run([x, w, y]))</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<blockquote>
-<p>[(50.0, 10.0)]<br>[(2.0, 10.0)]<br>[50.0, 9.0, 450.0]<br>[(50.0, 9.0)]<br>[(2.0, 9.0)]<br>[50.0, 8.0, 400.0]<br>[(50.0, 8.0)]<br>[(2.0, 8.0)]<br>[50.0, 7.0, 350.0]<br>[(50.0, 7.0)]<br>[(2.0, 7.0)]<br>[50.0, 6.0, 300.0]<br>[(50.0, 6.0)]<br>[(2.0, 6.0)]</p>
-<p>…</p>
-<p>…</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>吴恩达神经网络</title>
-    <url>/2021/06/06/%E5%90%B4%E6%81%A9%E8%BE%BE/</url>
-    <content><![CDATA[<h1 id="What-you-need-to-remember"><a href="#What-you-need-to-remember" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>• <strong>np.exp(x)</strong> works for any np.array x and applies the exponential function<br>to every coordinate<br>• the <strong>sigmoid</strong> function and its gradient</p>
-<a id="more"></a>
-<p>• <strong>image2vector</strong> is commonly used in deep learning<br>• <strong>np.reshape</strong> is widely used. In the future, you’ll see that keeping your<br>matrix/vector dimensions straight will go toward eliminating a lot of<br>bugs.<br>• numpy has efficient built-in functions<br>• <strong>broadcasting</strong> is extremely useful</p>
-<h1 id="What-to-remember"><a href="#What-to-remember" class="headerlink" title="What to remember:"></a>What to remember:</h1><p>• <strong>Vectorization</strong> is very important in deep learning. It provides computa-<br>tional efficiency and clarity.<br>• You have reviewed the L1 and L2 <strong>loss</strong>.<br>• You are familiar with many numpy functions such as np.sum, np.dot,<br>np.multiply, np.maximum, etc…</p>
-<h1 id="What-you-need-to-remember-1"><a href="#What-you-need-to-remember-1" class="headerlink" title="What you need to remember:"></a>What you need to remember:</h1><p>Common steps for <strong>pre-processing</strong> a new dataset are:<br>• Figure out the dimensions and shapes of the problem (m_train, m_test, num_px,<br>…)<br>• Reshape the datasets such that each example is now a vector of size (num_px *<br>num_px * 3, 1)<br>• <strong>Standardize</strong> the data</p>
-<h1 id="What-to-remember-You’ve-implemented-several-functions-that"><a href="#What-to-remember-You’ve-implemented-several-functions-that" class="headerlink" title="What to remember: You’ve implemented several functions that:"></a>What to remember: You’ve implemented several functions that:</h1><p>• <strong>Initialize</strong> (w,b)<br>• <strong>Optimize</strong> the loss iteratively to learn parameters (w,b):<br>– computing the cost and its <strong>gradient</strong><br>– <strong>updating</strong> the parameters using gradient descent<br>• Use the learned (w,b) to <strong>predict</strong> the labels for a given set of examples</p>
-<h1 id="What-to-remember-from-this-assignment"><a href="#What-to-remember-from-this-assignment" class="headerlink" title="What to remember from this assignment:"></a>What to remember from this assignment:</h1><ol>
-<li><strong>Preprocessing</strong> the dataset is important.</li>
-<li>You implemented each function separately: initialize(), propagate(), optimize().<br>Then you built a model().</li>
-<li>Tuning the learning rate (which is an example of a ”<strong>hyperparameter</strong>”) can make a<br>big difference to the algorithm</li>
-</ol>
-<h1 id="What-you-should-remember"><a href="#What-you-should-remember" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• The weights W<sup>[l]</sup> should be <strong>initialized</strong> randomly to break symmetry.<br>• It is however okay to initialize the biases b<sup>[l]</sup> to zeros. Symmetry is still<br>broken so long as W<sup>[l]</sup> is initialized randomly.</p>
-<p>• Initializing weights to very large random values does not work well.</p>
-<p>• Hopefully intializing with <strong>small random values</strong> does better. </p>
-<h1 id="What-you-should-remember-from-this-assignment"><a href="#What-you-should-remember-from-this-assignment" class="headerlink" title="What you should remember from this assignment:"></a>What you should remember from this assignment:</h1><p>• Different initializations lead to different results<br>• Random initialization is used to break symmetry and make sure different<br>hidden units can learn different things<br>• Don’t intialize to values that are too large<br>• He initialization works well for networks with ReLU activations.</p>
-<p><u><font color=red>Gradient Descent =&gt; Stochastic Gradient Descent (SGD) =&gt;mini-batch Gradient Descent</font></u></p>
-<p><font color=red><u>SGD is equivalent to mini-batch gradient descent where each mini-batch has just 1 example.</u></font></p>
-<h1 id="What-you-should-remember-1"><a href="#What-you-should-remember-1" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• The difference between <strong>gradient descent, mini-batch gradient descent and stochastic</strong><br><strong>gradient descent</strong> is the number of examples you use to perform one update step.<br>• You have to tune a learning rate <strong>hyperparameter</strong> α.<br>• With a well-turned mini-batch size, usually it outperforms either gradient descent<br>or stochastic gradient descent (particularly when the training set is large).</p>
-<h1 id="What-you-should-remember-2"><a href="#What-you-should-remember-2" class="headerlink" title="What you should remember:"></a>What you should remember:</h1><p>• Shuffling and Partitioning are the two steps required to build mini-batches<br>• Powers of two are often chosen to be the mini-batch size, e.g., 16, 32, 64, 128.</p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>强化学习</title>
-    <url>/2020/11/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p>强化学习的基本要素，我们对其分别进行定义：</p>
-<ul>
-<li>智能体（Agent）：可以采取行动的智能个体；例如，可以完成投递的无人机，或者在视频游戏中朝目标行动的超级马里奥。强化学习算法就是一个智能体。<a id="more"></a></li>
-<li>行动（Action）：在电子游戏中，行动可能包括向右奔跑或者向左奔跑，向高出处跳或者向低处跳，下蹲或者站住不动。在股市中，行动可能包括买入，卖出或者持有任何有价证券或者它们的变体。在处理空中飞行的无人机时，行动可能包括三维空间中的很多速度和加速度。</li>
-<li>环境（Environment）：指的就是智能体行走于其中的世界。这个环境将智能体当前的状态和行动作为输入，输出是智能体的奖励和下一步的状态。</li>
-<li>状态（State，S）：一个状态就是智能体所处的具体即时状态；也就是说，一个具体的地方和时刻，这是一个具体的即时配置。</li>
-<li>奖励（Reward，R）：奖励是我们衡量某个智能体的行动成败的反馈。例如，在视频游戏中，当马里奥碰到金币的时候，它就会赢得分数。面对任何既定的状态，智能体要以行动的形式向环境输出，然后环境会返回这个智能体的一个新状态和奖励。它们可以有效地评估该智能体的行动。</li>
-</ul>
-<p>所以，环境就是能够将当前状态下采取的动作转换成下一个状态和奖励的函数；环境是一个我们只能看到输入输出的黑盒子。智能体是将新的状态和奖励转换成下一个行动的函数。我们可以知悉智能体的函数，但是我们无法知悉环境的函数。强化学习相当于智能体在尝试逼近这个环境的函数，这样我们就能够向黑盒子环境发送最大化奖励的行动了。</p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>边框</title>
-    <url>/2020/11/21/%E8%BE%B9%E6%A1%86/</url>
-    <content><![CDATA[  <p style=border-style:none>无边框</p>
-  <p style=border-style:dotted>点线式边框</p>
-  <p style=border-style:dashed>破折线式边框</p>
-  <p style=border-style:solid>直线式边框</p>
-  <p style=border-style:double>双线式边框</p>
-  <p style=border-style:groove>槽线式边框</p>
-  <p style=border-style:ridge>脊线式边框</p>
-  <p style=border-style:inset>内嵌效果的边框</p>
-  <p style=border-style:outset>突起效果的边框</p>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>知识图谱</title>
-    <url>/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/</url>
-    <content><![CDATA[<h2 id="如何从零开始搭建知识图谱？"><a href="#如何从零开始搭建知识图谱？" class="headerlink" title="如何从零开始搭建知识图谱？"></a>如何从零开始搭建知识图谱？</h2><p>发布时间: 18-07-0223:43</p>
-<p>\1. 概论</p>
-<p>随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场。</p>
-<a id="more"></a>
-<p><img src="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3" alt="img"></p>
-<p>\2. 知识抽取</p>
-<p>知识图谱的构建是后续应用的基础，而且构建的前提是需要把数据从不同的数据源中抽取出来。对于垂直领域的知识图谱来说，<strong>它们的数据源主要来自两种渠道：一种是业务本身的数据，这部分数据通常包含在公司内的数据库表并以结构化的方式存储；另一种是网络上公开、抓取的数据，这些数据通常是以网页的形式存在所以是非结构化的数据。</strong></p>
-<p>前者一般只需要简单预处理即可以作为后续 AI 系统的输入，但后者一般需要借助于自然语言处理等技术来提取出结构化信息。比如在上面的搜索例子里，Bill Gates 和 Malinda Gate 的关系就可以从非结构化数据中提炼出来，比如维基百科等数据源。</p>
-<p><img src="http://t10.baidu.com/it/u=3524701362,4051137342&fm=173&app=25&f=JPEG?w=640&h=331&s=05B0EC32552245090070A459020040F3" alt="img"></p>
-<p>信息抽取的难点在于处理非结构化数据。在下面的图中，我们给出了一个实例。左边是一段非结构化的英文文本，右边是从这些文本中抽取出来的实体和关系。在构建类似的图谱过程当中，主要涉及以下几个方面的自然语言处理技术：</p>
-<p>a. 实体命名识别（Name Entity Recognition）b. 关系抽取（Relation Extraction）c. 实体统一（Entity Resolution）d. 指代消解（Coreference Resolution）</p>
-<p>下面针对每一项技术解决的问题做简单的描述，以至于这些是具体怎么实现的，不在这里一一展开。</p>
-<p><img src="http://t10.baidu.com/it/u=3848596317,2706783691&fm=173&app=25&f=JPEG?w=640&h=275&s=CC90E81A9FE144824AE598C2020070B3" alt="img"></p>
-<p>首先是实体命名识别，就是从文本里提取出实体并对每个实体做分类 / 打标签：比如从上述文本里，我们可以提取出实体 -“NYC”，并标记实体类型为 “Location”；我们也可以从中提取出“Virgil’s BBQ”，并标记实体类型为“Restarant”。这种过程称之为实体命名识别，这是一项相对比较成熟的技术，有一些现成的工具可以用来做这件事情。其次，我们可以通过关系抽取技术，把实体间的关系从文本中提取出来，比如实体“hotel”和“Hilton property”之间的关系为“in”；“hotel”和“Time Square”的关系为“near”等等。</p>
-<p><img src="http://t11.baidu.com/it/u=2261386009,2555456406&fm=173&app=25&f=JPEG?w=640&h=262&s=0C40FC128BF074821CE900DA0200D0B2" alt="img"></p>
-<p>另外，在实体命名识别和关系抽取过程中，有两个比较棘手的问题：一个是实体统一，也就是说有些实体写法上不一样，但其实是指向同一个实体。比如“NYC”和“New York”表面上是不同的字符串，但其实指的都是纽约这个城市，需要合并。实体统一不仅可以减少实体的种类，也可以降低图谱的稀疏性（Sparsity）；另一个问题是指代消解，也是文本中出现的“it”, “he”, “she”这些词到底指向哪个实体，比如在本文里两个被标记出来的“it”都指向“hotel”这个实体。</p>
-<p><img src="http://t12.baidu.com/it/u=2616873605,1175169232&fm=173&app=25&f=JPEG?w=640&h=233&s=CC90E81ADFD548C20070F0CA010010B2" alt="img"></p>
-<p>实体统一和指代消解问题相对于前两个问题更具有挑战性。</p>
-<p>\3. 知识图谱的存储</p>
-<p><strong>知识图谱主要有两种存储方式：一种是基于 RDF 的存储；另一种是基于图数据库的存储。</strong>它们之间的区别如下图所示。RDF 一个重要的设计原则是数据的易发布以及共享，图数据库则把重点放在了高效的图查询和搜索上。其次，RDF 以三元组的方式来存储数据而且不包含属性信息，但图数据库一般以属性图为基本的表示形式，所以实体和关系可以包含属性，这就意味着更容易表达现实的业务场景。</p>
-<p><img src="http://t12.baidu.com/it/u=712907711,4221552733&fm=173&app=25&f=JPEG?w=639&h=242&s=0AAE7C2287846D435ADD35CA0000C0B1" alt="img"></p>
-<p>根据最新的统计（2018 年上半年），图数据库仍然是增长最快的存储系统。相反，关系型数据库的增长基本保持在一个稳定的水平。同时，我们也列出了常用的图数据库系统以及他们最新使用情况的排名。 其中 Neo4j 系统目前仍是使用率最高的图数据库，它拥有活跃的社区，而且系统本身的查询效率高，但唯一的不足就是不支持准分布式。相反，OrientDB 和 JanusGraph（原 Titan）支持分布式，但这些系统相对较新，社区不如 Neo4j 活跃，这也就意味着使用过程当中不可避免地会遇到一些刺手的问题。如果选择使用 RDF 的存储系统，Jena 或许一个比较不错的选择。</p>
-<p><img src="http://t11.baidu.com/it/u=626952808,2562026971&fm=173&app=25&f=JPEG?w=639&h=227&s=0470E432BDB04C035450E4D8000060B3" alt="img"></p>
-<p>\4. 金融知识图谱的搭建</p>
-<p>接下来我们看一个实际的具体案例，讲解怎么一步步搭建可落地的金融风控领域的知识图谱系统。 首先需要说明的一点是，有可能不少人认为搭建一个知识图谱系统的重点在于算法和开发。但事实并不是想象中的那样，<strong>其实最重要的核心在于对业务的理解以及对知识图谱本身的设计</strong>，这就类似于对于一个业务系统，数据库表的设计尤其关键，而且这种设计绝对离不开对业务的深入理解以及对未来业务场景变化的预估。 当然，在这里我们先不讨论数据的重要性。</p>
-<p><img src="http://t11.baidu.com/it/u=1461973663,1466794736&fm=173&app=25&f=JPEG?w=639&h=184&s=6AAE3C624B6249321EFDB4CA000080B1" alt="img"></p>
-<p>一个完整的知识图谱的构建包含以下几个步骤：<strong>1. 定义具体的业务问题 2. 数据的收集 &amp; 预处理 3. 知识图谱的设计 4. 把数据存入知识图谱 5. 上层应用的开发，以及系统的评估。</strong>下面我们就按照这个流程来讲一下每个步骤所需要做的事情以及需要思考的问题。</p>
-<p>4.1 定义具体的业务问题</p>
-<p>在 P2P 网贷环境下，最核心的问题是风控，也就是怎么去评估一个借款人的风险。在线上的环境下，欺诈风险尤其为严重，而且很多这种风险隐藏在复杂的关系网络之中，而且知识图谱正好是为这类问题所设计的，所以我们“有可能”期待它能在欺诈，这个问题上带来一些价值。</p>
-<p><img src="http://t10.baidu.com/it/u=4101688044,1856892679&fm=173&app=25&f=JPEG?w=640&h=289&s=C006DC1A85C46D43095554CA020050B2" alt="img"></p>
-<p>在进入下一个话题的讨论之前，<strong>要明确的一点是，对于自身的业务问题到底需不需要知识图谱系统的支持。</strong>因为在很多的实际场景，即使对关系的分析有一定的需求，实际上也可以利用传统数据库来完成分析的。所以为了避免使用知识图谱而选择知识图谱，以及更好的技术选型，以下给出了几点总结，供参考。</p>
-<p><img src="http://t12.baidu.com/it/u=1965742121,2969045495&fm=173&app=25&f=JPEG?w=639&h=219&s=0AAA7E228B8049431A7DB4CA0000E0B1" alt="img"></p>
-<p>4.2 数据收集 &amp; 预处理</p>
-<p>下一步就是要确定数据源以及做必要的数据预处理。针对于数据源，我们需要考虑以下几点：1. 我们已经有哪些数据？ 2. 虽然现在没有，但有可能拿到哪些数据？ 3. 其中哪部分数据可以用来降低风险？ 4. 哪部分数据可以用来构建知识图谱？在这里需要说明的一点是，并不是所有跟反欺诈相关的数据都必须要进入知识图谱，对于这部分的一些决策原则在接下来的部分会有比较详细的介绍。</p>
-<p>对于反欺诈，有几个数据源是我们很容易想得到的，包括用户的基本信息、行为数据、运营商数据、网络上的公开信息等等。假设我们已经有了一个数据源的列表清单，则下一步就要看哪些数据需要进一步的处理，比如对于非结构化数据我们或多或少都需要用到跟自然语言处理相关的技术。 用户填写的基本信息基本上会存储在业务表里，除了个别字段需要进一步处理，很多字段则直接可以用于建模或者添加到知识图谱系统里。对于行为数据来说，我们则需要通过一些简单的处理，并从中提取有效的信息比如“用户在某个页面停留时长”等等。 对于网络上公开的网页数据，则需要一些信息抽取相关的技术。</p>
-<p>举个例子，对于用户的基本信息，我们很可能需要如下的操作。一方面，用户信息比如姓名、年龄、学历等字段可以直接从结构化数据库中提取并使用。但另一方面，对于填写的公司名来说，我们有可能需要做进一步的处理。比如部分用户填写“北京贪心科技有限公司”，另外一部分用户填写“北京望京贪心科技有限公司”，其实指向的都是同一家公司。所以，这时候我们需要做公司名的对齐，用到的技术细节可以参考前面讲到的实体对齐技术。</p>
-<p><img src="http://t10.baidu.com/it/u=2903476509,3457739770&fm=173&app=25&f=JPEG?w=639&h=272&s=8DB0EC128F904CC054516C56020080F2" alt="img"></p>
-<p>4.3 知识图谱的设计</p>
-<p>图谱的设计是一门艺术，不仅要对业务有很深的理解、也需要对未来业务可能的变化有一定预估，从而设计出最贴近现状并且性能高效的系统。在知识图谱设计的问题上，我们肯定会面临以下几个常见的问题：<strong>1. 需要哪些实体、关系和属性？ 2. 哪些属性可以做为实体，哪些实体可以作为属性？ 3. 哪些信息不需要放在知识图谱中？</strong></p>
-<p>基于这些常见的问题，我们从以往的设计经验中抽象出了一系列的设计原则。这些设计原则就类似于传统数据库设计中的范式，来引导相关人员设计出更合理的知识图谱系统，同时保证系统的高效性。</p>
-<p><img src="http://t12.baidu.com/it/u=33644744,766651579&fm=173&app=25&f=JPEG?w=640&h=250&s=4AAC3C628FD04CC25C7505DE000080B1" alt="img"></p>
-<p>接下来，我们举几个简单的例子来说明其中的一些原则。 首先是，业务原则（Business Principle），它的含义是 “<strong>一切要从业务逻辑出发，并且通过观察知识图谱的设计也很容易推测其背后业务的逻辑，而且设计时也要想好未来业务可能的变化</strong>”。</p>
-<p>举个例子，可以观察一下下面这个图谱，并试问自己背后的业务逻辑是什么。通过一番观察，其实也很难看出到底业务流程是什么样的。做个简单的解释，这里的实体 -“申请”意思就是 application，如果对这个领域有所了解，其实就是进件实体。在下面的图中，申请和电话实体之间的“has_phone”，“parent phone”是什么意思呢？</p>
-<p><img src="http://t11.baidu.com/it/u=1843334557,961909614&fm=173&app=25&f=JPEG?w=640&h=272&s=25B2EC32CB604C0348C070D80000D0B2" alt="img"></p>
-<p>接下来再看一下下面的图，跟之前的区别在于我们把申请人从原有的属性中抽取出来并设置成了一个单独的实体。在这种情况下，整个业务逻辑就变得很清晰，我们很容易看出张三申请了两个贷款，而且张三拥有两个手机号，在申请其中一个贷款的时候他填写了父母的电话号。总而言之，一个好的设计很容易让人看到业务本身的逻辑。</p>
-<p><img src="http://t12.baidu.com/it/u=2571953264,527713124&fm=173&app=25&f=JPEG?w=639&h=328&s=4D803C72137061824840F8C8020030F3" alt="img"></p>
-<p>接下来再看一个原则叫做效率原则（Efficiency Principle）。<strong>效率原则让知识图谱尽量轻量化、并决定哪些数据放在知识图谱，哪些数据不需要放在知识图谱</strong>。在这里举一个简单的类比，在经典的计算机存储系统中，我们经常会谈论到内存和硬盘，内存作为高效的访问载体，作为所有程序运行的关键。这种存储上的层次结构设计源于数据的局部性 -“locality”，也就是说经常被访问到的数据集中在某一个区块上，所以这部分数据可以放到内存中来提升访问的效率。 类似的逻辑也可以应用到知识图谱的设计上：我们把常用的信息存放在知识图谱中，把那些访问频率不高，对关系分析无关紧要的信息放在传统的关系型数据库当中。 <strong>效率原则的核心在于把知识图谱设计成小而轻的存储载体。</strong></p>
-<p><img src="http://t12.baidu.com/it/u=226327970,1562893738&fm=173&app=25&f=JPEG?w=640&h=318&s=CDA0AC520530F42949E80D52020040F2" alt="img"></p>
-<p>比如在下面的知识图谱中，我们完全可以把一些信息比如“年龄”，“家乡”放到传统的关系型数据库当中，因为这些数据对于：a. 分析关系来说没有太多作用 b. 访问频率低，放在知识图谱上反而影响效率</p>
-<p><img src="http://t11.baidu.com/it/u=302720116,1354414349&fm=173&app=25&f=JPEG?w=640&h=322&s=69203C720F70448A506130D2000080B1" alt="img"></p>
-<p>另外，从分析原则（Analytics Principle）的角度，我们不需要把跟关系分析无关的实体放在图谱当中；从冗余原则（Redundancy Principle）的角度，有些重复性信息、高频信息可以放到传统数据库当中。</p>
-<p>4.4 把数据存入知识图谱</p>
-<p>存储上我们要面临存储系统的选择，但由于我们设计的知识图谱带有属性，图数据库可以作为首选。但至于选择哪个图数据库也要看业务量以及对效率的要求。如果数据量特别庞大，则 Neo4j 很可能满足不了业务的需求，这时候不得不去选择支持准分布式的系统比如 OrientDB, JanusGraph 等，或者通过效率、冗余原则把信息存放在传统数据库中，从而减少知识图谱所承载的信息量。 通常来讲，对于 10 亿节点以下规模的图谱来说 Neo4j 已经足够了。</p>
-<p>4.5 上层应用的开发</p>
-<p>等我们构建好知识图谱之后，接下来就要使用它来解决具体的问题。对于风控知识图谱来说，首要任务就是挖掘关系网络中隐藏的欺诈风险。<strong>从算法的角度来讲，有两种不同的场景：一种是基于规则的；另一种是基于概率的。</strong>鉴于目前 AI 技术的现状，基于规则的方法论还是在垂直领域的应用中占据主导地位，但随着数据量的增加以及方法论的提升，基于概率的模型也将会逐步带来更大的价值。</p>
-<p>4.5.1 基于规则的方法论</p>
-<p>首先，我们来看几个基于规则的应用，分别是不一致性验证、基于规则的特征提取、基于模式的判断。</p>
-<p><strong>不一致性验证</strong></p>
-<p>为了判断关系网络中存在的风险，一种简单的方法就是做不一致性验证，也就是通过一些规则去找出潜在的矛盾点。这些规则是以人为的方式提前定义好的，所以在设计规则这个事情上需要一些业务的知识。比如在下面的这个图中，李明和李飞两个人都注明了同样的公司电话，但实际上从数据库中判断这俩人其实在不同的公司上班，这就是一个矛盾点。 类似的规则其实可以有很多，不在这里一一列出。</p>
-<p><img src="http://t11.baidu.com/it/u=2086250224,504274614&fm=173&app=25&f=JPEG?w=640&h=355&s=A012EC325F0254C2566F58D80200D0B2" alt="img"></p>
-<p><strong>基于规则提取特征</strong></p>
-<p>我们也可以基于规则从知识图谱中提取一些特征，而且这些特征一般基于深度的搜索比如 2 度，3 度甚至更高维度。比如我们可以问一个这样的问题：“申请人二度关系里有多少个实体触碰了黑名单？”，从图中我们很容观察到二度关系中有两个实体触碰了黑名单（黑名单由红色来标记）。等这些特征被提取之后，一般可以作为风险模型的输入。在此还是想说明一点，如果特征并不涉及深度的关系，其实传统的关系型数据库则足以满足需求。</p>
-<p><img src="http://t11.baidu.com/it/u=1060578160,1139020907&fm=173&app=25&f=JPEG?w=639&h=364&s=2032EC325F0264C0446978DA020050B2" alt="img"></p>
-<p><strong>基于模式的判断</strong></p>
-<p>这种方法比较适用于找出团体欺诈，它的核心在于通过一些模式来找到有可能存在风险的团体或者子图（sub-graph），然后对这部分子图做进一步的分析。 这种模式有很多种，在这里举几个简单的例子。 比如在下图中，三个实体共享了很多其他的信息，我们可以看做是一个团体，并对其做进一步的分析。</p>
-<p><img src="http://t12.baidu.com/it/u=3828566894,715445935&fm=173&app=25&f=JPEG?w=640&h=325&s=05F2EC329B8340C208C13D52020080F2" alt="img"></p>
-<p>再比如，我们也可以从知识图谱中找出强连通图，并把它标记出来，然后做进一步风险分析。强连通图意味着每一个节点都可以通过某种路径达到其他的点，也就说明这些节点之间有很强的关系。</p>
-<p><img src="http://t10.baidu.com/it/u=480692214,290401441&fm=173&app=25&f=JPEG?w=640&h=327&s=61728472DF324580425830D90200C0B2" alt="img"></p>
-<p>4.5.2 基于概率的方法</p>
-<p>除了基于规则的方法，也可以使用概率统计的方法。 比如社区挖掘、标签传播、聚类等技术都属于这个范畴。 对于这类技术，在本文里不做详细的讲解，感兴趣的读者可以参考相关文献。</p>
-<p>社区挖掘算法的目的在于从图中找出一些社区。对于社区，我们可以有多种定义，但直观上可以理解为社区内节点之间关系的密度要明显大于社区之间的关系密度。下面的图表示社区发现之后的结果，图中总共标记了三个不同的社区。一旦我们得到这些社区之后，就可以做进一步的风险分析。</p>
-<p>由于社区挖掘是基于概率的方法论，好处在于不需要人为地去定义规则，特别是对于一个庞大的关系网络来说，定义规则这事情本身是一件很复杂的事情。</p>
-<p><img src="http://t11.baidu.com/it/u=3112136647,1918214170&fm=173&app=25&f=JPEG?w=640&h=392&s=A036EC328F026EC05CFCCDDA0200D0B3" alt="img"></p>
-<p>标签传播算法的核心思想在于节点之间信息的传递。这就类似于，跟优秀的人在一起自己也会逐渐地变优秀是一个道理。因为通过这种关系会不断地吸取高质量的信息，最后使得自己也会不知不觉中变得更加优秀。具体细节不在这里做更多解释。</p>
-<p>相比规则的方法论，基于概率的方法的缺点在于：需要足够多的数据。如果数据量很少，而且整个图谱比较稀疏（Sparse），基于规则的方法可以成为我们的首选。尤其是对于金融领域来说，数据标签会比较少，这也是为什么基于规则的方法论还是更普遍地应用在金融领域中的主要原因。</p>
-<p>4.5.3 基于动态网络的分析</p>
-<p>以上所有的分析都是基于静态的关系图谱。所谓的静态关系图谱，意味着我们不考虑图谱结构本身随时间的变化，只是聚焦在当前知识图谱结构上。然而，我们也知道图谱的结构是随时间变化的，而且这些变化本身也可以跟风险有所关联。</p>
-<p>在下面的图中，我们给出了一个知识图谱 T 时刻和 T+1 时刻的结构，我们很容易看出在这两个时刻中间，图谱结构（或者部分结构）发生了很明显的变化，这其实暗示着潜在的风险。那怎么去判断这些结构上的变化呢？ 感兴趣的读者可以查阅跟“dynamic network mining”相关的文献。</p>
-<p><img src="http://t12.baidu.com/it/u=621530735,2369132207&fm=173&app=25&f=JPEG?w=639&h=302&s=6172A47297F3658044C084CE000010B2" alt="img"></p>
-<p>\5. 知识图谱在其他行业中的应用</p>
-<p>除了金融领域，知识图谱的应用可以涉及到很多其他的行业，包括医疗、教育、证券投资、推荐等等。其实，只要有关系存在，则有知识图谱可发挥价值的地方。 在这里简单举几个垂直行业中的应用。</p>
-<p>比如对于教育行业，我们经常谈论个性化教育、因材施教的理念。其核心在于理解学生当前的知识体系，而且这种知识体系依赖于我们所获取到的数据比如交互数据、评测数据、互动数据等等。为了分析学习路径以及知识结构，我们则需要针对于一个领域的概念知识图谱，简单来讲就是概念拓扑结构。在下面的图中，我们给出了一个非常简单的概念图谱：比如为了学习逻辑回归则需要先理解线性回归；为了学习 CNN，得对神经网络有所理解等等。所有对学生的评测、互动分析都离不开概念图谱这个底层的数据。</p>
-<p><img src="http://t11.baidu.com/it/u=2915145958,428470587&fm=173&app=25&f=JPEG?w=639&h=229&s=617284721134F6217FFE45D90200D0B2" alt="img"></p>
-<p>在证券领域，我们经常会关心比如“一个事件发生了，对哪些公司产生什么样的影响？” 比如有一个负面消息是关于公司 1 的高管，而且我们知道公司 1 和公司 2 有种很密切的合作关系，公司 2 有个主营产品是由公司 3 提供的原料基础上做出来的。</p>
-<p><img src="http://t12.baidu.com/it/u=819872987,394960907&fm=173&app=25&f=JPEG?w=640&h=278&s=1832EC12093153825FF4C54B0300F0B1" alt="img"></p>
-<p>其实有了这样的一个知识图谱，我们很容易回答哪些公司有可能会被这次的负面事件所影响。当然，仅仅是“有可能”，具体会不会有强相关性必须由数据来验证。所以在这里，知识图谱的好处就是把我们所需要关注的范围很快给我们圈定。接下来的问题会更复杂一些，比如既然我们知道公司 3 有可能被这次事件所影响，那具体影响程度有多大？ 对于这个问题，光靠知识图谱是很难回答的，必须要有一个影响模型、以及需要一些历史数据才能在知识图谱中做进一步推理以及计算。</p>
-<p>\6. 实践上的几点建议</p>
-<p>首先，知识图谱是一个比较新的工具，它的主要作用还是在于分析关系，尤其是深度的关系。所以在业务上，首先要确保它的必要性，其实很多问题可以用非知识图谱的方式来解决。</p>
-<p>知识图谱领域一个最重要的话题是知识的推理。 而且知识的推理是走向强人工智能的必经之路。但很遗憾的，目前很多语义网络的角度讨论的推理技术（比如基于深度学习，概率统计）很难在实际的垂直应用中落地。其实目前最有效的方式还是基于一些规则的方法论，除非我们有非常庞大的数据集。</p>
-<p>最后，还是要强调一点，<strong>知识图谱工程本身还是业务为重心，以数据为中心。不要低估业务和数据的重要性。</strong></p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>发音</title>
-    <url>/2021/06/06/%E9%9F%B3%E6%A0%87/</url>
-    <content><![CDATA[<ul>
-<li><strong>/e/ 和 /æ/ ，</strong>两个音标在日常生活中常常容易搞错，关键的区别在于<strong>口型的大小</strong>。</li>
-</ul>
-<blockquote>
-<p>  <strong>/e/</strong>      <strong>/æ/</strong></p>
-<p>  b<strong>e</strong>d 床    b<strong>a</strong>d 坏的</p>
-<p>  r<strong>e</strong>d 红色   r<strong>a</strong>t 老鼠</p>
-</blockquote>
-<a id="more"></a>
-
-<ul>
-<li>发 <strong>/ə/</strong> 时，<strong>嘴巴放松</strong>，微微打开一点，比刚才的**/e/<strong>开口小。和拼音的</strong>e<strong>相比，发音更</strong>短促**，不能拖音。</li>
-</ul>
-<blockquote>
-<p>  <strong>/e/</strong>      <strong>/ə/</strong></p>
-<p> <strong>e</strong>ffort 努力    <strong>a</strong>fford 承担</p>
-<p> l<strong>e</strong>t 让     pil<strong>o</strong>t 飞行员</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ɜːr/</strong> 时，先发长元音**/ɜ:/<strong>，再快速过渡到</strong>卷舌音/r/**。</li>
-</ul>
-<blockquote>
-<p><strong>/ɜːr/</strong>      <strong>/e/</strong></p>
-<p>h<strong>ear</strong>d 听见    h<strong>ea</strong>d 头</p>
-<p>l<strong>ear</strong>n 学习    l<strong>e</strong>sson 课程</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ʌ/</strong> 时，不能把嘴张得太大，只要打开到**/ɑː/的一半大小<strong>就可以，发音要</strong>短促有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/ɑː/</strong>      <strong>/ʌ/</strong></p>
-<p>   b<strong>o</strong>dy 身体   b<strong>u</strong>ddy 伙伴</p>
-<p> l<strong>a</strong>tte 拿铁    l<strong>o</strong>ve 爱</p>
-</blockquote>
-<ul>
-<li>发 <strong>/ʊ/</strong> 时，嘴唇不需要像**/uː/<strong>那样用力圈成小圆，只需要微微地让</strong>双唇往前突一下<strong>，发音要</strong>短促有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/u:/</strong>      <strong>/ʊ/</strong></p>
-<p>  f<strong>oo</strong>d 食物    g<strong>oo</strong>d 好的</p>
-<p>   p<strong>oo</strong>l 泳池    p<strong>u</strong>t 放下</p>
-</blockquote>
-<ul>
-<li>发 <strong>/i:/</strong> 时，<strong>拖长发音</strong>，同时<strong>把嘴角向两边拉</strong>。发 <strong>/ɪ/**时，</strong>微微打开一点<strong>嘴巴，舌尖向下</strong>抵在下齿<strong>那里发音，发音要</strong>短而有力**。</li>
-</ul>
-<blockquote>
-<p>  <strong>/i:/</strong>      <strong>/ɪ/</strong></p>
-<p>  <strong>ea</strong>t 吃     <strong>i</strong>t 它</p>
-<p> l<strong>ea</strong>ve 离开    l<strong>i</strong>ve 居住</p>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-]]></content>
-      <categories>
-        <category>英语</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-      </tags>
   </entry>
 </search>
