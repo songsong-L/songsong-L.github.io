@@ -135,12 +135,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">0</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">55</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -240,6 +240,15 @@
                 <span class="post-meta-item-text">更新于</span>
                 <time title="修改时间：2022-03-24 16:54:52" itemprop="dateModified" datetime="2022-03-24T16:54:52+08:00">2022-03-24</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
 
           
   
@@ -338,6 +347,15 @@
                 <span class="post-meta-item-text">更新于</span>
                 <time title="修改时间：2022-03-24 16:50:29" itemprop="dateModified" datetime="2022-03-24T16:50:29+08:00">2022-03-24</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
 
           
   
@@ -487,6 +505,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="Songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/" class="post-title-link" itemprop="url">tensorflow初始化及其求导</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-13 00:00:00" itemprop="dateCreated datePublished" datetime="2021-09-13T00:00:00+08:00">2021-09-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:13" itemprop="dateModified" datetime="2022-03-26T20:34:13+08:00">2022-03-26</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>直接上代码，一看就明白！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment">#随机初始化</span></span><br><span class="line">v1=tf.Variable(tf.random.normal(shape=[<span class="number">4</span>,<span class="number">3</span>],mean=<span class="number">0</span>,stddev=<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#结合numpy</span></span><br><span class="line">a = np.random.random((<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line"><span class="comment">#常量形式</span></span><br><span class="line">v2=tf.constant(a.astype(<span class="string">&#x27;float32&#x27;</span>))</span><br><span class="line"><span class="comment">#变量形式1</span></span><br><span class="line">v3=tf.Variable(a.astype(<span class="string">&#x27;float32&#x27;</span>))</span><br><span class="line"><span class="comment">#变量形式2</span></span><br><span class="line">v4=tf.Variable(v2)</span><br><span class="line"></span><br><span class="line"><span class="comment">#特殊形式0，1等</span></span><br><span class="line">v5=tf.Variable(tf.ones([<span class="number">4</span>,<span class="number">3</span>]))</span><br><span class="line"></span><br><span class="line">v6=tf.convert_to_tensor(a,dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line"><span class="comment"># print(v1)</span></span><br><span class="line"><span class="comment"># print(v2)</span></span><br><span class="line"><span class="comment"># print(v3)</span></span><br><span class="line"><span class="comment"># print(v4)</span></span><br><span class="line"><span class="comment"># print(v5)</span></span><br><span class="line"><span class="comment"># print(v6)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print((v6.numpy() == v2.numpy()).all())</span></span><br><span class="line"><span class="comment"># print((v6.numpy() == v3.numpy()).all())</span></span><br><span class="line"><span class="comment"># print((v6.numpy() == v4.numpy()).all())</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#试图对常量求导</span></span><br><span class="line"><span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> g:  <span class="comment"># 记录求导的磁带</span></span><br><span class="line">    y = v2 * v2</span><br><span class="line">dy_dx = g.gradient(y, v2)  <span class="comment"># 求导</span></span><br><span class="line">print(dy_dx)</span><br><span class="line"></span><br><span class="line"><span class="comment">#监控常量</span></span><br><span class="line"><span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> g:  <span class="comment"># 记录求导的磁带</span></span><br><span class="line">    g.watch(v2)</span><br><span class="line">    y = v2 * v2</span><br><span class="line">dy_dx = g.gradient(y, v2)  <span class="comment"># 求导</span></span><br><span class="line">print(dy_dx)</span><br><span class="line"></span><br><span class="line"><span class="comment">#对变量求导</span></span><br><span class="line"><span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> g:  <span class="comment"># 记录求导的磁带</span></span><br><span class="line">    y = v4 * v4</span><br><span class="line">dy_dx = g.gradient(y, v4)  <span class="comment"># 求导</span></span><br><span class="line">print(dy_dx)</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://songsong.host/2021/09/13/tensorflow%E8%AE%A1%E7%AE%97psnr%E4%B8%8Essim/">
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/face.jpg">
@@ -559,94 +665,6 @@
 <p><img src="https://img-blog.csdnimg.cn/8eaf15a2cf38418498e61e1de9234706.png" alt="在这里插入图片描述"><br>不会吧不会吧，不会tensorflow连除数为0都不考虑吧。。。<br>计算psnr需要计算mse，当两张一样的图片时，mse几乎为0，在计算psnr那就无穷大了。<br>tensorflow万万没想到我会计算两张一样的图片？？？。。。</p>
 <h2 id="测试3，批量计算"><a href="#测试3，批量计算" class="headerlink" title="测试3，批量计算"></a>测试3，批量计算</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">bath=[]</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> images, labels <span class="keyword">in</span> mnist_dataset:    <span class="comment"># image: [4, 28, 28, 1], labels: [4]</span></span><br><span class="line">    i = i + <span class="number">1</span></span><br><span class="line">    bath.append(images)</span><br><span class="line">    <span class="keyword">if</span> i&gt;<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># psnr = tf.image.psnr(images, images, 1)</span></span><br><span class="line">    <span class="comment"># print(psnr)</span></span><br><span class="line">    <span class="comment"># break</span></span><br><span class="line"></span><br><span class="line">print(tf.image.psnr(bath[<span class="number">0</span>],bath[<span class="number">1</span>],<span class="number">1</span>))</span><br><span class="line">print(tf.image.ssim(bath[<span class="number">0</span>],bath[<span class="number">1</span>],<span class="number">1</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/ef8a44fa50244bf9bdb93a41b12250b1.png" alt="在这里插入图片描述"></p>
-
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://songsong.host/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/">
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/face.jpg">
-      <meta itemprop="name" content="Songsong">
-      <meta itemprop="description" content="我就是我，不一样的烟火">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Songsong的垃圾堆">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/" class="post-title-link" itemprop="url">tensorflow初始化及其求导</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-09-13 00:00:00" itemprop="dateCreated datePublished" datetime="2021-09-13T00:00:00+08:00">2021-09-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-26 20:34:13" itemprop="dateModified" datetime="2022-03-26T20:34:13+08:00">2022-03-26</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/13/tensorflow%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%85%B6%E6%B1%82%E5%AF%BC/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>直接上代码，一看就明白！</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment">#随机初始化</span></span><br><span class="line">v1=tf.Variable(tf.random.normal(shape=[<span class="number">4</span>,<span class="number">3</span>],mean=<span class="number">0</span>,stddev=<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#结合numpy</span></span><br><span class="line">a = np.random.random((<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line"><span class="comment">#常量形式</span></span><br><span class="line">v2=tf.constant(a.astype(<span class="string">&#x27;float32&#x27;</span>))</span><br><span class="line"><span class="comment">#变量形式1</span></span><br><span class="line">v3=tf.Variable(a.astype(<span class="string">&#x27;float32&#x27;</span>))</span><br><span class="line"><span class="comment">#变量形式2</span></span><br><span class="line">v4=tf.Variable(v2)</span><br><span class="line"></span><br><span class="line"><span class="comment">#特殊形式0，1等</span></span><br><span class="line">v5=tf.Variable(tf.ones([<span class="number">4</span>,<span class="number">3</span>]))</span><br><span class="line"></span><br><span class="line">v6=tf.convert_to_tensor(a,dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># print(a)</span></span><br><span class="line"><span class="comment"># print(v1)</span></span><br><span class="line"><span class="comment"># print(v2)</span></span><br><span class="line"><span class="comment"># print(v3)</span></span><br><span class="line"><span class="comment"># print(v4)</span></span><br><span class="line"><span class="comment"># print(v5)</span></span><br><span class="line"><span class="comment"># print(v6)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print((v6.numpy() == v2.numpy()).all())</span></span><br><span class="line"><span class="comment"># print((v6.numpy() == v3.numpy()).all())</span></span><br><span class="line"><span class="comment"># print((v6.numpy() == v4.numpy()).all())</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#试图对常量求导</span></span><br><span class="line"><span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> g:  <span class="comment"># 记录求导的磁带</span></span><br><span class="line">    y = v2 * v2</span><br><span class="line">dy_dx = g.gradient(y, v2)  <span class="comment"># 求导</span></span><br><span class="line">print(dy_dx)</span><br><span class="line"></span><br><span class="line"><span class="comment">#监控常量</span></span><br><span class="line"><span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> g:  <span class="comment"># 记录求导的磁带</span></span><br><span class="line">    g.watch(v2)</span><br><span class="line">    y = v2 * v2</span><br><span class="line">dy_dx = g.gradient(y, v2)  <span class="comment"># 求导</span></span><br><span class="line">print(dy_dx)</span><br><span class="line"></span><br><span class="line"><span class="comment">#对变量求导</span></span><br><span class="line"><span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> g:  <span class="comment"># 记录求导的磁带</span></span><br><span class="line">    y = v4 * v4</span><br><span class="line">dy_dx = g.gradient(y, v4)  <span class="comment"># 求导</span></span><br><span class="line">print(dy_dx)</span><br></pre></td></tr></table></figure>
-
-
 
       
     </div>
@@ -810,6 +828,15 @@
                 <span class="post-meta-item-text">更新于</span>
                 <time title="修改时间：2022-03-24 16:55:03" itemprop="dateModified" datetime="2022-03-24T16:55:03+08:00">2022-03-24</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
 
           
   
@@ -902,6 +929,15 @@
                 <span class="post-meta-item-text">更新于</span>
                 <time title="修改时间：2022-03-24 16:55:14" itemprop="dateModified" datetime="2022-03-24T16:55:14+08:00">2022-03-24</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%8B%B1%E8%AF%AD/" itemprop="url" rel="index"><span itemprop="name">英语</span></a>
+                </span>
+            </span>
 
           
   
@@ -1249,6 +1285,18 @@
           <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
   <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=298880&auto=0&height=66"></iframe>
