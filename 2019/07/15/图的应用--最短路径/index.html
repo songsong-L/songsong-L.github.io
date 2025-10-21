@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="图的应用--最短路径">
+<meta property="og:url" content="http://songsong.host/2019/07/15/%E5%9B%BE%E7%9A%84%E5%BA%94%E7%94%A8--%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190715100416296.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190715100515686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-07-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.939Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="最短路径">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190715100416296.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://songsong.host/2019/07/15/%E5%9B%BE%E7%9A%84%E5%BA%94%E7%94%A8--%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>图的应用--最短路径 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2019/07/15/%E5%9B%BE%E7%9A%84%E5%BA%94%E7%94%A8--%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图的应用--最短路径
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-15 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-15T00:00:00+08:00">2019-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/07/15/%E5%9B%BE%E7%9A%84%E5%BA%94%E7%94%A8--%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/15/%E5%9B%BE%E7%9A%84%E5%BA%94%E7%94%A8--%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <body>
+<div id="top"></div>
+</body>
+
+
+<h1 id="1-从某个源点到其余各点的最短距离"><a href="#1-从某个源点到其余各点的最短距离" class="headerlink" title="1. 从某个源点到其余各点的最短距离"></a>1. 从某个源点到其余各点的最短距离</h1><ul>
+<li><h2 id="迪杰斯特拉（Dijkstra）算法"><a href="#迪杰斯特拉（Dijkstra）算法" class="headerlink" title="迪杰斯特拉（Dijkstra）算法"></a>迪杰斯特拉（Dijkstra）算法</h2><ul>
+<li><p>将顶点集V分为两堆—-S 和 V-S，初始时S只有源点。</p>
+</li>
+<li><p>辅助数组</p>
+<ul>
+<li>S[i]==true/1，表示顶点加入了S集中。</li>
+<li>Path[i]，其值记录着当前路径上vi的直接前驱顶点序号。</li>
+<li>D[i]，从源点v0到终点vi的的当前最短路径长度。这与最小生成树 <strong><em>普利姆（prim）</em></strong> 算法中的辅助数组相似。只不过这里是路径，比较的是中转和非中转路线的权值，而最小生成树中，比较的是集合中（可能v0，v1）的点到其余各个顶点（可能v2，v3）的权值谁小（v0v2与v1v2、v0v3与v1v3比）。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">void ShortestPath_DIJ(int v0) 		&#x2F;&#x2F; 迪杰斯特拉算法最短路径</span><br><span class="line">&#123;	</span><br><span class="line">	int v,w,i;	</span><br><span class="line">	int S[NUM]&#x3D;&#123;0&#125;;	</span><br><span class="line">	int min;	</span><br><span class="line">	for(v&#x3D;1;v&lt;G.vexnum;v++)&#123;		&#x2F;&#x2F;初始化 </span><br><span class="line">		S[v]&#x3D;0;						&#x2F;&#x2F;初始化为空集 </span><br><span class="line">		D[v]&#x3D;G.arcs[v0][v].adj;		&#x2F;&#x2F;将v0到各个终点的长度初始化为权值	</span><br><span class="line">		if(D[v]&lt;Max)&#123;				&#x2F;&#x2F;如果v0和V之间有边，将V的前驱置为v0 </span><br><span class="line">			path[v]&#x3D;v0;		</span><br><span class="line">		&#125;</span><br><span class="line">		else path[v]&#x3D;-1;	 		&#x2F;&#x2F;如果没有边，即没路 </span><br><span class="line">	&#125;</span><br><span class="line">	D[v0]&#x3D;0;						&#x2F;&#x2F;源点到原点的距离为0 </span><br><span class="line">	S[v0]&#x3D;1;						&#x2F;&#x2F;将v0加入S</span><br><span class="line">	</span><br><span class="line">	&#x2F;* 初始化结束，开始主循环，每次求得v0到某个顶点v的最短路径，将v加入S中*&#x2F; </span><br><span class="line">	</span><br><span class="line">	for(i&#x3D;2;i&lt;G.vexnum;++i)&#123;		&#x2F;&#x2F;对其余n-1个顶点依次进行计算 </span><br><span class="line">		min&#x3D;Max;	</span><br><span class="line">		for(w&#x3D;1;w&lt;G.vexnum;++w)				</span><br><span class="line">			if(!S[w]&amp;&amp;D[w]&lt;min)&#123;	&#x2F;&#x2F;选择一条当前的最短路径</span><br><span class="line">				v&#x3D;w;			</span><br><span class="line">				min&#x3D;D[w];		</span><br><span class="line">			&#125;	    </span><br><span class="line">		S[v]&#x3D;1;						&#x2F;&#x2F;将v加入S </span><br><span class="line">		</span><br><span class="line">		for(w&#x3D;1;w&lt;G.vexnum;++w)		&#x2F;&#x2F;更新v0到集合V-S上所有顶点的最短路径长度 </span><br><span class="line">		if(!S[w]&amp;&amp;((D[v]+G.arcs[v][w].adj)&lt;D[w]))&#123;		&#x2F;&#x2F;中转路径更小 </span><br><span class="line">			D[w]&#x3D;D[v]+G.arcs[v][w].adj;		</span><br><span class="line">			path[w]&#x3D;v;		</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><h2 id="输出路径"><a href="#输出路径" class="headerlink" title="输出路径"></a>输出路径</h2><p>从终点回溯到起点，path[i]的值是vi的前驱，只要前驱不等于起点，就一直回溯即可得到最短路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">if(sight1!&#x3D;sight2)&#123;</span><br><span class="line">	printf(&quot;\n\t从%s到%s的最短路径是&quot;,G.vex[sight1].sight,G.vex[sight2].sight);	</span><br><span class="line">	printf(&quot;\t(最短距离为 %dm.)\n\n\t&quot;,D[sight2]);	</span><br><span class="line">    printf(&quot;%s&lt;--&quot;,G.vex[sight2].sight);</span><br><span class="line">	while(path[end]!&#x3D;sight1)&#123;</span><br><span class="line">		end&#x3D;path[end];</span><br><span class="line">		printf(&quot;%s&lt;--&quot;,G.vex[end].sight);	</span><br><span class="line">		q&#x3D;q+1;		</span><br><span class="line">		if(q%8&#x3D;&#x3D;0) printf(&quot;\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;%s&quot;,G.vex[sight1].sight);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="#top">回到顶部</a></p>
+<h1 id="2-每一对顶点之间的最短距离"><a href="#2-每一对顶点之间的最短距离" class="headerlink" title="2. 每一对顶点之间的最短距离"></a>2. 每一对顶点之间的最短距离</h1><p>很显然，调用n次迪杰斯特拉（Dijkstra）算法即可得到任意两地间的最短距离。还有一种方法就是下面的弗洛伊德（Floyed）算法。</p>
+</li>
+</ul>
+</li>
+<li><h2 id="弗洛伊德（Floyed）算法"><a href="#弗洛伊德（Floyed）算法" class="headerlink" title="弗洛伊德（Floyed）算法"></a>弗洛伊德（Floyed）算法</h2><ul>
+<li>理解的不是很透彻，只能从宏观把握一下。两点间距离最小，要么有中转要么没有中转，所以肯定要比较加入中间点的路径长度。两个for循环，那只能输出二维数组的值（即两地间的距离），所以还需要一个for循环来插入中转点，然后比较找最短路径距离。</li>
+<li>辅助数组<br>  path[i][j]，其值记录了i，j确定的顶点的前驱。<br>  D[i][j]，记录了vi到vj的最短路径长度。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">void ShortestPath_Floyed()&#123;			&#x2F;&#x2F;求各对顶点之间的最短路径</span><br><span class="line">	int P[NUM][NUM];				&#x2F;&#x2F;记录路径</span><br><span class="line">	int Dis[NUM][NUM];				&#x2F;&#x2F;记录最短路径  </span><br><span class="line">	int i,j,k,q&#x3D;0;	</span><br><span class="line">	int end;</span><br><span class="line">	for(i&#x3D;1;i&lt;G.vexnum;i++)&#123;		&#x2F;&#x2F;初始化 </span><br><span class="line">		for(j&#x3D;1;j&lt;G.vexnum;j++)&#123;</span><br><span class="line">			if(i&#x3D;&#x3D;j) Dis[i][j]&#x3D;0;</span><br><span class="line">			else Dis[i][j]&#x3D;G.arcs[i][j].adj;</span><br><span class="line">			if(Dis[i][j]&lt;Max) P[i][j]&#x3D;i;	&#x2F;&#x2F;如果i和j之间有边，将j的前驱置为i</span><br><span class="line">			else P[i][j]&#x3D;-1;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for(k&#x3D;1;k&lt;G.vexnum;k++)</span><br><span class="line">		for(i&#x3D;1;i&lt;G.vexnum;i++)</span><br><span class="line">			for(j&#x3D;1;j&lt;G.vexnum;j++)	</span><br><span class="line">				if(Dis[i][k]+Dis[k][j]&lt;Dis[i][j])&#123;	</span><br><span class="line">					Dis[i][j]&#x3D;Dis[i][k]+Dis[k][j];		</span><br><span class="line">					P[i][j]&#x3D;P[k][j];	</span><br><span class="line">				&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><h2 id="输出路径-1"><a href="#输出路径-1" class="headerlink" title="输出路径"></a>输出路径</h2>从终点回溯到起点，path[i][j]的值是vj的前驱，只要前驱不等于起点vi，就一直回溯即可得到最短路径。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">for(i&#x3D;1;i&lt;G.vexnum;i++)&#123;	</span><br><span class="line">		for(j&#x3D;1;j&lt;G.vexnum;j++)&#123;	</span><br><span class="line">			end&#x3D;j;		</span><br><span class="line">			printf(&quot;\n从%s到%s的最短路径是&quot;,G.vex[i].sight,G.vex[j].sight);	</span><br><span class="line">			printf(&quot;\t(最短距离为 %dm.)\n\t&quot;,Dis[i][j]);	</span><br><span class="line">		    printf(&quot;\n%s&lt;--&quot;,G.vex[j].sight);</span><br><span class="line">			while(P[i][end]!&#x3D;i)&#123;</span><br><span class="line">				end&#x3D;P[i][end];</span><br><span class="line">				printf(&quot;%s&lt;--&quot;,G.vex[end].sight);	</span><br><span class="line">				q&#x3D;q+1;		</span><br><span class="line">				if(q%8&#x3D;&#x3D;0) printf(&quot;\n&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			printf(&quot;%s\n&quot;,G.vex[i].sight);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<a href="#top">回到顶部</a><h1 id="总的代码："><a href="#总的代码：" class="headerlink" title="总的代码："></a>总的代码：</h1></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#define Max 32767</span><br><span class="line">#define NUM 13</span><br><span class="line"></span><br><span class="line">typedef char ArcType; </span><br><span class="line">typedef char VerType; </span><br><span class="line"></span><br><span class="line">typedef struct ArcCell&#123;</span><br><span class="line">	int adj;				&#x2F;&#x2F;记录权值 </span><br><span class="line">	ArcType *info;			&#x2F;&#x2F;其他信息 </span><br><span class="line">&#125;ArcCell;</span><br><span class="line"></span><br><span class="line">typedef struct VertexType&#123;</span><br><span class="line">	int number;     		&#x2F;&#x2F;顶点编号</span><br><span class="line">	VerType *sight;			&#x2F;&#x2F;其他信息，在此记录顶点名 即地名 </span><br><span class="line">&#125;VertexType;</span><br><span class="line"></span><br><span class="line">typedef struct&#123;</span><br><span class="line">	VertexType vex[NUM];	&#x2F;&#x2F;顶点表 </span><br><span class="line">	ArcCell arcs[NUM][NUM];	&#x2F;&#x2F;邻接矩阵 </span><br><span class="line">	int vexnum,arcnum;    	&#x2F;&#x2F;点数和边数 </span><br><span class="line">&#125;MGraph;</span><br><span class="line"></span><br><span class="line">MGraph G;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int D[NUM];									&#x2F;&#x2F;记录最短路径 </span><br><span class="line">int path[NUM];								&#x2F;&#x2F;记录路径 </span><br><span class="line">void CreateUDN(int v,int a);				&#x2F;&#x2F;创建图	</span><br><span class="line">void ShortestPath_DIJ(int num);				&#x2F;&#x2F;求最短路径	</span><br><span class="line">void ShortestPath_Floyed();					&#x2F;&#x2F;求各对顶点之间的最短路径 </span><br><span class="line">void printpath(int sight1,int sight2);		&#x2F;&#x2F;输出任意两点间的最短路径 </span><br><span class="line">void lookAllArc();							&#x2F;&#x2F;浏览任意两地边的信息 </span><br><span class="line">void lookSingleArc();						&#x2F;&#x2F;浏览单一边的信息</span><br><span class="line">void modify(); 								&#x2F;&#x2F;修改两个位置之间的距离 </span><br><span class="line">void welcome();</span><br><span class="line">char Menu();</span><br><span class="line"></span><br><span class="line">void CreateUDN(int v,int a) &#x2F;&#x2F; 创建图的函数</span><br><span class="line">&#123;</span><br><span class="line">	int i,j;</span><br><span class="line">	G.vexnum&#x3D;v;</span><br><span class="line">	G.arcnum&#x3D;a;</span><br><span class="line">	for(i&#x3D;1;i&lt;G.vexnum;++i) G.vex[i].number&#x3D;i;</span><br><span class="line">	G.vex[0].sight&#x3D;&quot;初始化&quot;;</span><br><span class="line">	G.vex[1].sight&#x3D;&quot;西苑门口&quot;;</span><br><span class="line">	G.vex[2].sight&#x3D;&quot;男生宿舍17A公寓&quot;;</span><br><span class="line">	G.vex[3].sight&#x3D;&quot;第三食堂&quot;;</span><br><span class="line">	G.vex[4].sight&#x3D;&quot;大学生活动中心&quot;;</span><br><span class="line">	G.vex[5].sight&#x3D;&quot;西苑图书馆&quot;;</span><br><span class="line">	G.vex[6].sight&#x3D;&quot;篮球场&quot;;</span><br><span class="line">	G.vex[7].sight&#x3D;&quot;教学楼区&quot;;</span><br><span class="line">	G.vex[8].sight&#x3D;&quot;计算机学院办公楼&quot;;</span><br><span class="line">	G.vex[9].sight&#x3D;&quot;中苑门口&quot;;</span><br><span class="line">	G.vex[10].sight&#x3D;&quot;医务室&quot;;</span><br><span class="line">	G.vex[11].sight&#x3D;&quot;中苑图书馆&quot;;</span><br><span class="line">	G.vex[12].sight&#x3D;&quot;体育馆&quot;;</span><br><span class="line">	</span><br><span class="line">	for(i&#x3D;1;i&lt;G.vexnum;++i)&#123;</span><br><span class="line">		for(j&#x3D;1;j&lt;G.vexnum;++j)&#123;	</span><br><span class="line">			G.arcs[i][j].adj&#x3D;Max;		&#x2F;&#x2F;初始化权值为最大，即不通路	</span><br><span class="line">			G.arcs[i][j].info&#x3D;NULL;	</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	G.arcs[1][4].adj&#x3D;G.arcs[4][1].adj&#x3D;500;	</span><br><span class="line">	G.arcs[1][3].adj&#x3D;G.arcs[3][1].adj&#x3D;500;	</span><br><span class="line">	G.arcs[3][5].adj&#x3D;G.arcs[5][3].adj&#x3D;100;	</span><br><span class="line">	G.arcs[9][10].adj&#x3D;G.arcs[10][9].adj&#x3D;400;	</span><br><span class="line">	G.arcs[4][6].adj&#x3D;G.arcs[6][4].adj&#x3D;100;	</span><br><span class="line">	G.arcs[2][5].adj&#x3D;G.arcs[5][2].adj&#x3D;400;	</span><br><span class="line">	G.arcs[2][4].adj&#x3D;G.arcs[4][2].adj&#x3D;300;	</span><br><span class="line">	G.arcs[5][7].adj&#x3D;G.arcs[7][5].adj&#x3D;100;	</span><br><span class="line">	G.arcs[4][6].adj&#x3D;G.arcs[6][4].adj&#x3D;100;	</span><br><span class="line">	G.arcs[4][7].adj&#x3D;G.arcs[7][4].adj&#x3D;200;	</span><br><span class="line">	G.arcs[6][8].adj&#x3D;G.arcs[8][6].adj&#x3D;300;</span><br><span class="line">	G.arcs[7][8].adj&#x3D;G.arcs[8][7].adj&#x3D;200;	</span><br><span class="line">	G.arcs[1][9].adj&#x3D;G.arcs[9][1].adj&#x3D;10;</span><br><span class="line">	G.arcs[10][11].adj&#x3D;G.arcs[11][10].adj&#x3D;400;</span><br><span class="line">	G.arcs[11][12].adj&#x3D;G.arcs[12][11].adj&#x3D;300;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void modify()&#123;</span><br><span class="line">	int sight1,sight2,length;</span><br><span class="line">	printf(&quot;\n\t\t请输入要修改的两地：\n&quot;);	</span><br><span class="line">	scanf(&quot;%d %d&quot;,&amp;sight1,&amp;sight2);</span><br><span class="line">	if(sight1&lt;1||sight1&gt;12||sight2&lt;1||sight2&gt;12)&#123;</span><br><span class="line">		printf(&quot;\n\t\t请输入正确的地名序号~\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	else if(sight2!&#x3D;sight1)&#123;</span><br><span class="line">		if(G.arcs[sight1][sight2].adj&lt;Max)&#123;</span><br><span class="line">			printf(&quot;\n\t请输入从%s到%s的最新路径长度&quot;,G.vex[sight1].sight,G.vex[sight2].sight);	</span><br><span class="line">			scanf(&quot;%d&quot;,&amp;length);</span><br><span class="line">			if(length&lt;Max)&#123;</span><br><span class="line">				G.arcs[sight1][sight2].adj&#x3D;length;</span><br><span class="line">				G.arcs[sight2][sight1].adj&#x3D;	G.arcs[sight1][sight2].adj;</span><br><span class="line">				printf(&quot;\t修改成功！\n&quot;);</span><br><span class="line">			&#125; </span><br><span class="line">			else	printf(&quot;\t请输入有效的路径长度\n&quot;);	</span><br><span class="line">		&#125;</span><br><span class="line">		else printf(&quot;这两地之间没有通路，不能修改！\n&quot;);		</span><br><span class="line">	&#125;</span><br><span class="line">	else printf(&quot;请输入有意义的两地！\n&quot;); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">void lookAllArc()&#123;	</span><br><span class="line">	int i,j,n&#x3D;0; </span><br><span class="line">	printf(&quot;\n所有边的信息如下：\n&quot;);	</span><br><span class="line">	for(i&#x3D;1;i&lt;NUM;++i)&#123;</span><br><span class="line">		for(j&#x3D;1;j&lt;NUM;++j)&#123;</span><br><span class="line">			if(G.arcs[i][j].adj&lt;Max)&#123;</span><br><span class="line">				n++;</span><br><span class="line">				printf(&quot;从%s到%s的路径长度是%d\n&quot;,G.vex[i].sight,G.vex[j].sight,G.arcs[i][j].adj); </span><br><span class="line">			&#125;	</span><br><span class="line">			else &#123;</span><br><span class="line">				n++;</span><br><span class="line">				printf(&quot;从%s到%s没有直接的路~\n&quot;,G.vex[i].sight,G.vex[j].sight); </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;\n\n累计%d条记录\n\n&quot;,n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void lookSingleArc()&#123;</span><br><span class="line">	int i,j,n&#x3D;0; </span><br><span class="line">	int v0,v1; </span><br><span class="line">	printf(&quot;\n\n\t\t请选择一端的序号（1～12）：&quot;);		</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;v0);		</span><br><span class="line">	printf(&quot;\t\t请选择另一端的序号（1～12）：&quot;);		</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;v1);</span><br><span class="line">	if(v0&lt;1||v0&gt;12||v1&lt;1||v1&gt;12)&#123;</span><br><span class="line">		printf(&quot;\n\t\t请输入正确的地名序号~\n&quot;);</span><br><span class="line">	&#125;			</span><br><span class="line">	else if(G.arcs[v0][v1].adj&lt;Max)&#123;</span><br><span class="line">		printf(&quot;\n\t\t从%s到%s的路径长度是%dm\n&quot;,G.vex[v0].sight,G.vex[v1].sight,G.arcs[v0][v1].adj); </span><br><span class="line">	&#125;	</span><br><span class="line">	else &#123;</span><br><span class="line">		printf(&quot;\n\t\t从%s到%s没有直接的路~\n&quot;,G.vex[v0].sight,G.vex[v1].sight); </span><br><span class="line">	&#125;		</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">void ShortestPath_DIJ(int v0) 		&#x2F;&#x2F; 迪杰斯特拉算法最短路径</span><br><span class="line">&#123;	</span><br><span class="line">	int v,w,i;	</span><br><span class="line">	int S[NUM]&#x3D;&#123;0&#125;;	</span><br><span class="line">	int min;	</span><br><span class="line">	for(v&#x3D;1;v&lt;G.vexnum;v++)&#123;		&#x2F;&#x2F;初始化 </span><br><span class="line">		S[v]&#x3D;0;						&#x2F;&#x2F;初始化为空集 </span><br><span class="line">		D[v]&#x3D;G.arcs[v0][v].adj;		&#x2F;&#x2F;将v0到各个终点的长度初始化为权值	</span><br><span class="line">		if(D[v]&lt;Max)&#123;				&#x2F;&#x2F;如果v0和V之间有边，将V的前驱置为v0 </span><br><span class="line">			path[v]&#x3D;v0;		</span><br><span class="line">		&#125;</span><br><span class="line">		else path[v]&#x3D;-1;	 		&#x2F;&#x2F;如果没有边，即没路 </span><br><span class="line">	&#125;</span><br><span class="line">	D[v0]&#x3D;0;						&#x2F;&#x2F;源点到原点的距离为0 </span><br><span class="line">	S[v0]&#x3D;1;						&#x2F;&#x2F;将v0加入S</span><br><span class="line">	</span><br><span class="line">	&#x2F;* 初始化结束，开始主循环，每次求得v0到某个顶点v的最短路径，将v加入S中*&#x2F; </span><br><span class="line">	</span><br><span class="line">	for(i&#x3D;2;i&lt;G.vexnum;++i)&#123;		&#x2F;&#x2F;对其余n-1个顶点依次进行计算 </span><br><span class="line">		min&#x3D;Max;	</span><br><span class="line">		for(w&#x3D;1;w&lt;G.vexnum;++w)				</span><br><span class="line">			if(!S[w]&amp;&amp;D[w]&lt;min)&#123;	&#x2F;&#x2F;选择一条当前的最短路径</span><br><span class="line">				v&#x3D;w;			</span><br><span class="line">				min&#x3D;D[w];		</span><br><span class="line">			&#125;	    </span><br><span class="line">		S[v]&#x3D;1;						&#x2F;&#x2F;将v加入S </span><br><span class="line">		</span><br><span class="line">		for(w&#x3D;1;w&lt;G.vexnum;++w)		&#x2F;&#x2F;更新v0到集合V-S上所有顶点的最短路径长度 </span><br><span class="line">			if(!S[w]&amp;&amp;((D[v]+G.arcs[v][w].adj)&lt;D[w]))&#123;	&#x2F;&#x2F;中转路径更小 </span><br><span class="line">				D[w]&#x3D;D[v]+G.arcs[v][w].adj;		</span><br><span class="line">				path[w]&#x3D;v;		</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ShortestPath_Floyed()&#123;			&#x2F;&#x2F;求各对顶点之间的最短路径</span><br><span class="line">	int P[NUM][NUM];				&#x2F;&#x2F;记录路径</span><br><span class="line">	int Dis[NUM][NUM];				&#x2F;&#x2F;记录最短路径  </span><br><span class="line">	int i,j,k,q&#x3D;0;	</span><br><span class="line">	int end;</span><br><span class="line">	for(i&#x3D;1;i&lt;G.vexnum;i++)&#123;		&#x2F;&#x2F;初始化 </span><br><span class="line">		for(j&#x3D;1;j&lt;G.vexnum;j++)&#123;</span><br><span class="line">			if(i&#x3D;&#x3D;j) Dis[i][j]&#x3D;0;</span><br><span class="line">			else Dis[i][j]&#x3D;G.arcs[i][j].adj;</span><br><span class="line">			if(Dis[i][j]&lt;Max) P[i][j]&#x3D;i;	&#x2F;&#x2F;如果i和j之间有边，将j的前驱置为i</span><br><span class="line">			else P[i][j]&#x3D;-1;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for(k&#x3D;1;k&lt;G.vexnum;k++)</span><br><span class="line">		for(i&#x3D;1;i&lt;G.vexnum;i++)</span><br><span class="line">			for(j&#x3D;1;j&lt;G.vexnum;j++)	</span><br><span class="line">				if(Dis[i][k]+Dis[k][j]&lt;Dis[i][j])&#123;	</span><br><span class="line">					Dis[i][j]&#x3D;Dis[i][k]+Dis[k][j];		</span><br><span class="line">					P[i][j]&#x3D;P[k][j];	</span><br><span class="line">				&#125;</span><br><span class="line">	</span><br><span class="line">	for(i&#x3D;1;i&lt;G.vexnum;i++)&#123;	</span><br><span class="line">		for(j&#x3D;1;j&lt;G.vexnum;j++)&#123;	</span><br><span class="line">			end&#x3D;j;		</span><br><span class="line">			printf(&quot;\n从%s到%s的最短路径是&quot;,G.vex[i].sight,G.vex[j].sight);	</span><br><span class="line">			printf(&quot;\t(最短距离为 %dm.)\n\t&quot;,Dis[i][j]);	</span><br><span class="line">		    printf(&quot;\n%s&lt;--&quot;,G.vex[j].sight);</span><br><span class="line">			while(P[i][end]!&#x3D;i)&#123;</span><br><span class="line">				end&#x3D;P[i][end];</span><br><span class="line">				printf(&quot;%s&lt;--&quot;,G.vex[end].sight);	</span><br><span class="line">				q&#x3D;q+1;		</span><br><span class="line">				if(q%8&#x3D;&#x3D;0) printf(&quot;\n&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			printf(&quot;%s\n&quot;,G.vex[i].sight);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void printpath(int sight1,int sight2) &#x2F;&#x2F; 输出函数</span><br><span class="line">&#123;	</span><br><span class="line">	int q&#x3D;0;	</span><br><span class="line">	int end&#x3D;sight2;	</span><br><span class="line">	if(sight1&lt;1||sight1&gt;12||sight2&lt;1||sight2&gt;12)&#123;</span><br><span class="line">		printf(&quot;\n\t\t请输入正确的地名序号~\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	else if(sight1!&#x3D;sight2)&#123;</span><br><span class="line">		printf(&quot;\n\t从%s到%s的最短路径是&quot;,G.vex[sight1].sight,G.vex[sight2].sight);	</span><br><span class="line">		printf(&quot;\t(最短距离为 %dm.)\n\n\t&quot;,D[sight2]);	</span><br><span class="line">	    printf(&quot;%s&lt;--&quot;,G.vex[sight2].sight);</span><br><span class="line">		while(path[end]!&#x3D;sight1)&#123;</span><br><span class="line">			end&#x3D;path[end];</span><br><span class="line">			printf(&quot;%s&lt;--&quot;,G.vex[end].sight);	</span><br><span class="line">			q&#x3D;q+1;		</span><br><span class="line">			if(q%8&#x3D;&#x3D;0) printf(&quot;\n&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">		printf(&quot;%s&quot;,G.vex[sight1].sight);</span><br><span class="line">	&#125;</span><br><span class="line">	else&#123;</span><br><span class="line">		printf(&quot;\n\t\t\t从%s到%s的距离为0m\n&quot;,G.vex[sight1].sight,G.vex[sight2].sight);	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void welcome() &#x2F;&#x2F;登录图标</span><br><span class="line">&#123;</span><br><span class="line">	int i&#x3D;0; </span><br><span class="line">	printf(&quot;\t\t■■■■■■■■■■■■■■■■■■■■■■■\n&quot;);</span><br><span class="line">	printf(&quot;\t\t■                                          ■\n&quot;);</span><br><span class="line">	printf(&quot;\t\t■  ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■  ■\n&quot;);	</span><br><span class="line">	printf(&quot;\t\t■                                          ■\n&quot;);</span><br><span class="line">	printf(&quot;\t\t■  ■ 欢迎来到X X X X 大学校园导航系统 ■  ■\n&quot;);	</span><br><span class="line">	printf(&quot;\t\t■                                          ■\n&quot;);</span><br><span class="line">	printf(&quot;\t\t■  ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■  ■\n&quot;);</span><br><span class="line">	printf(&quot;\t\t■                                          ■\n&quot;);</span><br><span class="line">	printf(&quot;\t\t■■■■■■■■■■■■■■■■■■■■■■■\n\n&quot;);</span><br><span class="line">	for(i&#x3D;1;i&lt;NUM;i++)&#123;</span><br><span class="line">		printf(&quot;\t\t\t\t(%2d)%-20s\t\t\t\n&quot;,i,G.vex[i].sight);	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void show()&#123;</span><br><span class="line">	int i,j&#x3D;0;</span><br><span class="line">	for(i&#x3D;0;i&lt;G.vexnum;i++)&#123;</span><br><span class="line">		for(j&#x3D;0;j&lt;G.vexnum;j++)&#123;</span><br><span class="line">			printf(&quot;%8d&quot;,G.arcs[i][j].adj);</span><br><span class="line">		&#125;</span><br><span class="line">		printf(&quot;\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int main() &#x2F;&#x2F; 主函数</span><br><span class="line">&#123; </span><br><span class="line"> </span><br><span class="line">	int v0,v1;</span><br><span class="line">	char ck;</span><br><span class="line">	CreateUDN(NUM,15);</span><br><span class="line">	&#x2F;&#x2F;show();</span><br><span class="line">	do&#123;</span><br><span class="line">		ck&#x3D;Menu();</span><br><span class="line">		switch(ck)&#123;			</span><br><span class="line">			case &#39;1&#39;:		</span><br><span class="line">				welcome();		</span><br><span class="line">				printf(&quot;\n\n\t\t\t请选择出发地序号（1～12）：&quot;);		</span><br><span class="line">				scanf(&quot;%d&quot;,&amp;v0);		</span><br><span class="line">				printf(&quot;\t\t\t请选择目的地序号（1～12）：&quot;);		</span><br><span class="line">				scanf(&quot;%d&quot;,&amp;v1);		</span><br><span class="line">				ShortestPath_DIJ(v0);		</span><br><span class="line">				printpath(v0,v1);		</span><br><span class="line">				printf(&quot;\n\n\t\t请按回车键继续...\n&quot;);			</span><br><span class="line">				getchar();		</span><br><span class="line">				getchar();		</span><br><span class="line">				break;</span><br><span class="line">			case&#39;2&#39;:	</span><br><span class="line">				lookAllArc();				</span><br><span class="line">				getchar();</span><br><span class="line">				getchar();	</span><br><span class="line">			 	break;</span><br><span class="line">			case&#39;3&#39;:				</span><br><span class="line">				modify();		</span><br><span class="line">				getchar();</span><br><span class="line">				getchar();	</span><br><span class="line">			 	break;</span><br><span class="line">			case&#39;4&#39;:				</span><br><span class="line">				ShortestPath_Floyed();		</span><br><span class="line">				getchar();</span><br><span class="line">				getchar();	</span><br><span class="line">			 	break;	 </span><br><span class="line">			case&#39;5&#39;:				</span><br><span class="line">				lookSingleArc();		</span><br><span class="line">				getchar();</span><br><span class="line">				getchar();	</span><br><span class="line">			 	break;	 	 	</span><br><span class="line">			case&#39;6&#39;:				</span><br><span class="line">				printf(&quot;\n\n有待实现更多功能\n\n&quot;);		</span><br><span class="line">				getchar();</span><br><span class="line">				getchar();	</span><br><span class="line">			 	break;	</span><br><span class="line">		&#125;;	</span><br><span class="line">	&#125;while(ck!&#x3D;&#39;e&#39;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">char Menu() &#x2F;&#x2F; 主菜单</span><br><span class="line">&#123;</span><br><span class="line">	char c;</span><br><span class="line">	int flag;</span><br><span class="line">	do&#123;</span><br><span class="line">		welcome();</span><br><span class="line">		flag&#x3D;1;			</span><br><span class="line">		printf(&quot;\t 操作： \n&quot;);</span><br><span class="line">		printf(&quot;\t┏----------------------------┓\n&quot;);</span><br><span class="line">		printf(&quot;\t│ 1.导航                     │\n&quot;);	</span><br><span class="line">		printf(&quot;\t│ 2.查看所有边的路径长度     │\n&quot;);	</span><br><span class="line">		printf(&quot;\t│ 3.修改路径长度             │\n&quot;);	</span><br><span class="line">		printf(&quot;\t│ 4.查看各地间的最短路径长度 │\n&quot;);	</span><br><span class="line">		printf(&quot;\t│ 5.查看单一边的路径长度     │\n&quot;);</span><br><span class="line">		printf(&quot;\t│ e.退出                     │\n&quot;);		</span><br><span class="line">		printf(&quot;\t┗----------------------------┛\n&quot;);</span><br><span class="line">		printf(&quot;\t\t请输入您的选择：&quot;);	</span><br><span class="line">		scanf(&quot;%c&quot;,&amp;c);	</span><br><span class="line">		if(c&#x3D;&#x3D;&#39;1&#39;||c&#x3D;&#x3D;&#39;2&#39;||c&#x3D;&#x3D;&#39;3&#39;||c&#x3D;&#x3D;&#39;4&#39;||c&#x3D;&#x3D;&#39;5&#39;||c&#x3D;&#x3D;&#39;e&#39;)	</span><br><span class="line">			flag&#x3D;0;		</span><br><span class="line">	&#125;while(flag);	</span><br><span class="line">	return c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="#top">回到顶部</a></p>
+<h1 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h1><p>![在这里插入图片描述](<a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20190715100310587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20190715100310587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70</a> =600x)<br>迪杰斯特拉（Dijkstra）算法求起点到终点最短路径：<br><img src="https://img-blog.csdnimg.cn/20190715100416296.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>弗洛伊德（Floyed）算法求任意两地间的最短距离：<br><img src="https://img-blog.csdnimg.cn/20190715100515686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#top">回到顶部</a></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" rel="tag"># 最短路径</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/14/%E5%9B%BE%E7%9A%84%E5%BA%94%E7%94%A8--%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" rel="prev" title="图的应用--最小生成树">
+      <i class="fa fa-chevron-left"></i> 图的应用--最小生成树
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E7%9B%AE%E5%BD%95/" rel="next" title="数据结构复习整理目录">
+      数据结构复习整理目录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%8E%E6%9F%90%E4%B8%AA%E6%BA%90%E7%82%B9%E5%88%B0%E5%85%B6%E4%BD%99%E5%90%84%E7%82%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.</span> <span class="nav-text">1. 从某个源点到其余各点的最短距离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AA%E6%9D%B0%E6%96%AF%E7%89%B9%E6%8B%89%EF%BC%88Dijkstra%EF%BC%89%E7%AE%97%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">迪杰斯特拉（Dijkstra）算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E8%B7%AF%E5%BE%84"><span class="nav-number">1.2.</span> <span class="nav-text">输出路径</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%AF%8F%E4%B8%80%E5%AF%B9%E9%A1%B6%E7%82%B9%E4%B9%8B%E9%97%B4%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.</span> <span class="nav-text">2. 每一对顶点之间的最短距离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%97%E6%B4%9B%E4%BC%8A%E5%BE%B7%EF%BC%88Floyed%EF%BC%89%E7%AE%97%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">弗洛伊德（Floyed）算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E8%B7%AF%E5%BE%84-1"><span class="nav-number">2.2.</span> <span class="nav-text">输出路径</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">总的代码：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">运行结果：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

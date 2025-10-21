@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="百度搜索栏下方的提示效果如下：实现路线：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现搜索词补全功能">
+<meta property="og:url" content="http://songsong.host/2020/07/10/%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E8%AF%8D%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:description" content="百度搜索栏下方的提示效果如下：实现路线：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200710095820979.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200710104440920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200710104447905.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200710104503293.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.764Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="ajax">
+<meta property="article:tag" content="trie">
+<meta property="article:tag" content="智能提示">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200710095820979.png">
+
+<link rel="canonical" href="http://songsong.host/2020/07/10/%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E8%AF%8D%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>实现搜索词补全功能 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2020/07/10/%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E8%AF%8D%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          实现搜索词补全功能
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-10T00:00:00+08:00">2020-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/10/%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E8%AF%8D%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/10/%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E8%AF%8D%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>819</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>百度搜索栏下方的提示效果如下：<br><img src="https://img-blog.csdnimg.cn/20200710095820979.png" alt="在这里插入图片描述"><br>实现路线：</p>
+<ul>
+<li>ajax异步请求</li>
+<li>trie树数据结构</li>
+</ul>
+<h1 id="trie"><a href="#trie" class="headerlink" title="trie"></a>trie</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">package songsong.host.food.util;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">class Node &#123;</span><br><span class="line">    public Map&lt;String, Node&gt; nexts; &#x2F;&#x2F; 子节点</span><br><span class="line">    public int end;</span><br><span class="line"></span><br><span class="line">    public Node() &#123;</span><br><span class="line">        this.nexts &#x3D; new HashMap&lt;String, Node&gt;();</span><br><span class="line">        this.end &#x3D; 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Trie &#123;</span><br><span class="line">    private Node root;</span><br><span class="line">    private List&lt;String&gt; list;</span><br><span class="line"></span><br><span class="line">    public Trie()&#123;</span><br><span class="line">       root  &#x3D; new Node();</span><br><span class="line">       list &#x3D; new ArrayList&lt;String&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void insert(String word) &#123;</span><br><span class="line">        if (word &#x3D;&#x3D; null)</span><br><span class="line">            return;</span><br><span class="line">        Node node &#x3D; root;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            String str &#x3D; &quot;&quot; + word.charAt(i);</span><br><span class="line">            if (node.nexts.get(str) &#x3D;&#x3D; null)</span><br><span class="line">                node.nexts.put(str, new Node());</span><br><span class="line">            node &#x3D; node.nexts.get(str);</span><br><span class="line">        &#125;</span><br><span class="line">        node.end &#x3D; 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean startWith(String preWord) &#123;</span><br><span class="line">        Node node &#x3D; root;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; preWord.length(); i++) &#123;</span><br><span class="line">            String str &#x3D; &quot;&quot; + preWord.charAt(i);</span><br><span class="line">            if (node.nexts.get(str) &#x3D;&#x3D; null)</span><br><span class="line">                return false;</span><br><span class="line">            node &#x3D; node.nexts.get(str);</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;String&gt; getData(String preword) &#123;</span><br><span class="line">        list.clear();</span><br><span class="line">        if (!startWith(preword))</span><br><span class="line">            return null;</span><br><span class="line">        else &#123;</span><br><span class="line">            StringBuilder str &#x3D; new StringBuilder(&quot;&quot;);</span><br><span class="line">            str.append(preword);</span><br><span class="line">            Node node &#x3D; root;</span><br><span class="line">            for (int i &#x3D; 0; i &lt; preword.length(); i++)</span><br><span class="line">                node &#x3D; node.nexts.get(&quot;&quot; + preword.charAt(i));</span><br><span class="line">            dfs(node, str);</span><br><span class="line">        &#125;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void dfs(Node root, StringBuilder str) &#123;</span><br><span class="line">        if (root.end &#x3D;&#x3D; 1) &#123;</span><br><span class="line">            list.add(str.toString());</span><br><span class="line">            if (root.nexts.size() &#x3D;&#x3D; 0)</span><br><span class="line">                return;</span><br><span class="line">        &#125;</span><br><span class="line">        Node node &#x3D; root;</span><br><span class="line">        for (String s : node.nexts.keySet()) &#123;</span><br><span class="line">            str.append(s);</span><br><span class="line">            dfs(node.nexts.get(s), str);</span><br><span class="line">            str.delete(str.length() - 1, str.length());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;    public static void main(String[] args) &#123;</span><br><span class="line">&#x2F;&#x2F;        System.out.println(&quot;ok&quot;);</span><br><span class="line">&#x2F;&#x2F;        Trie test &#x3D; new Trie();</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;what&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;what do you do&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;what is your name&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;宫保鸡丁&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;烧烤&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;鱼香肉丝&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;红烧鸡&quot;);</span><br><span class="line">&#x2F;&#x2F;        test.insert(&quot;红焖鸡&quot;);</span><br><span class="line">&#x2F;&#x2F;        System.out.println(&quot;输入a&quot;);</span><br><span class="line">&#x2F;&#x2F;        System.out.println(test.getData(&quot;a&quot;));</span><br><span class="line">&#x2F;&#x2F;        System.out.println(test.startWith(&quot;a&quot;));</span><br><span class="line">&#x2F;&#x2F;</span><br><span class="line">&#x2F;&#x2F;    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>有了这就好说了，启动浏览器的时候，直接从数据库的search表里把关键字拿出来构建trie树，当然可以将关键字进行排序等处理，拿热搜等等。ajax异步请求，搜索栏发生变化，补全提示词实时变化。</p>
+<h1 id="请求数据"><a href="#请求数据" class="headerlink" title="请求数据"></a>请求数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;实现打开浏览器就加载热搜,并构建trie树</span><br><span class="line">	@RequestMapping(&quot;&#x2F;search&quot;)</span><br><span class="line">	public void search(HttpServletResponse response)&#123;</span><br><span class="line">		&#x2F;&#x2F;查询前X的热搜：</span><br><span class="line">		List&lt;Search&gt; searcheList&#x3D;commonService.selectAllSearch(100);</span><br><span class="line">		&#x2F;&#x2F;构建trie树</span><br><span class="line">		for (int i &#x3D; 0;i&lt;searcheList.size();i++) &#123;</span><br><span class="line">			test.insert(searcheList.get(i).getWords());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;给前端写回json数据</span><br><span class="line">	private void writeBack(HttpServletResponse response,Object o)&#123;</span><br><span class="line">        &#x2F;&#x2F;解决：拒绝引用</span><br><span class="line">        String json &#x3D; JSON.toJSONString(o, SerializerFeature.DisableCircularReferenceDetect);</span><br><span class="line">        response.setCharacterEncoding(&quot;utf-8&quot;);</span><br><span class="line">        response.setContentType(&quot;application&#x2F;json; charset&#x3D;utf-8&quot;);</span><br><span class="line">		try &#123;</span><br><span class="line">			response.getWriter().print(json);</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;补全提示</span><br><span class="line">	@RequestMapping(&quot;&#x2F;search&#x2F;&#123;word&#125;&quot;)</span><br><span class="line">	public void search(HttpServletResponse response,@PathVariable(&quot;word&quot;) String word)&#123;</span><br><span class="line">		&#x2F;&#x2F;查询联想词</span><br><span class="line">		List&lt;String&gt; words &#x3D; test.getData(word);</span><br><span class="line">		writeBack(response,words);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="search-js"><a href="#search-js" class="headerlink" title="search.js"></a>search.js</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">$(function()&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url : &quot;&#x2F;common&#x2F;search&#x2F;&quot;,</span><br><span class="line">        type : &#39;get&#39;,</span><br><span class="line">        dataType : &#39;json&#39;,</span><br><span class="line">        success : function(data) &#123;</span><br><span class="line">            alert(&quot;构建trie成功！&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$(function()&#123;</span><br><span class="line">    $(&#39;#keyword&#39;).blur(function() &#123;</span><br><span class="line">        setTimeout(function() &#123;  &#x2F;&#x2F;进行延时处理，时间单位为千分之一秒</span><br><span class="line">            clearContent();</span><br><span class="line">        &#125;, 500)</span><br><span class="line">    &#125;).focus(function()&#123;</span><br><span class="line">        if($(this).val() !&#x3D; &#39;&#39;)&#123;</span><br><span class="line">            getMoreContents();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#x2F;&#x2F;激活新加进来的元素点击事件</span><br><span class="line">    $(&#39;body&#39;).on(&quot;click&quot;, &quot;#content_table_body tr&quot;, function () &#123;</span><br><span class="line">        var td &#x3D; $(this).find(&quot;td&quot;);</span><br><span class="line">        var data &#x3D; td.eq(0).text();</span><br><span class="line">        $(&quot;#keyword&quot;).val(data.toString());</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">function getMoreContents() &#123;</span><br><span class="line">    setLocation();</span><br><span class="line">    var content &#x3D; $(&quot;#keyword&quot;).val();</span><br><span class="line">    if (content &#x3D;&#x3D; &quot;&quot;) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    submit(content);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;清空数据</span><br><span class="line">function clearContent() &#123;</span><br><span class="line">    $(&quot;#popdiv&quot;).attr(&quot;style&quot;,&quot;display: none&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function setLocation() &#123;</span><br><span class="line">    &#x2F;&#x2F;关联信息的显示位置</span><br><span class="line">    var content &#x3D; document.getElementById(&quot;keyword&quot;);</span><br><span class="line">    var width &#x3D; content.offsetWidth;&#x2F;&#x2F;输入框的宽度</span><br><span class="line">    $(&quot;#popdiv&quot;).attr(&quot;style&quot;,&quot;position:absolute;z-index: 9999&quot;);</span><br><span class="line"></span><br><span class="line">    document.getElementById(&quot;content_table&quot;).style.width &#x3D; width + &quot;px&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function submit(word) &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url : &quot;&#x2F;common&#x2F;search&#x2F;&quot;+word,</span><br><span class="line">        type : &#39;get&#39;,</span><br><span class="line">        dataType : &#39;json&#39;,</span><br><span class="line">        success : function(data) &#123;</span><br><span class="line">            $(&quot;#content_table_body&quot;).html(&quot;&quot;);</span><br><span class="line">            $.each(data, function (i, item) &#123;</span><br><span class="line">                $(&quot;#content_table_body&quot;).append(searchTable(item));</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function searchTable(item)&#123;</span><br><span class="line">    var tr &#x3D; &#39;&lt;tr&gt;&lt;td&gt;&#39;</span><br><span class="line">        + item</span><br><span class="line">        +&#39;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&#39;;</span><br><span class="line">    return tr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="部分html"><a href="#部分html" class="headerlink" title="部分html"></a>部分html</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel&#x3D;&quot;stylesheet&quot; th:href&#x3D;&quot;@&#123;&#x2F;css&#x2F;bootstrap.min.css&#125;&quot;&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; th:src&#x3D;&quot;@&#123;&#x2F;js&#x2F;jquery-3.2.1.min.js&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; th:src&#x3D;&quot;@&#123;&#x2F;js&#x2F;bootstrap.min.js&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; th:src&#x3D;&quot;@&#123;&#x2F;js&#x2F;search.js&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;div class&#x3D;&quot;col-lg-5 col-md-8 col-sm-5 m-auto&quot; id&#x3D;&quot;search&quot;&gt;</span><br><span class="line">&lt;form action&#x3D;&quot;&#x2F;common&#x2F;search&#x2F;s&quot;  method&#x3D;&quot;post&quot; class&#x3D;&quot;input-group input-group-lg mt-3&quot;&gt;</span><br><span class="line">					&lt;!--onblur&#x3D;&quot;keywordBlur()&quot; onfocus&#x3D;&quot;getMoreContents()&quot;--&gt;</span><br><span class="line">	&lt;input type&#x3D;&quot;text&quot; autocomplete&#x3D;&#39;off&#39; class&#x3D;&quot;form-control input-lg&quot; id&#x3D;&quot;keyword&quot; name&#x3D;&quot;keyword&quot; onkeyup&#x3D;&quot;getMoreContents()&quot; placeholder&#x3D;&quot;请输入...&quot; &#x2F;&gt;</span><br><span class="line">	&lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-primary&quot;&gt;搜 索&lt;&#x2F;button&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br><span class="line">&lt;div id&#x3D;&quot;popdiv&quot; class&#x3D;&quot;bg-light text-dark&quot;&gt;</span><br><span class="line">		&lt;table id&#x3D;&quot;content_table&quot; class&#x3D;&quot;table table-hover bg-secondary text-white&quot;&gt;</span><br><span class="line">			&lt;tbody id&#x3D;&quot;content_table_body&quot;&gt;</span><br><span class="line"></span><br><span class="line">			&lt;&#x2F;tbody&gt;</span><br><span class="line">		&lt;&#x2F;table&gt;</span><br><span class="line">	&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h1><p><img src="https://img-blog.csdnimg.cn/20200710104440920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/20200710104447905.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200710104503293.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/ajax/" rel="tag"># ajax</a>
+              <a href="/tags/trie/" rel="tag"># trie</a>
+              <a href="/tags/%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BA/" rel="tag"># 智能提示</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/09/python+django%E6%90%AD%E5%BB%BAweb/" rel="prev" title="python+django搭建web">
+      <i class="fa fa-chevron-left"></i> python+django搭建web
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/11/tensorflow%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="next" title="tensorflow图像识别">
+      tensorflow图像识别 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#trie"><span class="nav-number">1.</span> <span class="nav-text">trie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text">请求数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#search-js"><span class="nav-number">3.</span> <span class="nav-text">search.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E5%88%86html"><span class="nav-number">4.</span> <span class="nav-text">部分html</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">5.</span> <span class="nav-text">效果</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

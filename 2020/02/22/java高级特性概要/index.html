@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Java注解注解的本质@Target(ElementType.METHOD)@Retention(RetentionPolicy.SOURCE)public @interface Override {}这是注解 @Override 的定义，其实它本质上就是：public interface Override extends Annotation{}有关这一点，你可以去反编译任意一个注解类。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java高级特性概要">
+<meta property="og:url" content="http://songsong.host/2020/02/22/java%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E6%A6%82%E8%A6%81/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:description" content="Java注解注解的本质@Target(ElementType.METHOD)@Retention(RetentionPolicy.SOURCE)public @interface Override {}这是注解 @Override 的定义，其实它本质上就是：public interface Override extends Annotation{}有关这一点，你可以去反编译任意一个注解类。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.921Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://songsong.host/2020/02/22/java%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E6%A6%82%E8%A6%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>java高级特性概要 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2020/02/22/java%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E6%A6%82%E8%A6%81/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java高级特性概要
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-22T00:00:00+08:00">2020-02-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/02/22/java%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E6%A6%82%E8%A6%81/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/22/java%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E6%A6%82%E8%A6%81/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Java注解<br>注解的本质<br>@Target(ElementType.METHOD)@Retention(RetentionPolicy.SOURCE)<br>public @interface Override {<br>}<br>这是注解 @Override 的定义，其实它本质上就是：<br>public interface Override extends Annotation{<br>}<br>有关这一点，你可以去反编译任意一个注解类。</p>
+<p>@Target：注解的作用目标<br>ElementType 是一个枚举类型，有以下一些值：<br>ElementType.TYPE：允许被修饰的注解作用在类、接口和枚举上<br>ElementType.FIELD：允许作用在属性字段上<br>ElementType.METHOD：允许作用在方法上<br>ElementType.PARAMETER：允许作用在方法参数上<br>ElementType.CONSTRUCTOR：允许作用在构造器上<br>ElementType.LOCAL_VARIABLE：允许作用在本地局部变量上<br>ElementType.ANNOTATION_TYPE：允许作用在注解上<br>ElementType.PACKAGE：允许作用在包上</p>
+<p>@Retention：注解的生命周期<br>RetentionPolicy 依然是一个枚举类型：<br>RetentionPolicy.SOURCE：当前注解编译期可见，不会写入 class 文件<br>RetentionPolicy.CLASS：类加载阶段丢弃，会写入 class 文件<br>RetentionPolicy.RUNTIME：永久保存，可以反射获取</p>
+<p>@Documented：注解是否应当被包含在 JavaDoc 文档中<br>@Inherited：是否允许子类继承该注解</p>
+<p>JAVA 的内置三大注解<br>除了上述四种元注解外，JDK 还为我们预定义了另外三种注解，它们是：<br>@Override         //匹对父类中是否具有一个同样的方法<br>@Deprecated      //标记已经不再被推荐使用了，可能下一次的 JDK 版本就会删除。<br>@SuppressWarnings        //压制警告（看着烦人）</p>
+<p>自定义注解<br>public @interface BugReport {<br>   enum Status {UNCONFIRMED, CONFIRMED, FIXED, NOTABUG};<br>   boolean showStopper() default true;<br>   String assiganedTo() default “[none]”;<br>   Status status() default Status.UNCONFIRMED;<br>   String[] reportedBy();<br>}</p>
+<p>注解与反射<br>Class 类中提供了以下一些方法用于反射注解：<br>getAnnotation：返回指定的注解<br>isAnnotationPresent：判定当前元素是否被指定注解修饰<br>getAnnotations：返回所有的注解<br>getDeclaredAnnotation：返回本元素的指定注解<br>getDeclaredAnnotations：返回本元素的所有注解，不包含父类继承而来的</p>
+<p>Java反射<br>Class&lt;?&gt; classTest = Class.forName(“”);<br>setAccessible(true); //临时改变私有的东西<br>getConstructor(String.class,String.class);    //构造方法<br>getDeclaredConstructor(String.class,String.class);<br>newInstance()  //创建实例<br>getFields()    // 反射本类及父类所有的public属性<br>getDeclaredFields() // 反射本类所有属性(包括公有和私有)<br>    Fild.getName() //属性名<br>    Fild.get(obj) //属性值<br>getMethods()    // 反射本类及父类所有的public方法<br>getDeclaredMethods()// 反射本类所有方法(包括公有和私有)<br>invoke(obj,arg…)    //执行方法<br>Java代理</p>
+<p>应用：<br>基于反射、注解、代理，<br>实现简易AOP、实现简易ORM、实现简易Spring框架</p>
+<p>ClassLoader 中与加载类相关的方法<br>方法    说明<br>getParent()    返回该类加载器的父类加载器。<br>loadClass(String name)    加载名称为name的类，返回的结果是 java.lang.Class类的实例。<br>findClass(String name)    查找名称为name的类，返回的结果是 java.lang.Class类的实例。<br>findLoadedClass(String name)    查找名称为name的已经被加载过的类，返回的结果是 java.lang.Class类的实例。<br>defineClass(String name, byte[] b, int off, int len)    把字节数组 b中的内容转换成 Java 类，返回的结是 java.lang.Class类的实例。这个方法被声明为final的。<br>resolveClass(Class&lt;?&gt; c)    链接指定的 Java 类。</p>
+<p>public class test{<br> <br>   public static void main(String[] args) {<br>       ClassLoader loader = test.class.getClassLoader();<br>       while (loader != null) {<br>           System.out.println(loader.toString());<br>           loader = loader.getParent();<br>       }<br>   }<br>}</p>
+<p>class文件结构<br>类型    名称    说明    长度<br>u4    magic    魔数，识别Class文件格式    4个字节<br>u2    minor_version    副版本号    2个字节<br>u2    major_version    主版本号    2个字节<br>u2    constant_pool_count    常量池计算器    2个字节<br>cp_info    constant_pool    常量池    n个字节<br>u2    access_flags    访问标志    2个字节<br>u2    this_class    类索引    2个字节<br>u2    super_class    父类索引    2个字节<br>u2    interfaces_count    接口计数器    2个字节<br>u2    interfaces    接口索引集合    2个字节<br>u2    fields_count    字段个数    2个字节<br>field_info    fields    字段集合    n个字节<br>u2    methods_count    方法计数器    2个字节<br>method_info    methods    方法集合    n个字节<br>u2    attributes_count    附加属性计数器    2个字节<br>attribute_info    attributes    附加属性集合    n个字节<br>类型    标志    描述<br>CONSTANT_utf8_info    1    UTF-8编码的字符串<br>CONSTANT_Integer_info    3    整形字面量<br>CONSTANT_Float_info    4    浮点型字面量<br>CONSTANT_Long_info    5    长整型字面量<br>CONSTANT_Double_info    6    双精度浮点型字面量<br>CONSTANT_Class_info    7    类或接口的符号引用<br>CONSTANT_String_info    8    字符串类型字面量<br>CONSTANT_Fieldref_info    9    字段的符号引用<br>CONSTANT_Methodref_info    10    类中方法的符号引用<br>CONSTANT_InterfaceMethodref_info    11    接口中方法的符号引用<br>CONSTANT_NameAndType_info    12    字段或方法的符号引用<br>CONSTANT_MethodHandle_info    15    表示方法句柄<br>CONSTANT_MothodType_info    16    标志方法类型<br>CONSTANT_InvokeDynamic_info    18    表示一个动态方法调用点</p>
+<p>表的结构信息</p>
+<p>类的访问信息表<br>标志名称    标志值    含义<br>ACC_PUBLIC    0x0001    是否为Public类型<br>ACC_FINAL    0x0010    是否被声明为final，只有类可以设置<br>ACC_SUPER    0x0020    是否允许使用invokespecial字节码指令的新语义，JDK1.0.2之后编译出来的类的这个标志默认为真<br>ACC_INTERFACE    0x0200    标志这是一个接口<br>ACC_ABSTRACT    0x0400    是否为abstract类型，对于接口或者抽象类来说，次标志值为真，其他类型为假<br>ACC_SYNTHETIC    0x1000    标志这个类并非由用户代码产生<br>ACC_ANNOTATION    0x2000    标志这是一个注解<br>ACC_ENUM    x4000    标志这是一个枚举<br>字段表结构<br>field_info {<br>    u2 access_flags;<br>    u2 name_index;<br>    u2 descriptor_index;<br>    u2 attributes_count;<br>    attribute_info attributes[attributes_count];<br>}</p>
+<p>类型    名称    含义    数量<br>u2    access_flags    访问标志    1<br>u2    name_index    字段名索引    1<br>u2    descriptor_index    描述符索引    1<br>u2    attributes_count    属性计数器    1<br>attribute_info    attributes    属性集合    attributes_count<br>字段的访问信息表<br>标志名称    标志值    含义<br>ACC_PUBLIC    0x0001    字段是否为public<br>ACC_PRIVATE    0x0002    字段是否为private<br>ACC_PROTECTED    0x0004    字段是否为protected<br>ACC_STATIC    0x0008    字段是否为static<br>ACC_FINAL    0x0010    字段是否为final<br>ACC_VOLATILE    0x0040    字段是否为volatile<br>ACC_TRANSTENT    0x0080    字段是否为transient<br>ACC_SYNCHETIC    0x1000    字段是否为由编译器自动产生<br>ACC_ENUM    0x4000    字段是否为enum<br>方法表结构<br>method_info {<br>    u2 access_flags;<br>    u2 name_index;<br>    u2 descriptor_index;<br>    u2 attributes_count;<br>    attribute_info attributes[attributes_count];<br>}<br>类型    名称    含义    数量<br>u2    access_flags    访问标志    1<br>u2    name_index    方法名索引    1<br>u2    descriptor_index    描述符索引    1<br>u2    attributes_count    属性计数器    1<br>attribute_info    attributes    属性集合    attributes_count</p>
+<p>方法访问信息表<br>标志名称    标志值    含义<br>ACC_PUBLIC    0x0001    方法是否为public<br>ACC_PRIVATE    0x0002    方法是否为private<br>ACC_PROTECTED    0x0004    方法是否为protected<br>ACC_STATIC    0x0008    方法是否为static<br>ACC_FINAL    0x0010    方法是否为final<br>ACC_SYHCHRONRIZED    0x0020    方法是否为synchronized<br>ACC_BRIDGE    0x0040    方法是否是有编译器产生的方法<br>ACC_VARARGS    0x0080    方法是否接受参数<br>ACC_NATIVE    0x0100    方法是否为native<br>ACC_ABSTRACT    0x0400    方法是否为abstract<br>ACC_STRICTFP    0x0800    方法是否为strictfp<br>ACC_SYNTHETIC    0x1000    方法是否是有编译器自动产生的<br>属性表通用格式<br>attribute_info {<br>    u2 attribute_name_index;   //属性名索引<br>    u4 attribute_length;       //属性长度<br>u1 info[attribute_length]; //属性的具体内容<br>}<br>类型    名称    数量    含义<br>u2    attribute_name_index    1    属性名索引<br>u2    attribute_length    1    属性长度<br>u1    info    attribute_length    属性表<br>Code 属性<br>Code_attribute {<br>    u2 attribute_name_index; //常量池中的uft8类型的索引，值固定为”Code“<br>    u4 attribute_length; //属性值长度，为整个属性表长度-6<br>    u2 max_stack;   //操作数栈的最大深度值，jvm运行时根据该值分配栈帧<br>    u2 max_locals;  //局部变量表最大存储空间，单位是slot<br>    u4 code_length; // 字节码指令的个数<br>    u1 code[code_length]; // 具体的字节码指令<br>    u2 exception_table_length; //异常的个数<br>    {   u2 start_pc;<br>        u2 end_pc;<br>        u2 handler_pc; //当字节码在[start_pc, end_pc)区间出现catch_type或子类，则转到handler_pc行继续处理。<br>        u2 catch_type; //当catch_type=0，则任意异常都需转到handler_pc处理<br>    } exception_table[exception_table_length]; //具体的异常内容<br>    u2 attributes_count;     //属性的个数<br>attribute_info attributes[attributes_count]; //具体的属性内容<br>}</p>
+<p>类型    名称    数量    含义<br>u2    attribute_name_index    1    属性名索引<br>u4    attribute_length    1    属性长度<br>u2    max_stack    1    操作数栈深度的最大值<br>u2    max_locals    1    局部变量表所需的存续空间<br>u4    code_length    1    字节码指令的长度<br>u1    code    code_length    存储字节码指令<br>u2    exception_table_length    1    异常表长度<br>exception_info    exception_table    exception_length    异常表<br>u2    attributes_count    1    属性集合计数器<br>attribute_info    attributes    attributes_count    属性集合</p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/19/Java%20class%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90%E5%AE%9E%E5%88%97/" rel="prev" title="Java class文件分析实列">
+      <i class="fa fa-chevron-left"></i> Java class文件分析实列
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/07/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="next" title="java多线程">
+      java多线程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

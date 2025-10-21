@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="新手使用云服务器（及其发布Javaweb项目）的若干问题">
+<meta property="og:url" content="http://songsong.host/2019/12/27/%E6%96%B0%E6%89%8B%E4%BD%BF%E7%94%A8%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%8F%8A%E5%85%B6%E5%8F%91%E5%B8%83Javaweb%E9%A1%B9%E7%9B%AE%EF%BC%89%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227102703780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227103234350.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019122712103484.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227121413883.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227122345140.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227124020848.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227125253898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227125749573.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191227125920599.png">
+<meta property="article:published_time" content="2019-12-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.794Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="tomcat">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191227102703780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://songsong.host/2019/12/27/%E6%96%B0%E6%89%8B%E4%BD%BF%E7%94%A8%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%8F%8A%E5%85%B6%E5%8F%91%E5%B8%83Javaweb%E9%A1%B9%E7%9B%AE%EF%BC%89%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>新手使用云服务器（及其发布Javaweb项目）的若干问题 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2019/12/27/%E6%96%B0%E6%89%8B%E4%BD%BF%E7%94%A8%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%8F%8A%E5%85%B6%E5%8F%91%E5%B8%83Javaweb%E9%A1%B9%E7%9B%AE%EF%BC%89%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          新手使用云服务器（及其发布Javaweb项目）的若干问题
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-27 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-27T00:00:00+08:00">2019-12-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/27/%E6%96%B0%E6%89%8B%E4%BD%BF%E7%94%A8%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%8F%8A%E5%85%B6%E5%8F%91%E5%B8%83Javaweb%E9%A1%B9%E7%9B%AE%EF%BC%89%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/27/%E6%96%B0%E6%89%8B%E4%BD%BF%E7%94%A8%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E5%8F%8A%E5%85%B6%E5%8F%91%E5%B8%83Javaweb%E9%A1%B9%E7%9B%AE%EF%BC%89%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>933</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <body>
+<div id="top"></div>
+</body>
+
+
+<ul>
+<li><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1>  简单交代一下，这篇主要记录一下自己第一次使用云服务器时遇到的问题及其解决办法。看这篇的朋友们，首先对自己电脑本地环境的搭建应该是熟练掌握了。比如jdk、mysql、Tomcat等的配置。如果这在自己电脑上都还没玩懂，那就先别玩服务器了！</li>
+<li><h1 id="我用的东西"><a href="#我用的东西" class="headerlink" title="我用的东西"></a>我用的东西</h1></li>
+</ul>
+<ol>
+<li><p>mysql 5.7.21</p>
+</li>
+<li><p>Tomcat 9.0.11</p>
+</li>
+<li><p>jdk 1.8</p>
+</li>
+<li><p>eclipse/IntelliJ IDEA（这看自己习惯了）</p>
+</li>
+<li><p>腾讯云服务器（windows server 2012 r2）</p>
+<p> <strong><em>有了这些基本的东西就能玩起来了！</em></strong></p>
+</li>
+</ol>
+<ul>
+<li><h1 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h1><ul>
+<li><h2 id="一、配置服务器环境"><a href="#一、配置服务器环境" class="headerlink" title="一、配置服务器环境"></a>一、配置服务器环境</h2><ul>
+<li><h3 id="1-开始菜单栏直接搜索远程（或cmd-输命令方式）"><a href="#1-开始菜单栏直接搜索远程（或cmd-输命令方式）" class="headerlink" title="1.开始菜单栏直接搜索远程（或cmd 输命令方式）"></a>1.开始菜单栏直接搜索远程（或cmd 输命令方式）</h3>  如图所示：<pre><code>  ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191227102550979.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70)    </code></pre>
+<ul>
+<li><h3 id="2-找到下图中的详细信息，勾选某盘（目的是将其挂载到服务器上，可将自己电脑上资源考到服务器上去）"><a href="#2-找到下图中的详细信息，勾选某盘（目的是将其挂载到服务器上，可将自己电脑上资源考到服务器上去）" class="headerlink" title="2. 找到下图中的详细信息，勾选某盘（目的是将其挂载到服务器上，可将自己电脑上资源考到服务器上去）"></a>2. 找到下图中的详细信息，勾选某盘（目的是将其挂载到服务器上，可将自己电脑上资源考到服务器上去）</h3><img src="https://img-blog.csdnimg.cn/20191227102703780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li><h3 id="3-服务器上看到下图所示，就是刚刚我挂载上去的（我的软件全在E盘）"><a href="#3-服务器上看到下图所示，就是刚刚我挂载上去的（我的软件全在E盘）" class="headerlink" title="3.服务器上看到下图所示，就是刚刚我挂载上去的（我的软件全在E盘）"></a>3.服务器上看到下图所示，就是刚刚我挂载上去的（我的软件全在E盘）</h3>  <img src="https://img-blog.csdnimg.cn/20191227103234350.png" alt="在这里插入图片描述"></li>
+<li><h3 id="4-然后把jdk、MySQL、tomcat等从挂载上去的盘直接考到服务器的盘上，然后与自己电脑一样，配置环境变量，这就不用多说了。"><a href="#4-然后把jdk、MySQL、tomcat等从挂载上去的盘直接考到服务器的盘上，然后与自己电脑一样，配置环境变量，这就不用多说了。" class="headerlink" title="4.然后把jdk、MySQL、tomcat等从挂载上去的盘直接考到服务器的盘上，然后与自己电脑一样，配置环境变量，这就不用多说了。"></a>4.然后把jdk、MySQL、tomcat等从挂载上去的盘直接考到服务器的盘上，然后与自己电脑一样，配置环境变量，这就不用多说了。</h3>  <img src="https://img-blog.csdnimg.cn/2019122712103484.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><ul>
+<li><h3 id="验证自己是否安装成功"><a href="#验证自己是否安装成功" class="headerlink" title="验证自己是否安装成功"></a>验证自己是否安装成功</h3><pre><code>  输入Java有效果，那jdk成功了！
+  能进入MySQL。说明MySQL成功了（自己电脑上的那些数据库表也都在）
+  浏览器的那只小猫在，说明Tomcat成功了！</code></pre>
+  <img src="https://img-blog.csdnimg.cn/20191227121413883.png" alt="在这里插入图片描述"></li>
+<li><h3 id="注：其中我遇到的小问题"><a href="#注：其中我遇到的小问题" class="headerlink" title="注：其中我遇到的小问题"></a>注：<em>其中我遇到的小问题</em></h3><ol>
+<li>jdk是最容易成功的。</li>
+<li>安装MySQL时，给我说缺少什么什么 <strong><em>dll</em></strong> 文件，百度试了两种方法，第一种，在自己电脑找到那个dll，考过去，但没用。第二种，下载下图那个东西，在服务器上安装就解决了。<br><img src="https://img-blog.csdnimg.cn/20191227122345140.png" alt="在这里插入图片描述"></li>
+<li> Tomcat不行，各种试了试，最终下载了一个新的然后就解决了。（可能我自己电脑上用那个Tomcat被我改过配置文件）</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h2 id="二、上述环境都配置无误后，就到了发布Javaweb项目的时候了"><a href="#二、上述环境都配置无误后，就到了发布Javaweb项目的时候了" class="headerlink" title="二、上述环境都配置无误后，就到了发布Javaweb项目的时候了"></a>二、上述环境都配置无误后，就到了发布Javaweb项目的时候了</h2><ul>
+<li><h3 id="首先，项目在自己电脑上调试好，跑起来。"><a href="#首先，项目在自己电脑上调试好，跑起来。" class="headerlink" title="首先，项目在自己电脑上调试好，跑起来。"></a>首先，项目在自己电脑上调试好，跑起来。</h3></li>
+<li><h3 id="然后，eclipse或IntelliJ-IDEA将其打包。"><a href="#然后，eclipse或IntelliJ-IDEA将其打包。" class="headerlink" title="然后，eclipse或IntelliJ IDEA将其打包。"></a>然后，eclipse或IntelliJ IDEA将其打包。</h3></li>
+<li><h3 id="直接往服务器tomcat路径，webapps文件夹下扔就行。"><a href="#直接往服务器tomcat路径，webapps文件夹下扔就行。" class="headerlink" title="直接往服务器tomcat路径，webapps文件夹下扔就行。"></a>直接往服务器tomcat路径，webapps文件夹下扔就行。</h3></li>
+<li><h3 id="修改tomcat路径，config文件夹下server文件，端口改为80（这样访问的时候只需要ip，不用加端口号），下加这么一句："><a href="#修改tomcat路径，config文件夹下server文件，端口改为80（这样访问的时候只需要ip，不用加端口号），下加这么一句：" class="headerlink" title="修改tomcat路径，config文件夹下server文件，端口改为80（这样访问的时候只需要ip，不用加端口号），下加这么一句："></a>修改tomcat路径，config文件夹下server文件，端口改为80（这样访问的时候只需要ip，不用加端口号），<host>下加这么一句：</h3><pre><code>    &lt;Context path=&quot;/&quot; docBase=&quot;C:apache-tomcat-9.0.11\webapps\&quot; reloadable=&quot;true&quot;/&gt;</code></pre>
+<p>  docBase那里，如果配置到具体的项目，那么访问的时候只需要外网ip就行。如果只配置到webapps，那么访问的时候需要在ip后面加上具体项目名（放在webapps下的打包文件，会被tomcat自动解析）<br><img src="https://img-blog.csdnimg.cn/20191227124020848.png" alt="在这里插入图片描述"></p>
+</li>
+<li><h3 id="启动Tomcat。"><a href="#启动Tomcat。" class="headerlink" title="启动Tomcat。"></a>启动Tomcat。</h3><p>  浏览器输入自己服务器外网ip访问试试<br>  <img src="https://img-blog.csdnimg.cn/20191227125253898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li><h3 id="注：其中我遇到的小问题-1"><a href="#注：其中我遇到的小问题-1" class="headerlink" title="注：其中我遇到的小问题"></a>注：<em>其中我遇到的小问题</em></h3>  自己在服务器上用内网ip可以访问到项目，但用外网ip就访问不到（或者输入外网ip的时候就跳出IIS）：<br>  解决：<ol>
+<li>关闭IIS服务<br><img src="https://img-blog.csdnimg.cn/20191227125749573.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>我的已经关闭了。<br><img src="https://img-blog.csdnimg.cn/20191227125920599.png" alt="在这里插入图片描述"></li>
+<li>还是访问不到项目，一开始以为是tomcat的问题，最终解决。<pre><code> 是防火墙的问题。
+ ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191227130138983.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70)</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h1 id="结束，-以上就是我自己玩服务器的一点总结，有问题的可以参考一下！"><a href="#结束，-以上就是我自己玩服务器的一点总结，有问题的可以参考一下！" class="headerlink" title="结束， 以上就是我自己玩服务器的一点总结，有问题的可以参考一下！"></a>结束， 以上就是我自己玩服务器的一点总结，有问题的可以参考一下！</h1></li>
+</ul>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/tomcat/" rel="tag"># tomcat</a>
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/29/%E5%85%B3%E4%BA%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BF%90%E7%AE%97/" rel="prev" title="关于二进制的一些运算">
+      <i class="fa fa-chevron-left"></i> 关于二进制的一些运算
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/27/Linux/" rel="next" title="Linux">
+      Linux <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%94%A8%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="nav-number">2.</span> <span class="nav-text">我用的东西</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%BC%8F%E5%BC%80%E5%A7%8B"><span class="nav-number">3.</span> <span class="nav-text">正式开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83"><span class="nav-number">3.1.</span> <span class="nav-text">一、配置服务器环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%80%E5%A7%8B%E8%8F%9C%E5%8D%95%E6%A0%8F%E7%9B%B4%E6%8E%A5%E6%90%9C%E7%B4%A2%E8%BF%9C%E7%A8%8B%EF%BC%88%E6%88%96cmd-%E8%BE%93%E5%91%BD%E4%BB%A4%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.开始菜单栏直接搜索远程（或cmd 输命令方式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%89%BE%E5%88%B0%E4%B8%8B%E5%9B%BE%E4%B8%AD%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF%EF%BC%8C%E5%8B%BE%E9%80%89%E6%9F%90%E7%9B%98%EF%BC%88%E7%9B%AE%E7%9A%84%E6%98%AF%E5%B0%86%E5%85%B6%E6%8C%82%E8%BD%BD%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E5%8F%AF%E5%B0%86%E8%87%AA%E5%B7%B1%E7%94%B5%E8%84%91%E4%B8%8A%E8%B5%84%E6%BA%90%E8%80%83%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%8E%BB%EF%BC%89"><span class="nav-number">3.1.2.</span> <span class="nav-text">2. 找到下图中的详细信息，勾选某盘（目的是将其挂载到服务器上，可将自己电脑上资源考到服务器上去）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9C%8B%E5%88%B0%E4%B8%8B%E5%9B%BE%E6%89%80%E7%A4%BA%EF%BC%8C%E5%B0%B1%E6%98%AF%E5%88%9A%E5%88%9A%E6%88%91%E6%8C%82%E8%BD%BD%E4%B8%8A%E5%8E%BB%E7%9A%84%EF%BC%88%E6%88%91%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%85%A8%E5%9C%A8E%E7%9B%98%EF%BC%89"><span class="nav-number">3.1.3.</span> <span class="nav-text">3.服务器上看到下图所示，就是刚刚我挂载上去的（我的软件全在E盘）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%84%B6%E5%90%8E%E6%8A%8Ajdk%E3%80%81MySQL%E3%80%81tomcat%E7%AD%89%E4%BB%8E%E6%8C%82%E8%BD%BD%E4%B8%8A%E5%8E%BB%E7%9A%84%E7%9B%98%E7%9B%B4%E6%8E%A5%E8%80%83%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%9B%98%E4%B8%8A%EF%BC%8C%E7%84%B6%E5%90%8E%E4%B8%8E%E8%87%AA%E5%B7%B1%E7%94%B5%E8%84%91%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%8C%E8%BF%99%E5%B0%B1%E4%B8%8D%E7%94%A8%E5%A4%9A%E8%AF%B4%E4%BA%86%E3%80%82"><span class="nav-number">3.1.4.</span> <span class="nav-text">4.然后把jdk、MySQL、tomcat等从挂载上去的盘直接考到服务器的盘上，然后与自己电脑一样，配置环境变量，这就不用多说了。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E8%87%AA%E5%B7%B1%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">3.1.5.</span> <span class="nav-text">验证自己是否安装成功</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%EF%BC%9A%E5%85%B6%E4%B8%AD%E6%88%91%E9%81%87%E5%88%B0%E7%9A%84%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.6.</span> <span class="nav-text">注：其中我遇到的小问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%8A%E8%BF%B0%E7%8E%AF%E5%A2%83%E9%83%BD%E9%85%8D%E7%BD%AE%E6%97%A0%E8%AF%AF%E5%90%8E%EF%BC%8C%E5%B0%B1%E5%88%B0%E4%BA%86%E5%8F%91%E5%B8%83Javaweb%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%97%B6%E5%80%99%E4%BA%86"><span class="nav-number">3.2.</span> <span class="nav-text">二、上述环境都配置无误后，就到了发布Javaweb项目的时候了</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88%EF%BC%8C%E9%A1%B9%E7%9B%AE%E5%9C%A8%E8%87%AA%E5%B7%B1%E7%94%B5%E8%84%91%E4%B8%8A%E8%B0%83%E8%AF%95%E5%A5%BD%EF%BC%8C%E8%B7%91%E8%B5%B7%E6%9D%A5%E3%80%82"><span class="nav-number">3.2.1.</span> <span class="nav-text">首先，项目在自己电脑上调试好，跑起来。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%EF%BC%8Ceclipse%E6%88%96IntelliJ-IDEA%E5%B0%86%E5%85%B6%E6%89%93%E5%8C%85%E3%80%82"><span class="nav-number">3.2.2.</span> <span class="nav-text">然后，eclipse或IntelliJ IDEA将其打包。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E5%BE%80%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E8%B7%AF%E5%BE%84%EF%BC%8Cwebapps%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E6%89%94%E5%B0%B1%E8%A1%8C%E3%80%82"><span class="nav-number">3.2.3.</span> <span class="nav-text">直接往服务器tomcat路径，webapps文件夹下扔就行。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9tomcat%E8%B7%AF%E5%BE%84%EF%BC%8Cconfig%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8Bserver%E6%96%87%E4%BB%B6%EF%BC%8C%E7%AB%AF%E5%8F%A3%E6%94%B9%E4%B8%BA80%EF%BC%88%E8%BF%99%E6%A0%B7%E8%AE%BF%E9%97%AE%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%AA%E9%9C%80%E8%A6%81ip%EF%BC%8C%E4%B8%8D%E7%94%A8%E5%8A%A0%E7%AB%AF%E5%8F%A3%E5%8F%B7%EF%BC%89%EF%BC%8C%E4%B8%8B%E5%8A%A0%E8%BF%99%E4%B9%88%E4%B8%80%E5%8F%A5%EF%BC%9A"><span class="nav-number">3.2.4.</span> <span class="nav-text">修改tomcat路径，config文件夹下server文件，端口改为80（这样访问的时候只需要ip，不用加端口号），下加这么一句：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8Tomcat%E3%80%82"><span class="nav-number">3.2.5.</span> <span class="nav-text">启动Tomcat。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%EF%BC%9A%E5%85%B6%E4%B8%AD%E6%88%91%E9%81%87%E5%88%B0%E7%9A%84%E5%B0%8F%E9%97%AE%E9%A2%98-1"><span class="nav-number">3.2.6.</span> <span class="nav-text">注：其中我遇到的小问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%EF%BC%8C-%E4%BB%A5%E4%B8%8A%E5%B0%B1%E6%98%AF%E6%88%91%E8%87%AA%E5%B7%B1%E7%8E%A9%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93%EF%BC%8C%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8F%AF%E4%BB%A5%E5%8F%82%E8%80%83%E4%B8%80%E4%B8%8B%EF%BC%81"><span class="nav-number">4.</span> <span class="nav-text">结束， 以上就是我自己玩服务器的一点总结，有问题的可以参考一下！</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

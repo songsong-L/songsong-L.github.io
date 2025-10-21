@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Python数据分析与挖掘">
+<meta property="og:url" content="http://songsong.host/2019/08/18/Python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%8E%E6%8C%96%E6%8E%98/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190818093129706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190818090748381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190817114544380.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190817133922581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019081713465038.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190818094715336.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-08-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.991Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="Python数据分析与挖掘">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190818093129706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://songsong.host/2019/08/18/Python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%8E%E6%8C%96%E6%8E%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python数据分析与挖掘 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2019/08/18/Python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%8E%E6%8C%96%E6%8E%98/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python数据分析与挖掘
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-18 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-18T00:00:00+08:00">2019-08-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/08/18/Python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%8E%E6%8C%96%E6%8E%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/08/18/Python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%8E%E6%8C%96%E6%8E%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <body>
+<div id="top"></div>
+</body>
+
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前段时间做了个回归模型预测分析，效果不好，只是简单地熟悉了数据挖掘的流程而已，下面记录一些数据挖掘常用到的东西。</p>
+<h1 id="数据来源"><a href="#数据来源" class="headerlink" title="数据来源"></a>数据来源</h1><ul>
+<li>找公开的</li>
+<li>爬虫</li>
+<li>现成软件，比如八爪鱼</li>
+</ul>
+<p>下面是一个爬历史天气的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Spyder Editor</span><br><span class="line"></span><br><span class="line">This is a temporary script file.</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Sun May  5 11:11:43 2019</span><br><span class="line"></span><br><span class="line">@author: kdc</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import requests</span><br><span class="line">from requests.exceptions import RequestException</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import os</span><br><span class="line">import csv</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def get_one_page(url):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    获取网页</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    print(&#39;正在加载&#39;+url)</span><br><span class="line">    headers&#x3D;&#123;&#39;User-Agent&#39;:&#39;User-Agent:Mozilla&#x2F;5.0&#39;&#125;</span><br><span class="line">    try:</span><br><span class="line">        response &#x3D; requests.get(url,headers&#x3D;headers)</span><br><span class="line">        if response.status_code &#x3D;&#x3D; 200:</span><br><span class="line">            return response.content</span><br><span class="line">        return None</span><br><span class="line">    except RequestException:</span><br><span class="line">        return None</span><br><span class="line"></span><br><span class="line">def parse_one_page(html):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">	对网页内容进行解析</span><br><span class="line">	&#39;&#39;&#39;</span><br><span class="line">    soup &#x3D; BeautifulSoup(html,  &quot;lxml&quot;)</span><br><span class="line">    info &#x3D; soup.find(&#39;div&#39;,  class_&#x3D;&#39;wdetail&#39;)</span><br><span class="line">    rows&#x3D;[]</span><br><span class="line">    tr_list &#x3D; info.find_all(&#39;tr&#39;)[1:]       # 使用从第二个tr开始取</span><br><span class="line">    for index,  tr in enumerate(tr_list):     # enumerate可以返回元素的位置及内容</span><br><span class="line">        td_list &#x3D; tr.find_all(&#39;td&#39;)</span><br><span class="line">        date &#x3D; td_list[0].text.strip().replace(&quot;\n&quot;, &quot;&quot;)  # 取每个标签的text信息，并使用replace()函数将换行符删除</span><br><span class="line">        weather &#x3D; td_list[1].text.strip().replace(&quot;\n&quot;, &quot;&quot;).split(&quot;&#x2F;&quot;)[0].strip()</span><br><span class="line">        temperature_high &#x3D; td_list[2].text.strip().replace(&quot;\n&quot;,  &quot;&quot;).split(&quot;&#x2F;&quot;)[0].strip()</span><br><span class="line">        temperature_low &#x3D; td_list[2].text.strip().replace(&quot;\n&quot;,  &quot;&quot;).split(&quot;&#x2F;&quot;)[1].strip()</span><br><span class="line"></span><br><span class="line">        rows.append((date,weather,temperature_high,temperature_low))</span><br><span class="line">    return rows</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cities &#x3D; [&#39;tianjin&#39;,&#39;heilongjiang&#39;]</span><br><span class="line">years &#x3D; [&#39;2012&#39;,&#39;2013&#39;,&#39;2014&#39;,&#39;2015&#39;,&#39;2016&#39;,&#39;2017&#39;,&#39;2018&#39;]</span><br><span class="line">months &#x3D; [&#39;01&#39;,&#39;02&#39;,&#39;03&#39;,&#39;04&#39;,&#39;05&#39;,&#39;06&#39;,&#39;07&#39;,&#39;08&#39;,&#39;09&#39;,&#39;10&#39;,&#39;11&#39;,&#39;12&#39;]</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    # os.chdir()  # 设置工作路径</span><br><span class="line">    for city in cities:</span><br><span class="line">        with open(city + &#39;_weather.csv&#39;, &#39;a&#39;, newline&#x3D;&#39;&#39;) as f:</span><br><span class="line">            writer &#x3D; csv.writer(f)</span><br><span class="line">            writer.writerow([&#39;date&#39;,&#39;weather&#39;,&#39;temperature_high&#39;,&#39;temperature_low&#39;])</span><br><span class="line">            for year in years:</span><br><span class="line">                for month in months:</span><br><span class="line">                    url &#x3D; &#39;http:&#x2F;&#x2F;www.tianqihoubao.com&#x2F;lishi&#x2F;&#39;+city+&#39;&#x2F;month&#x2F;&#39;+year+month+&#39;.html&#39;</span><br><span class="line">                    html &#x3D; get_one_page(url)</span><br><span class="line">                    content&#x3D;parse_one_page(html)</span><br><span class="line">                    writer.writerows(content)</span><br><span class="line">                    print(city+year+month+&#39; is OK!&#39;)</span><br><span class="line">                    time.sleep(2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="#top">返回顶部</a></p>
+<h1 id="可视化及其数据处理"><a href="#可视化及其数据处理" class="headerlink" title="可视化及其数据处理"></a>可视化及其数据处理</h1><ul>
+<li><h2 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Sat May 25 10:04:26 2019</span><br><span class="line"></span><br><span class="line">@author: Administrator</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">from scipy.misc import imread</span><br><span class="line"></span><br><span class="line">from wordcloud.color_from_image import ImageColorGenerator</span><br><span class="line"></span><br><span class="line">#将数据打开     </span><br><span class="line">text &#x3D; open(&quot;f:\\pachong\\aa.txt&quot;,&#39;r&#39;,encoding&#x3D;&#39;gbk&#39;).read() </span><br><span class="line">#你需要处理的背景图片  </span><br><span class="line">bg_pic &#x3D; imread(&quot;f:\\pachong\\picture\\b.jpg&quot;)        </span><br><span class="line">#汉字要加这个</span><br><span class="line">font&#x3D;r&#39;C:\\Windows\\Fonts\\STFANGSO.ttf&#39;  </span><br><span class="line">#生成词云</span><br><span class="line">wordcloud &#x3D; WordCloud(mask&#x3D;bg_pic,background_color&#x3D;&#39;white&#39;,font_path&#x3D;font,scale&#x3D;1.5).generate(text) </span><br><span class="line">#生成背景图片</span><br><span class="line">image_colors&#x3D;ImageColorGenerator(bg_pic) </span><br><span class="line">#展示词云</span><br><span class="line">plt.imshow(wordcloud)  </span><br><span class="line"></span><br><span class="line">plt.axis(&#39;off&#39;)    </span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line">#在本地目录下生成该图片</span><br><span class="line">#wordcloud.to_file(&#39;f:\\house_price\\词云.pdf&#39;) </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>效果：<br>这是网易云音乐歌曲《你的酒馆对我打了烊》的评论，有毒啊！<br><img src="https://img-blog.csdnimg.cn/20190818093129706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#top">返回顶部</a></p>
+<ul>
+<li><h2 id="画饼图"><a href="#画饼图" class="headerlink" title="画饼图"></a>画饼图</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Mon May  6 22:15:50 2019</span><br><span class="line"></span><br><span class="line">@author: Administrator</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">###正常显示中文</span><br><span class="line">import matplotlib.pyplot as plot</span><br><span class="line">import matplotlib</span><br><span class="line"></span><br><span class="line">matplotlib.rcParams[&#39;font.sans-serif&#39;]&#x3D;[&#39;SimHei&#39;]  #使用指定的汉字字体类型（此处为黑体）</span><br><span class="line"></span><br><span class="line">#matplotlib.rcParams[&#39;axes.unicode_minus&#39;]&#x3D;False #用来正常显示负号</span><br><span class="line"></span><br><span class="line">####主要功能片段</span><br><span class="line">city&#x3D;&#39;chengdu&#39;</span><br><span class="line">citydict&#x3D;&#123;&#39;tianjin&#39;:&#39;天津&#39;,&#39;chengdu&#39;:&#39;成都&#39;,&#39;qujing&#39;:&#39;曲靖&#39;&#125;</span><br><span class="line">try:</span><br><span class="line">    #gbk不行那就utf_8</span><br><span class="line">    data &#x3D; pd.read_csv(r&#39;f:\\pachong\\&#39;+city+&#39;_weather.csv&#39;,encoding&#x3D;&#39;gbk&#39;)</span><br><span class="line">except IOError as e:  </span><br><span class="line">    print(e)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pieData&#x3D;data[&#39;weather&#39;].value_counts()</span><br><span class="line">after&#x3D;&#123;&#125;</span><br><span class="line">labels &#x3D; [] </span><br><span class="line"></span><br><span class="line"># 取出前几个，剩余的所占比重小，所有的作为其他显示</span><br><span class="line">cnt &#x3D; 0 </span><br><span class="line">required_cnt&#x3D;7  </span><br><span class="line">sum&#x3D;0</span><br><span class="line">for key, value in pieData.items():</span><br><span class="line">     cnt +&#x3D; 1</span><br><span class="line">     if cnt &gt; required_cnt:</span><br><span class="line">        sum&#x3D;sum+value</span><br><span class="line">    #print(&quot;&#123;&#125;:&#123;&#125;&quot;.format(key, value))</span><br><span class="line">     if cnt &lt;&#x3D; required_cnt:</span><br><span class="line">        after.update(&#123;key:value&#125;)</span><br><span class="line">        labels.append(key)</span><br><span class="line"></span><br><span class="line">after.update(&#123;&#39;其它&#39;:sum&#125;)</span><br><span class="line">labels.append(&#39;其它&#39;)</span><br><span class="line"></span><br><span class="line"> #设置标题名</span><br><span class="line">plot.title(citydict[city]+&quot;天气百分比&quot;) </span><br><span class="line">#为饼状图的每个区间安排颜色&#39;lightskyblue&#39;浅蓝色</span><br><span class="line">colors &#x3D; [&#39;orange&#39;,&#39;red&#39;,&#39;pink&#39;,&#39;lightskyblue&#39;,&#39;teal&#39;,&#39;green&#39;]</span><br><span class="line">#表示八个扇区“邻居”之间的缝隙距离</span><br><span class="line">explode &#x3D; (0.03, 0.02, 0.02, 0.03,0.03, 0.02, 0.02,0.02)</span><br><span class="line"></span><br><span class="line">patches, l_text, p_text &#x3D; plot.pie(pd.Series(after), explode&#x3D;explode,labels&#x3D;labels,colors&#x3D;colors,</span><br><span class="line"></span><br><span class="line">                                   labeldistance&#x3D;1.06, autopct&#x3D;&#39;%3.0f%%&#39;, shadow&#x3D;False,</span><br><span class="line"></span><br><span class="line">                                   startangle&#x3D;90, pctdistance&#x3D;0.6)</span><br><span class="line"></span><br><span class="line"># labeldistance，文本的位置离远点有多远，1.1指1.1倍半径的位置</span><br><span class="line"></span><br><span class="line"># autopct，圆里面的文本格式，%3.1f%%表示小数有三位，整数有一位的浮点数</span><br><span class="line"></span><br><span class="line"># shadow，饼是否有阴影</span><br><span class="line"></span><br><span class="line"># startangle，起始角度，0，表示从0开始逆时针转，为第一块。一般选择从90度开始比较好看</span><br><span class="line"></span><br><span class="line"># pctdistance，百分比的text离圆心的距离</span><br><span class="line"></span><br><span class="line"># patches, l_texts, p_texts，为了得到饼图的返回值，p_texts饼图内部文本的，l_texts饼图外label的文本</span><br><span class="line"></span><br><span class="line"># 改变文本的大小</span><br><span class="line"></span><br><span class="line"># 方法是把每一个text遍历。调用set_size方法设置它的属性</span><br><span class="line"></span><br><span class="line">for t in l_text:</span><br><span class="line"></span><br><span class="line">    t.set_size &#x3D; (30)</span><br><span class="line"></span><br><span class="line">for t in p_text:</span><br><span class="line"></span><br><span class="line">    t.set_size &#x3D; (20)#去掉&#x3D;号修改字体大小</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"># 设置x，y轴刻度一致，这样饼图才能是圆的</span><br><span class="line"></span><br><span class="line">plot.axis(&#39;equal&#39;)</span><br><span class="line"></span><br><span class="line">plot.legend(loc&#x3D;&#39;upper left&#39;, bbox_to_anchor&#x3D;(-0.1, 1))#legend为左上角那种集合的说明</span><br><span class="line"></span><br><span class="line"># loc: 表示legend的位置，包括&#39;upper right&#39;,&#39;upper left&#39;,&#39;lower right&#39;,&#39;lower left&#39;等</span><br><span class="line"></span><br><span class="line"># bbox_to_anchor: 表示legend距离图形之间的距离，当出现图形与legend重叠时，可使用bbox_to_anchor进行调整legend的位置</span><br><span class="line"></span><br><span class="line"># 由两个参数决定，第一个参数为legend距离左边的距离，第二个参数为距离下面的距离</span><br><span class="line"></span><br><span class="line">plot.grid()</span><br><span class="line"></span><br><span class="line">#plot.savefig(&#39;f:\\&#39;+citydict[city]+&#39;.pdf&#39;)</span><br><span class="line">plot.show()</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="https://img-blog.csdnimg.cn/20190818090748381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#top">返回顶部</a></p>
+<ul>
+<li><h2 id="画走势图"><a href="#画走势图" class="headerlink" title="画走势图"></a>画走势图</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python3</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Sun May  5 20:29:47 2019</span><br><span class="line"></span><br><span class="line">@author: kimmel</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;date	weather	temperature_high(℃)	temperature_low(℃)&#39;&#39;&#39;</span><br><span class="line">import numpy as np</span><br><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">       data &#x3D; pd.read_csv(r&#39;F:&#x2F;&#x2F;pachong&#x2F;&#x2F;tianjin_weather.csv&#39;,encoding&#x3D;&#39;gbk&#39;)</span><br><span class="line">except IOError as e:</span><br><span class="line">       print(e)</span><br><span class="line"></span><br><span class="line">x &#x3D; np.arange(0,365,1)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize&#x3D;(10,6))</span><br><span class="line"></span><br><span class="line">#正常显示负号</span><br><span class="line">plt.rcParams[&#39;axes.unicode_minus&#39;] &#x3D; False </span><br><span class="line"></span><br><span class="line">#表中有好多年的数据，用365乘以某数可以限定到某年到某年</span><br><span class="line">#plt.plot(x,data[&#39;temperature_high&#39;][365*0:365*1],label&#x3D;&#39;Temperature_high&#39;,color&#x3D;&#39;red&#39; , alpha&#x3D;0.8)</span><br><span class="line">#plt.plot(x,data[&#39;temperature_low&#39;][365*0:365*1],label&#x3D;&#39;Temperature_low&#39;, color&#x3D;&#39;blue&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.plot(x,data[&#39;temperature_high&#39;][365*6:365*7],label&#x3D;&#39;Temperature_high&#39;,color&#x3D;&#39;red&#39; , alpha&#x3D;0.8)</span><br><span class="line">plt.plot(x,data[&#39;temperature_low&#39;][365*6:365*7],label&#x3D;&#39;Temperature_low&#39;, color&#x3D;&#39;blue&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.xlabel(&quot;Time(day)&quot;)</span><br><span class="line">plt.ylabel((&quot;%s%c%s&quot;)%(&quot;Temperature(&quot;,u&quot;\u2103&quot;,&quot;)&quot;))</span><br><span class="line"></span><br><span class="line">plt.ylim(-30,45)</span><br><span class="line">y_ticks &#x3D; np.arange(-30,45,5)</span><br><span class="line">plt.yticks(y_ticks)</span><br><span class="line">plt.legend()</span><br><span class="line">#plt.savefig(r&#39;f:\\tianjin.pdf&#39;)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="https://img-blog.csdnimg.cn/20190817114544380.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#top">返回顶部</a></p>
+<ul>
+<li><h2 id="根据表中不同字段画条形图"><a href="#根据表中不同字段画条形图" class="headerlink" title="根据表中不同字段画条形图"></a>根据表中不同字段画条形图</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Wed May  8 12:54:47 2019</span><br><span class="line"></span><br><span class="line">@author: Administrator</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import pandas as pd</span><br><span class="line">###正常显示中文</span><br><span class="line">import matplotlib</span><br><span class="line"></span><br><span class="line">city&#x3D;&#39;tj&#39;</span><br><span class="line">citydict&#x3D;&#123;&#39;city&#39;:&#39;全国部分城市平均&#39;,&#39;tj&#39;:&#39;天津&#39;,&#39;bj&#39;:&#39;北京&#39;,&#39;cd&#39;:&#39;成都&#39;,&#39;gz&#39;:&#39;广州&#39;,&#39;sh&#39;:&#39;上海&#39;,&#39;sz&#39;:&#39;深圳&#39;,&#39;wh&#39;:&#39;武汉&#39;,&#39;hz&#39;:&#39;杭州&#39;,&#39;gy&#39;:&#39;贵阳&#39;,&#39;cs&#39;:&#39;长沙&#39;,&#39;cq&#39;:&#39;重庆&#39;,&#39;qj&#39;:&#39;曲靖&#39;,&#39;km&#39;:&#39;昆明&#39;&#125;</span><br><span class="line">matplotlib.rcParams[&#39;font.sans-serif&#39;]&#x3D;[&#39;SimHei&#39;]  #使用指定的汉字字体类型（此处为黑体）</span><br><span class="line"></span><br><span class="line">df &#x3D; pd.read_csv(r&#39;C:\Users\Administrator\Desktop\lianjia-beike-spider-master\data\ke\xiaoqu\all\all_city&#39;+&#39;.csv&#39;,encoding&#x3D;&#39;gbk&#39;)  </span><br><span class="line"> </span><br><span class="line">var &#x3D; df.groupby(&#39;城市&#39;)[&#39;挂牌均价&#39;].mean()</span><br><span class="line"></span><br><span class="line">fig &#x3D; plt.figure()</span><br><span class="line"></span><br><span class="line">ax1 &#x3D; fig.add_subplot(111)</span><br><span class="line">ax1.set_xlabel(&#39;地区&#39;)</span><br><span class="line">ax1.set_ylabel(&#39;房价&#39;)</span><br><span class="line">ax1.set_title(citydict[city]+&#39;各区平均房价&#39;)</span><br><span class="line"></span><br><span class="line">var.plot(kind&#x3D;&#39;bar&#39;)</span><br><span class="line"></span><br><span class="line">plt.savefig(&#39;f:\\&#39;+citydict[city]+&#39;房价.pdf&#39;)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="https://img-blog.csdnimg.cn/20190817133922581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#top">返回顶部</a></p>
+<ul>
+<li><h2 id="画地图"><a href="#画地图" class="headerlink" title="画地图"></a>画地图</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Wed May  8 12:54:47 2019</span><br><span class="line"></span><br><span class="line">@author: Administrator</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import pandas as pd</span><br><span class="line">from pyecharts import Map,Geo</span><br><span class="line">###正常显示中文</span><br><span class="line">import matplotlib</span><br><span class="line"></span><br><span class="line">city&#x3D;&#39;tj&#39;</span><br><span class="line">citydict&#x3D;&#123;&#39;city&#39;:&#39;全国部分城市平均&#39;,&#39;tj&#39;:&#39;天津&#39;,&#39;bj&#39;:&#39;北京&#39;,&#39;cd&#39;:&#39;成都&#39;,&#39;gz&#39;:&#39;广州&#39;,&#39;sh&#39;:&#39;上海&#39;,&#39;sz&#39;:&#39;深圳&#39;,&#39;wh&#39;:&#39;武汉&#39;,&#39;hz&#39;:&#39;杭州&#39;,&#39;gy&#39;:&#39;贵阳&#39;,&#39;cs&#39;:&#39;长沙&#39;,&#39;cq&#39;:&#39;重庆&#39;,&#39;qj&#39;:&#39;曲靖&#39;,&#39;km&#39;:&#39;昆明&#39;&#125;</span><br><span class="line">matplotlib.rcParams[&#39;font.sans-serif&#39;]&#x3D;[&#39;SimHei&#39;]  #使用指定的汉字字体类型（此处为黑体）</span><br><span class="line"></span><br><span class="line">df &#x3D; pd.read_csv(r&#39;C:\Users\Administrator\Desktop\lianjia-beike-spider-master\data\ke\xiaoqu\all\all_city&#39;+&#39;.csv&#39;,encoding&#x3D;&#39;gbk&#39;)  </span><br><span class="line"> </span><br><span class="line">var &#x3D; df.groupby(&#39;城市&#39;)[&#39;挂牌均价&#39;].mean()</span><br><span class="line"></span><br><span class="line">data&#x3D;list(var.items())</span><br><span class="line">attr, value &#x3D; Geo.cast(data)</span><br><span class="line"></span><br><span class="line">Geo &#x3D; Geo(&quot;全国部分城市房价热力图&quot;, &quot;数据来源房价信息表&quot;, title_color&#x3D;&quot;#fff&quot;, title_pos&#x3D;&quot;center&quot;, width&#x3D;1200, height&#x3D;600, background_color&#x3D;&#39;#404a59&#39;)</span><br><span class="line"></span><br><span class="line">Geo.add(&quot;房价热力图&quot;, attr, value, visual_range&#x3D;[0, 20000], type&#x3D;&#39;heatmap&#39;,visual_text_color&#x3D;&quot;#fff&quot;, symbol_size&#x3D;15, is_visualmap&#x3D;True, is_roam&#x3D;False)</span><br><span class="line"></span><br><span class="line">Geo.show_config()</span><br><span class="line"></span><br><span class="line">Geo.render(path&#x3D;&quot;f:\\a1.html&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#世界地图：</span><br><span class="line">map0 &#x3D; Map(&quot;世界地图示例&quot;, width&#x3D;1200, height&#x3D;600)</span><br><span class="line">map0.add(&quot;世界地图&quot;, attr, value, maptype&#x3D;&quot;world&quot;,  is_visualmap&#x3D;True, visual_text_color&#x3D;&#39;#000&#39;)</span><br><span class="line">map0.render(path&#x3D;&quot;f:\\a2.html&quot;)</span><br><span class="line"></span><br><span class="line">#中国地图</span><br><span class="line"># maptype&#x3D;&#39;china&#39; 只显示全国直辖市和省级</span><br><span class="line"># 数据只能是省名和直辖市的名称</span><br><span class="line">map1 &#x3D; Map(&quot;中国地图&quot;,&#39;中国地图&#39;, width&#x3D;1200, height&#x3D;600)</span><br><span class="line">map1.add(&quot;&quot;, attr, value, visual_range&#x3D;[0, 50],  maptype&#x3D;&#39;china&#39;, is_visualmap&#x3D;True,    visual_text_color&#x3D;&#39;#000&#39;)</span><br><span class="line">map1.show_config()</span><br><span class="line">map1.render(path&#x3D;&quot;f:\\a3.html&quot;)</span><br><span class="line"></span><br><span class="line">#省份地图</span><br><span class="line">province&#x3D; &#123;&#39;云南&#39;: 6&#125;</span><br><span class="line">provice&#x3D;list(province.keys())</span><br><span class="line">values&#x3D;list(province.values()) </span><br><span class="line">map2 &#x3D; Map(&quot;云南地图&quot;,&#39;云南&#39;, width&#x3D;1200, height&#x3D;600)</span><br><span class="line">map2.add(&#39;云南&#39;, provice, values, visual_range&#x3D;[1, 10], maptype&#x3D;&#39;云南&#39;, is_visualmap&#x3D;True, visual_text_color&#x3D;&#39;#000&#39;)</span><br><span class="line">map2.show_config()</span><br><span class="line">map2.render(path&#x3D;&quot;f:\\a4.html&quot;)</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">#区县地图</span><br><span class="line">quxian &#x3D; []</span><br><span class="line">values3 &#x3D; []</span><br><span class="line">map3 &#x3D; Map(&quot;aa&quot;,&#39;aa&#39;, width&#x3D;1200, height&#x3D;600)</span><br><span class="line">map3.add(&quot;xx&quot;, quxian, values3, visual_range&#x3D;[1, 10], maptype&#x3D;&#39;xx&#39;, is_visualmap&#x3D;True,    visual_text_color&#x3D;&#39;#000&#39;)</span><br><span class="line">map3.render(path&#x3D;&quot;f:\\a5.html&quot;)</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="https://img-blog.csdnimg.cn/2019081713465038.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#top">返回顶部</a></p>
+<ul>
+<li><h2 id="合并多个csv文件"><a href="#合并多个csv文件" class="headerlink" title="合并多个csv文件"></a>合并多个csv文件</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import pandas as pd</span><br><span class="line">import os</span><br><span class="line">Folder_Path &#x3D; r&#39;C:\Users\Administrator\Desktop\\all&#39;          #要拼接的文件夹及其完整路径，注意不要包含中文</span><br><span class="line">SaveFile_Path &#x3D;  r&#39;f:\\xx&#39;       #拼接后要保存的文件路径</span><br><span class="line">SaveFile_Name &#x3D; r&#39;all.csv&#39;              #合并后要保存的文件名</span><br><span class="line"> </span><br><span class="line">#修改当前工作目录</span><br><span class="line">os.chdir(Folder_Path)</span><br><span class="line">#将该文件夹下的所有文件名存入一个列表</span><br><span class="line">file_list &#x3D; os.listdir()</span><br><span class="line"> </span><br><span class="line">#读取第一个CSV文件并包含表头</span><br><span class="line">df &#x3D; pd.read_csv(Folder_Path +&#39;\\&#39;+ file_list[0],encoding&#x3D;&quot;gbk&quot;)   #或UTF-8</span><br><span class="line"> </span><br><span class="line">#将读取的第一个CSV文件写入合并后的文件保存</span><br><span class="line">df.to_csv(SaveFile_Path+&#39;\\&#39;+ SaveFile_Name,encoding&#x3D;&quot;gbk&quot;,index&#x3D;False)</span><br><span class="line"> </span><br><span class="line">#循环遍历列表中各个CSV文件名，并追加到合并后的文件</span><br><span class="line">for i in range(1,len(file_list)):</span><br><span class="line">    try:</span><br><span class="line">        df &#x3D; pd.read_csv(Folder_Path + &#39;\\&#39;+ file_list[i],encoding&#x3D;&quot;gbk&quot;)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br><span class="line">    df.to_csv(SaveFile_Path+&#39;\\&#39;+ SaveFile_Name,encoding&#x3D;&quot;gbk&quot;,index&#x3D;False, header&#x3D;False, mode&#x3D;&#39;a+&#39;)</span><br></pre></td></tr></table></figure>
+<p><a href="#top">返回顶部</a></p>
+<h1 id="最后利用各种挖掘算法分析解释"><a href="#最后利用各种挖掘算法分析解释" class="headerlink" title="最后利用各种挖掘算法分析解释"></a>最后利用各种挖掘算法分析解释</h1><p><img src="https://img-blog.csdnimg.cn/20190818094715336.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="感触"><a href="#感触" class="headerlink" title="感触"></a>感触</h1><p>对于新手而言，前期数据处理还是挺好玩的，刨除数据挖掘不说，自己搞点小东西玩玩也是好玩的。到真正的挖掘分析部分就有点吃不消了，书上那些人家总结好的算法，说实话，不能很好理解，只能是按照人家分析步骤自己也照着做，最终得出个什么结果。</p>
+<p><a href="#top">返回顶部</a></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%8E%E6%8C%96%E6%8E%98/" rel="tag"># Python数据分析与挖掘</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/16/%E5%90%84%E7%A7%8D%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" rel="prev" title="各种排序算法总结">
+      <i class="fa fa-chevron-left"></i> 各种排序算法总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/09/29/%E5%85%B3%E4%BA%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BF%90%E7%AE%97/" rel="next" title="关于二进制的一些运算">
+      关于二进制的一些运算 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90"><span class="nav-number">2.</span> <span class="nav-text">数据来源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E5%8F%8A%E5%85%B6%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">可视化及其数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%8D%E4%BA%91"><span class="nav-number">3.1.</span> <span class="nav-text">词云</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%BB%E9%A5%BC%E5%9B%BE"><span class="nav-number">3.2.</span> <span class="nav-text">画饼图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%BB%E8%B5%B0%E5%8A%BF%E5%9B%BE"><span class="nav-number">3.3.</span> <span class="nav-text">画走势图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E8%A1%A8%E4%B8%AD%E4%B8%8D%E5%90%8C%E5%AD%97%E6%AE%B5%E7%94%BB%E6%9D%A1%E5%BD%A2%E5%9B%BE"><span class="nav-number">3.4.</span> <span class="nav-text">根据表中不同字段画条形图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%BB%E5%9C%B0%E5%9B%BE"><span class="nav-number">3.5.</span> <span class="nav-text">画地图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AAcsv%E6%96%87%E4%BB%B6"><span class="nav-number">3.6.</span> <span class="nav-text">合并多个csv文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%88%A9%E7%94%A8%E5%90%84%E7%A7%8D%E6%8C%96%E6%8E%98%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E8%A7%A3%E9%87%8A"><span class="nav-number">4.</span> <span class="nav-text">最后利用各种挖掘算法分析解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%84%9F%E8%A7%A6"><span class="nav-number">5.</span> <span class="nav-text">感触</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

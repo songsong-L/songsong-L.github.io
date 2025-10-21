@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="栈--顺序栈与链栈">
+<meta property="og:url" content="http://songsong.host/2019/07/03/%E6%A0%88--%E9%A1%BA%E5%BA%8F%E6%A0%88%E4%B8%8E%E9%93%BE%E6%A0%88/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190703105612641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190703142621889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-07-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.984Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="栈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190703105612641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://songsong.host/2019/07/03/%E6%A0%88--%E9%A1%BA%E5%BA%8F%E6%A0%88%E4%B8%8E%E9%93%BE%E6%A0%88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>栈--顺序栈与链栈 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2019/07/03/%E6%A0%88--%E9%A1%BA%E5%BA%8F%E6%A0%88%E4%B8%8E%E9%93%BE%E6%A0%88/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          栈--顺序栈与链栈
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-03 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-03T00:00:00+08:00">2019-07-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/07/03/%E6%A0%88--%E9%A1%BA%E5%BA%8F%E6%A0%88%E4%B8%8E%E9%93%BE%E6%A0%88/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/03/%E6%A0%88--%E9%A1%BA%E5%BA%8F%E6%A0%88%E4%B8%8E%E9%93%BE%E6%A0%88/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+         <body >
+    <div id="topAnchor"></div>
+</body>
+
+
+<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><ul>
+<li>逻辑结构：线性表</li>
+<li>存储结构：顺序存储\链式存储</li>
+<li>基本运算：<ol>
+<li>初始化</li>
+<li>判断栈空</li>
+<li>判断栈满</li>
+<li>入栈</li>
+<li>出栈</li>
+<li>取栈顶元素</li>
+</ol>
+</li>
+</ul>
+<p><strong><em>注意：栈也是线性表，其特殊性在于有特殊的运算规则。即：栈结构只能在一端进行操作，该操作端称为栈顶，另一端称为栈底。按照“后进先出”（Last In First Out,LIFO）原则处理数据节点。</em></strong></p>
+<h2 id="1-顺序栈"><a href="#1-顺序栈" class="headerlink" title="1. 顺序栈"></a>1. 顺序栈</h2><ul>
+<li><h4 id="顺序栈的定义"><a href="#顺序栈的定义" class="headerlink" title="顺序栈的定义"></a>顺序栈的定义</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct stack</span><br><span class="line">&#123;</span><br><span class="line">    int *base;        	 	&#x2F;&#x2F; 基地址</span><br><span class="line">    int *top;          		&#x2F;&#x2F; 栈顶指针</span><br><span class="line">    int stackSize;          &#x2F;&#x2F; 栈容量</span><br><span class="line">&#125;*Stack;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="顺序栈的初始化"><a href="#顺序栈的初始化" class="headerlink" title="顺序栈的初始化"></a>顺序栈的初始化</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Stack Init_Stack(Stack S)				&#x2F;&#x2F; 栈的初始化</span><br><span class="line">&#123;</span><br><span class="line">    S&#x3D;(Stack)malloc(sizeof(Stack));</span><br><span class="line">    if(!S)</span><br><span class="line">        exit(0);</span><br><span class="line">        </span><br><span class="line">    S-&gt;base &#x3D; (int*)malloc(STACK_INIT_SIZE*sizeof(DATATYPE));</span><br><span class="line"></span><br><span class="line">    if(!S-&gt;base)</span><br><span class="line">        exit(0);</span><br><span class="line"></span><br><span class="line">    S-&gt;top &#x3D; S-&gt;base;</span><br><span class="line">    S-&gt;stackSize &#x3D; STACK_INIT_SIZE;</span><br><span class="line">    return S;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="判断栈空"><a href="#判断栈空" class="headerlink" title="判断栈空"></a>判断栈空</h4>栈底等于栈顶即为空。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int IsEmpty(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    if (S-&gt;top &#x3D;&#x3D; S-&gt;base)&#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125; </span><br><span class="line">	else&#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><h4 id="判断栈满"><a href="#判断栈满" class="headerlink" title="判断栈满"></a>判断栈满</h4>栈顶减栈底等于栈容量即为栈满。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int IsFull(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    if (S-&gt;top - S-&gt;base &#x3D;&#x3D; S-&gt;stackSize) &#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125; </span><br><span class="line">	else&#123;</span><br><span class="line">        return 0;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></li>
+<li><h4 id="顺序栈的入栈"><a href="#顺序栈的入栈" class="headerlink" title="顺序栈的入栈"></a>顺序栈的入栈</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">void Push(Stack S, DATATYPE e)				&#x2F;&#x2F; 数据压进栈</span><br><span class="line">&#123;</span><br><span class="line">    assert(S);</span><br><span class="line"></span><br><span class="line">    if (IsFull(S))</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        S-&gt;base &#x3D; (int*)malloc((STACK_INIT_SIZE+STACK_INCREMENT)*sizeof(DATATYPE));</span><br><span class="line"></span><br><span class="line">        if (!S-&gt;base)</span><br><span class="line"></span><br><span class="line">            exit(0);       					 &#x2F;&#x2F; 存储分配失败</span><br><span class="line"></span><br><span class="line">        S-&gt;top &#x3D; S-&gt;base + S-&gt;stackSize;</span><br><span class="line"></span><br><span class="line">        S-&gt;stackSize +&#x3D; STACK_INCREMENT;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    *S-&gt;top++ &#x3D; e;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="顺序栈的出栈"><a href="#顺序栈的出栈" class="headerlink" title="顺序栈的出栈"></a>顺序栈的出栈</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DATATYPE Pop(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    assert(S);</span><br><span class="line">    if (S-&gt;top &#x3D;&#x3D; S-&gt;base)</span><br><span class="line">        return 0;     </span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return *--S-&gt;top;     &#x2F;&#x2F; *--S-&gt;top就是*(--S-&gt;top)</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="取栈顶元素"><a href="#取栈顶元素" class="headerlink" title="取栈顶元素"></a>取栈顶元素</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 访问栈顶 </span><br><span class="line">DATATYPE GetTop(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    assert(S);</span><br><span class="line">    if (S-&gt;top &#x3D;&#x3D; S-&gt;base)</span><br><span class="line">        return 0;         </span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return *(S-&gt;top-1);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong><em>注意：取栈顶元素与出栈的区别：</em></strong><br>*<strong>出栈</strong>：数据从栈中移出，<br><strong>取栈顶</strong>：只是访问了一下栈顶，数据还在栈中。*</p>
+<ul>
+<li><h4 id="顺序栈的销毁"><a href="#顺序栈的销毁" class="headerlink" title="顺序栈的销毁"></a>顺序栈的销毁</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void DestroyStack(Stack S) &#123;</span><br><span class="line">    free(S-&gt;base);</span><br><span class="line">	free(S);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></li>
+<li><h4 id="总的代码"><a href="#总的代码" class="headerlink" title="总的代码"></a>总的代码</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;assert.h&gt;             &#x2F;&#x2F; 断言函数</span><br><span class="line">#define STACK_INIT_SIZE 100     &#x2F;&#x2F; 栈容量</span><br><span class="line">#define STACK_INCREMENT 10      &#x2F;&#x2F; 栈增量</span><br><span class="line"></span><br><span class="line">typedef int DATATYPE;</span><br><span class="line"></span><br><span class="line">typedef struct stack</span><br><span class="line">&#123;</span><br><span class="line">    int *base;        	 &#x2F;&#x2F; 基地址</span><br><span class="line">    int *top;         	 &#x2F;&#x2F; 栈顶指针</span><br><span class="line">    int stackSize;       &#x2F;&#x2F; 栈容量</span><br><span class="line">&#125;*Stack;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 栈的初始化</span><br><span class="line">Stack Init_Stack(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    S&#x3D;(Stack)malloc(sizeof(Stack));</span><br><span class="line">    if(!S)</span><br><span class="line">        exit(0);</span><br><span class="line">        </span><br><span class="line">    S-&gt;base &#x3D; (int*)malloc(STACK_INIT_SIZE*sizeof(DATATYPE));</span><br><span class="line"></span><br><span class="line">    if(!S-&gt;base)</span><br><span class="line">        exit(0);</span><br><span class="line"></span><br><span class="line">    S-&gt;top &#x3D; S-&gt;base;</span><br><span class="line">    S-&gt;stackSize &#x3D; STACK_INIT_SIZE;</span><br><span class="line">    return S;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 判栈空</span><br><span class="line">int IsEmpty(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    if (S-&gt;top &#x3D;&#x3D; S-&gt;base)&#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125; </span><br><span class="line">	else&#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 判栈满</span><br><span class="line">int IsFull(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    if (S-&gt;top - S-&gt;base &#x3D;&#x3D; S-&gt;stackSize) &#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125; </span><br><span class="line">	else&#123;</span><br><span class="line">        return 0;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 操作数压栈</span><br><span class="line">void Push(Stack S, DATATYPE e)</span><br><span class="line">&#123;</span><br><span class="line">    assert(S);</span><br><span class="line"></span><br><span class="line">    if (IsFull(S))</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        S-&gt;base &#x3D; (int*)malloc((STACK_INIT_SIZE+STACK_INCREMENT)*sizeof(DATATYPE));</span><br><span class="line"></span><br><span class="line">        if (!S-&gt;base)</span><br><span class="line"></span><br><span class="line">            exit(0);        &#x2F;&#x2F; 存储分配失败</span><br><span class="line"></span><br><span class="line">        S-&gt;top &#x3D; S-&gt;base + S-&gt;stackSize;</span><br><span class="line"></span><br><span class="line">        S-&gt;stackSize +&#x3D; STACK_INCREMENT;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    *S-&gt;top++ &#x3D; e;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 操作数弹栈</span><br><span class="line">DATATYPE Pop(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    assert(S);</span><br><span class="line">    if (S-&gt;top &#x3D;&#x3D; S-&gt;base)</span><br><span class="line">        return 0;              &#x2F;&#x2F; 空栈弹出0保证部分负数的正确运算</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return *--S-&gt;top;     &#x2F;&#x2F; *--S-&gt;top就是*(--S-&gt;top)</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 访问栈顶 </span><br><span class="line">DATATYPE GetTop(Stack S)</span><br><span class="line">&#123;</span><br><span class="line">    assert(S);</span><br><span class="line">    if (S-&gt;top &#x3D;&#x3D; S-&gt;base)</span><br><span class="line">        return 0;         </span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return *(S-&gt;top-1);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 栈的销毁</span><br><span class="line">void DestroyStack(Stack S) &#123;</span><br><span class="line">    free(S-&gt;base);</span><br><span class="line">	free(S);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  	Stack OPND&#x3D;NULL;</span><br><span class="line">    OPND &#x3D; Init_Stack(OPND);        &#x2F;&#x2F; 创建操作数栈</span><br><span class="line">	int i;</span><br><span class="line">	for (i&#x3D;0; i&lt;5; i++)</span><br><span class="line">    &#123;</span><br><span class="line">    	Push(OPND,i); </span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    for (i&#x3D;0; i&lt;5; i++)</span><br><span class="line">    &#123;</span><br><span class="line">    	printf(&quot;此时的栈顶为：%d\n&quot;,GetTop(OPND));</span><br><span class="line">    	printf(&quot;将%d出栈\n&quot;,Pop(OPND)); </span><br><span class="line">    &#125;</span><br><span class="line">    DestroyStack(OPND);</span><br><span class="line">    return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h4><img src="https://img-blog.csdnimg.cn/20190703105612641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a><h2 id="2-链栈"><a href="#2-链栈" class="headerlink" title="2.链栈"></a>2.链栈</h2></li>
+<li><h4 id="链栈的定义"><a href="#链栈的定义" class="headerlink" title="链栈的定义"></a>链栈的定义</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct node			&#x2F;&#x2F;定义节点</span><br><span class="line">&#123;</span><br><span class="line">    DATATYPE data;</span><br><span class="line">    struct node * next;</span><br><span class="line">&#125; StackNode;</span><br><span class="line"></span><br><span class="line">typedef struct				&#x2F;&#x2F;定义一个链栈</span><br><span class="line">&#123;</span><br><span class="line">    StackNode * top;  		&#x2F;&#x2F;总指向栈顶 </span><br><span class="line">    int count;				&#x2F;&#x2F;计数器 记录链栈的元素个数</span><br><span class="line">&#125;Stack,*LinkStack;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="链栈的初始化"><a href="#链栈的初始化" class="headerlink" title="链栈的初始化"></a>链栈的初始化</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void init(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    s-&gt;top&#x3D;NULL;		&#x2F;&#x2F;该指针箭头指向为空</span><br><span class="line">    s-&gt;count&#x3D;0;			&#x2F;&#x2F;初始化时长度为零</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="判断栈空-1"><a href="#判断栈空-1" class="headerlink" title="判断栈空"></a>判断栈空</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int IsEmpty(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    return (s-&gt;top&#x3D;&#x3D;NULL? TRUE:FALSE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+<ul>
+<li><h4 id="链栈的入栈"><a href="#链栈的入栈" class="headerlink" title="链栈的入栈"></a>链栈的入栈</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void push(LinkStack s,DATATYPE a)</span><br><span class="line">&#123;</span><br><span class="line">    StackNode * p&#x3D;(StackNode *)malloc(sizeof(StackNode));</span><br><span class="line">    if(NULL&#x3D;&#x3D;p)				&#x2F;&#x2F;申请不成功</span><br><span class="line">        exit(1);</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        p-&gt;data&#x3D;a;			</span><br><span class="line">        p-&gt;next&#x3D;s-&gt;top;		&#x2F;&#x2F;将新节点的指针域指向原栈顶节点</span><br><span class="line">        s-&gt;top&#x3D;p;			&#x2F;&#x2F;栈顶指针指向新节点</span><br><span class="line">        s-&gt;count++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="链栈的出栈"><a href="#链栈的出栈" class="headerlink" title="链栈的出栈"></a>链栈的出栈</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DATATYPE pop(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    DATATYPE a; </span><br><span class="line">    if( IsEmpty(s))</span><br><span class="line">        return FALSE;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        a &#x3D;s-&gt;top-&gt;data;			&#x2F;&#x2F;将即将弹出的数据存在a中。不存也不影响出栈操作 </span><br><span class="line">        s-&gt;top&#x3D;s-&gt;top-&gt;next;</span><br><span class="line">        s-&gt;count--;</span><br><span class="line">        free(s-&gt;top);		</span><br><span class="line">		return a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="取栈顶元素-1"><a href="#取栈顶元素-1" class="headerlink" title="取栈顶元素"></a>取栈顶元素</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DATATYPE GetTop(LinkStack S)</span><br><span class="line">&#123;</span><br><span class="line">    if(IsEmpty(S))</span><br><span class="line">        return FALSE;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return S-&gt;top-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+<ul>
+<li><h4 id="总的代码-1"><a href="#总的代码-1" class="headerlink" title="总的代码"></a>总的代码</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"># include&lt;stdio.h&gt;</span><br><span class="line"># include&lt;stdlib.h&gt;</span><br><span class="line"># define FALSE 0</span><br><span class="line"># define TRUE 1</span><br><span class="line"></span><br><span class="line">typedef int DATATYPE;</span><br><span class="line"></span><br><span class="line">typedef struct node			&#x2F;&#x2F;定义节点</span><br><span class="line">&#123;</span><br><span class="line">    DATATYPE data;</span><br><span class="line">    struct node * next;</span><br><span class="line">&#125; StackNode;</span><br><span class="line"></span><br><span class="line">typedef struct				&#x2F;&#x2F;定义一个链栈</span><br><span class="line">&#123;</span><br><span class="line">    StackNode * top;  		&#x2F;&#x2F;总指向栈顶 </span><br><span class="line">    int count;				&#x2F;&#x2F;计数器 记录链栈的元素个数</span><br><span class="line">&#125;Stack,*LinkStack;</span><br><span class="line"></span><br><span class="line">void init(LinkStack s);					&#x2F;&#x2F;初始化</span><br><span class="line">int IsEmpty(LinkStack s);				&#x2F;&#x2F;判断是否为空（链栈一般不会为满）</span><br><span class="line">void push(LinkStack s,DATATYPE a);		&#x2F;&#x2F;入栈</span><br><span class="line">DATATYPE pop(LinkStack s);				&#x2F;&#x2F;出栈</span><br><span class="line">DATATYPE GetTop(LinkStack S);			&#x2F;&#x2F;取栈顶元素</span><br><span class="line">int length(LinkStack s);				&#x2F;&#x2F;取链栈长度</span><br><span class="line"></span><br><span class="line">void init(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    s-&gt;top&#x3D;NULL;		&#x2F;&#x2F;该指针箭头指向为空</span><br><span class="line">    s-&gt;count&#x3D;0;			&#x2F;&#x2F;初始化时长度为零</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int IsEmpty(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    return (s-&gt;top&#x3D;&#x3D;NULL? TRUE:FALSE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void push(LinkStack s,DATATYPE a)</span><br><span class="line">&#123;</span><br><span class="line">    StackNode * p&#x3D;(StackNode *)malloc(sizeof(StackNode));</span><br><span class="line">    if(NULL&#x3D;&#x3D;p)				&#x2F;&#x2F;申请不成功</span><br><span class="line">        exit(1);</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        p-&gt;data&#x3D;a;			</span><br><span class="line">        p-&gt;next&#x3D;s-&gt;top;		&#x2F;&#x2F;将新节点的指针域指向原栈顶节点</span><br><span class="line">        s-&gt;top&#x3D;p;			&#x2F;&#x2F;栈顶指针指向新节点</span><br><span class="line">        s-&gt;count++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">DATATYPE pop(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    DATATYPE a; </span><br><span class="line">    if( IsEmpty(s))</span><br><span class="line">        return FALSE;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        a &#x3D;s-&gt;top-&gt;data;			&#x2F;&#x2F;将即将弹出的数据存在a中。不存也不影响出栈操作 </span><br><span class="line">        s-&gt;top&#x3D;s-&gt;top-&gt;next;</span><br><span class="line">        s-&gt;count--;</span><br><span class="line">        free(s-&gt;top);		</span><br><span class="line">		return a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">DATATYPE GetTop(LinkStack S)</span><br><span class="line">&#123;</span><br><span class="line">    if(IsEmpty(S))</span><br><span class="line">        return FALSE;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return S-&gt;top-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int length(LinkStack s)</span><br><span class="line">&#123;</span><br><span class="line">    return s-&gt;count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    Stack S;</span><br><span class="line">    init(&amp;S);        &#x2F;&#x2F; 创建操作数栈</span><br><span class="line"> 	int i;</span><br><span class="line">	for (i&#x3D;0; i&lt;5; i++)</span><br><span class="line">    &#123;</span><br><span class="line">    	push(&amp;S,i); </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    printf(&quot;链栈长度为：%d\n&quot;,length(&amp;S));</span><br><span class="line">    	</span><br><span class="line">    while(!IsEmpty(&amp;S))</span><br><span class="line">    &#123;    </span><br><span class="line">		printf(&quot;此时的栈顶为：%d\n&quot;,GetTop(&amp;S));  </span><br><span class="line">        printf(&quot;将%d出栈\n&quot;,pop(&amp;S)); </span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="运行结果-1"><a href="#运行结果-1" class="headerlink" title="运行结果"></a>运行结果</h4><img src="https://img-blog.csdnimg.cn/20190703142621889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+<p><strong><em>注意：顺序栈的栈顶指向的是即将入栈的位置，没有指着任何数据，所以栈顶减栈底可以判断是否为空或满。而链栈的指针指向的是栈顶的数据，所以s-&gt;top==NULL就可以判断是否为空。别搞混了。</em></strong></p>
+<p><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A0%88/" rel="tag"># 栈</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/02/%E9%93%BE%E8%A1%A8--%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86/" rel="prev" title="链表--学生信息管理">
+      <i class="fa fa-chevron-left"></i> 链表--学生信息管理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/04/%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8--%E6%95%B0%E5%80%BC%E8%BD%AC%E6%8D%A2%E4%B8%8E%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/" rel="next" title="栈的应用--数值转换与表达式求值">
+      栈的应用--数值转换与表达式求值 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88"><span class="nav-number">1.</span> <span class="nav-text">栈</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%A1%BA%E5%BA%8F%E6%A0%88"><span class="nav-number">1.1.</span> <span class="nav-text">1. 顺序栈</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%A0%88%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">顺序栈的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%A0%88%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">顺序栈的初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%A0%88%E7%A9%BA"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">判断栈空</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%A0%88%E6%BB%A1"><span class="nav-number">1.1.0.4.</span> <span class="nav-text">判断栈满</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%A0%88%E7%9A%84%E5%85%A5%E6%A0%88"><span class="nav-number">1.1.0.5.</span> <span class="nav-text">顺序栈的入栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%A0%88%E7%9A%84%E5%87%BA%E6%A0%88"><span class="nav-number">1.1.0.6.</span> <span class="nav-text">顺序栈的出栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%96%E6%A0%88%E9%A1%B6%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.0.7.</span> <span class="nav-text">取栈顶元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%A0%88%E7%9A%84%E9%94%80%E6%AF%81"><span class="nav-number">1.1.0.8.</span> <span class="nav-text">顺序栈的销毁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.0.9.</span> <span class="nav-text">总的代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.1.0.10.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%93%BE%E6%A0%88"><span class="nav-number">1.2.</span> <span class="nav-text">2.链栈</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%A0%88%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">链栈的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%A0%88%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">链栈的初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%A0%88%E7%A9%BA-1"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">判断栈空</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%A0%88%E7%9A%84%E5%85%A5%E6%A0%88"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">链栈的入栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%A0%88%E7%9A%84%E5%87%BA%E6%A0%88"><span class="nav-number">1.2.0.5.</span> <span class="nav-text">链栈的出栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%96%E6%A0%88%E9%A1%B6%E5%85%83%E7%B4%A0-1"><span class="nav-number">1.2.0.6.</span> <span class="nav-text">取栈顶元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%9A%84%E4%BB%A3%E7%A0%81-1"><span class="nav-number">1.2.0.7.</span> <span class="nav-text">总的代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C-1"><span class="nav-number">1.2.0.8.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python+django搭建web">
+<meta property="og:url" content="http://songsong.host/2020/07/09/python+django%E6%90%AD%E5%BB%BAweb/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:description" content="前言">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200709210734130.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020070921133199.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200709211414737.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020070921182132.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200709212319399.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200709215733882.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020070922212264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200709222221904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.873Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="django">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200709210734130.png">
+
+<link rel="canonical" href="http://songsong.host/2020/07/09/python+django%E6%90%AD%E5%BB%BAweb/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>python+django搭建web | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2020/07/09/python+django%E6%90%AD%E5%BB%BAweb/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python+django搭建web
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-09T00:00:00+08:00">2020-07-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/09/python+django%E6%90%AD%E5%BB%BAweb/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/09/python+django%E6%90%AD%E5%BB%BAweb/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>安装Django和pycharm就不说了。<br><img src="https://img-blog.csdnimg.cn/20200709210734130.png" alt="在这里插入图片描述"><br><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/3.0/intro/tutorial01/">Django官网教程，很详细</a><br><em>注：我一开始用的pycharm社区版，引入bootstrap等文件没有代码补全。然后用破解版pycharm就可以了。（推”程序员的时光”微信公众号有破解教程）</em></p>
+<h1 id="创建Django项目"><a href="#创建Django项目" class="headerlink" title="创建Django项目"></a>创建Django项目</h1><p>cd进入存储项目的地方，运行下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject mytest</span><br></pre></td></tr></table></figure>
+<p>生成一些算是配置文件吧<br><img src="https://img-blog.csdnimg.cn/2020070921133199.png" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/20200709211414737.png" alt="在这里插入图片描述"><br>在manage.py所在目录运行下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure>
+<p>浏览器访问：<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a>  ，出现下图，空项目算是完成了。<br><img src="https://img-blog.csdnimg.cn/2020070921182132.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="交互"><a href="#交互" class="headerlink" title="交互"></a>交互</h1><h2 id="创建应用程序-实现记录体温"><a href="#创建应用程序-实现记录体温" class="headerlink" title="创建应用程序,实现记录体温"></a>创建应用程序,实现记录体温</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py startapp 应用名</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200709212319399.png" alt="在这里插入图片描述"></p>
+<h2 id="用pycharm打开应用程序"><a href="#用pycharm打开应用程序" class="headerlink" title="用pycharm打开应用程序"></a>用pycharm打开应用程序</h2><p>打开models.py:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Temperature(models.Model):</span><br><span class="line">    morning &#x3D; models.CharField(max_length&#x3D;10)</span><br><span class="line">    noon &#x3D; models.CharField(max_length&#x3D;10)</span><br><span class="line">    evening &#x3D; models.CharField(max_length&#x3D;10)</span><br><span class="line">    time &#x3D; models.CharField(max_length&#x3D;100)</span><br></pre></td></tr></table></figure>
+
+<h2 id="更换mysql"><a href="#更换mysql" class="headerlink" title="更换mysql"></a>更换mysql</h2><p>在<strong>init</strong>.py中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line"></span><br><span class="line">pymysql.version_info &#x3D; (1, 3, 13, &quot;final&quot;, 0)</span><br><span class="line"></span><br><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+
+<p>项目的settings.py文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">DATABASES &#x3D; &#123;</span><br><span class="line">    &#39;default&#39;: &#123;</span><br><span class="line">        &#39;ENGINE&#39;: &#39;django.db.backends.mysql&#39;,</span><br><span class="line">        &#39;NAME&#39;: &#39;test&#39;,        #数据库名字</span><br><span class="line">        &#39;USER&#39;: &#39;root&#39;,          #账号</span><br><span class="line">        &#39;PASSWORD&#39;: &#39;123456&#39;,      #密码</span><br><span class="line">        &#39;HOST&#39;: &#39;127.0.0.1&#39;,    #IP</span><br><span class="line">        &#39;PORT&#39;: &#39;3306&#39;,                   #端口</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">#要将应用程序包含在我们的项目中</span><br><span class="line">INSTALLED_APPS &#x3D; [</span><br><span class="line">    &#39;应用名.apps.应用名Config&#39;,</span><br><span class="line">    &#39;django.contrib.admin&#39;,</span><br><span class="line">    &#39;django.contrib.auth&#39;,</span><br><span class="line">    &#39;django.contrib.contenttypes&#39;,</span><br><span class="line">    &#39;django.contrib.sessions&#39;,</span><br><span class="line">    &#39;django.contrib.messages&#39;,</span><br><span class="line">    &#39;django.contrib.staticfiles&#39;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">#改为中国时区</span><br><span class="line">LANGUAGE_CODE &#x3D; &#39;zh-hans&#39;</span><br><span class="line"> </span><br><span class="line">TIME_ZONE &#x3D; &#39;Asia&#x2F;Shanghai&#39;</span><br><span class="line"> </span><br><span class="line">USE_I18N &#x3D; True</span><br><span class="line"> </span><br><span class="line">USE_L10N &#x3D; True</span><br><span class="line"> </span><br><span class="line">USE_TZ &#x3D; False</span><br></pre></td></tr></table></figure>
+
+<p>执行如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations 应用名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
+<p>去MySQL看，会生成数据库表<br>在migrations文件夹下会有0001等的编号，可以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py sqlmigrate 应用名 0001</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
+<h2 id="Django有自动的后台管理"><a href="#Django有自动的后台管理" class="headerlink" title="Django有自动的后台管理"></a>Django有自动的后台管理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python manage.py createsuperuser</span><br><span class="line">Username: admin</span><br><span class="line">Password: **********</span><br><span class="line">Password (again): *********</span><br><span class="line">Superuser created successfully.</span><br></pre></td></tr></table></figure>
+<p>打开admin.py：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">from django.contrib import admin</span><br><span class="line">from . import models</span><br><span class="line"></span><br><span class="line">admin.site.register(models.Temperature)</span><br></pre></td></tr></table></figure>
+
+<p>进入管理界面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br><span class="line"> http:&#x2F;&#x2F;127.0.0.1:8000&#x2F;admin&#x2F;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200709215733882.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="请求路径"><a href="#请求路径" class="headerlink" title="请求路径"></a>请求路径</h2><p>打开urls.py文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from django.urls import path</span><br><span class="line"></span><br><span class="line">from django.conf.urls import url</span><br><span class="line">from . import views</span><br><span class="line"></span><br><span class="line">app_name &#x3D; &#39;polls&#39;</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">    url(r&#39;^$&#39;, views.show),  # 页面展示</span><br><span class="line">    url(r&#39;^add&#x2F;&#39;, views.addTemperature),</span><br><span class="line">    url(r&#39;^index&#x2F;&#39;, views.index2),</span><br><span class="line">    url(r&#39;^look&#39;, views.look),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>打开项目的（不是应用程序的）urls.py文件：<br>将应用的请求路径包含进去</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns &#x3D; [</span><br><span class="line">    path(&#39;polls&#x2F;&#39;, include(&#39;polls.urls&#39;)),</span><br><span class="line">    path(&#39;admin&#x2F;&#39;, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>我这里则为，所有应用请求都是<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/polls/">http://127.0.0.1:8000/polls/</a>…<br>管理为：<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/admin">http://127.0.0.1:8000/admin</a></p>
+<h2 id="html页面"><a href="#html页面" class="headerlink" title="html页面"></a>html页面</h2><p>templates文件下新建一个与应用同名的文件（我也不知道为什么这样？？），然后在下面新建<br>index.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;&#x2F;title&gt;</span><br><span class="line">      &lt;link href&#x3D;&quot;&#x2F;static&#x2F;css&#x2F;bootstrap.min.css&quot; rel&#x3D;&quot;stylesheet&quot;&gt;</span><br><span class="line">       &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;jquery-3.2.1.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">       &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;bootstrap.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">    &lt;link href&#x3D;&quot;https:&#x2F;&#x2F;cdn.bootcss.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;css&#x2F;bootstrap.min.css&quot; rel&#x3D;&quot;stylesheet&quot;&gt;</span><br><span class="line">&lt;link href&#x3D;&quot;https:&#x2F;&#x2F;cdn.bootcss.com&#x2F;bootstrap-datetimepicker&#x2F;4.17.47&#x2F;css&#x2F;bootstrap-datetimepicker.min.css&quot; rel&#x3D;&quot;stylesheet&quot;&gt;</span><br><span class="line">       &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;moment-with-locales.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;cdn.bootcss.com&#x2F;bootstrap-datetimepicker&#x2F;4.17.47&#x2F;js&#x2F;bootstrap-datetimepicker.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;container-fluid&quot;&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;h1 class&#x3D;&quot;row col-2 m-auto&quot;&gt;体温录入&lt;&#x2F;h1&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;form action&#x3D;&quot;&#x2F;polls&#x2F;add&#x2F;&quot; method&#x3D;&quot;post&quot; class&#x3D;&quot;col-4 m-auto&quot;&gt;</span><br><span class="line">             &#123;% csrf_token %&#125;</span><br><span class="line">          &lt;div class&#x3D;&quot;input-group mb-3&quot;&gt;</span><br><span class="line">            &lt;div class&#x3D;&quot;input-group-prepend&quot;&gt;</span><br><span class="line">              &lt;span class&#x3D;&quot;input-group-text&quot;&gt;上午&lt;&#x2F;span&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">            &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;morning&quot; class&#x3D;&quot;form-control&quot; placeholder&#x3D;&quot;请输入温度&quot;&gt;</span><br><span class="line">          &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">          &lt;div class&#x3D;&quot;input-group mb-3&quot;&gt;</span><br><span class="line">            &lt;div class&#x3D;&quot;input-group-prepend&quot;&gt;</span><br><span class="line">              &lt;span class&#x3D;&quot;input-group-text&quot;&gt;中午&lt;&#x2F;span&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">            &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;noon&quot; class&#x3D;&quot;form-control&quot; placeholder&#x3D;&quot;请输入温度&quot;&gt;</span><br><span class="line">          &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">            &lt;div class&#x3D;&quot;input-group mb-3&quot;&gt;</span><br><span class="line">            &lt;div class&#x3D;&quot;input-group-prepend&quot;&gt;</span><br><span class="line">              &lt;span class&#x3D;&quot;input-group-text&quot;&gt;下午&lt;&#x2F;span&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">            &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;evening&quot; class&#x3D;&quot;form-control&quot; placeholder&#x3D;&quot;请输入温度&quot;&gt;</span><br><span class="line">          &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">            &lt;div class&#x3D;&quot;row&quot;&gt;</span><br><span class="line">                &lt;div class&#x3D;&#39;col-sm-6&#39;&gt;</span><br><span class="line">                    &lt;div class&#x3D;&quot;form-group&quot;&gt;</span><br><span class="line">                        &lt;label&gt;选择日期+时间：&lt;&#x2F;label&gt;</span><br><span class="line">                        &lt;!--指定 date标记--&gt;</span><br><span class="line">                        &lt;div class&#x3D;&#39;input-group date&#39; id&#x3D;&#39;datetimepicker2&#39;&gt;</span><br><span class="line">                            &lt;input type&#x3D;&#39;text&#39; name&#x3D;&quot;time&quot; class&#x3D;&quot;form-control&quot; placeholder&#x3D;&quot;获取时间&quot; &#x2F;&gt;</span><br><span class="line">                            &lt;span class&#x3D;&quot;input-group-addon&quot;&gt;</span><br><span class="line">                                &lt;span class&#x3D;&quot;glyphicon glyphicon-calendar&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">                            &lt;&#x2F;span&gt;</span><br><span class="line">                        &lt;&#x2F;div&gt;</span><br><span class="line">                    &lt;&#x2F;div&gt;</span><br><span class="line">                &lt;&#x2F;div&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">             &lt;script&gt;</span><br><span class="line">                $(function () &#123;</span><br><span class="line">                    $(&#39;#datetimepicker2&#39;).datetimepicker(&#123;</span><br><span class="line">                        format: &#39;YYYY-MM-DD hh:mm&#39;,</span><br><span class="line">                        locale: moment.locale(&#39;zh-cn&#39;)</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;);</span><br><span class="line">            &lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">             &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;col-12 btn btn-primary&quot;&gt;提交&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;&#x2F;form&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+<p>success.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;&#x2F;title&gt;</span><br><span class="line">    &lt;link href&#x3D;&quot;&#x2F;static&#x2F;css&#x2F;bootstrap.min.css&quot; rel&#x3D;&quot;stylesheet&quot;&gt;</span><br><span class="line">       &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;jquery-3.2.1.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">       &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;bootstrap.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">      &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;echarts.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">     &lt;script src&#x3D;&quot;&#x2F;static&#x2F;js&#x2F;chart.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;container-fluid&quot;&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;h1 class&#x3D;&quot;col-4 m-auto text-center text-success&quot;&gt;体温记录成功&lt;&#x2F;h1&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;col-12 m-auto&quot; id&#x3D;&quot;box&quot; style&#x3D;&quot;width: 1000px;height: 500px;&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+<p>chart.js</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line">$(function () &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: &quot;&#x2F;polls&#x2F;look&quot;,</span><br><span class="line">        type: &#39;get&#39;,</span><br><span class="line">        dataType: &#39;json&#39;,</span><br><span class="line">        success: function (data) &#123;</span><br><span class="line">            &#x2F;&#x2F; alert(&quot;成功！&quot;)</span><br><span class="line">            &#x2F;&#x2F; alert(&quot;上午&quot;+data.list[0].morning+&quot;下午&quot;+data.list[0].noon+&quot;时间&quot;+data.list[0].time)</span><br><span class="line">            lineChart(data.list);</span><br><span class="line">        &#125;,</span><br><span class="line">        error: function () &#123;</span><br><span class="line">            alert(&quot;失败！&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">function f() &#123;</span><br><span class="line">&#x2F;&#x2F;初始化ehcharts实例</span><br><span class="line">    var myChart&#x3D;echarts.init(document.getElementById(&quot;box&quot;));</span><br><span class="line">    &#x2F;&#x2F;指定图表的配置项和数据</span><br><span class="line">    var option&#x3D;&#123;</span><br><span class="line">        &#x2F;&#x2F;标题</span><br><span class="line">        title:&#123;</span><br><span class="line">          text:&#39;生鲜销量统计&#39;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#x2F;&#x2F;工具箱</span><br><span class="line">        &#x2F;&#x2F;保存图片</span><br><span class="line">        toolbox:&#123;</span><br><span class="line">            show:true,</span><br><span class="line">            feature:&#123;</span><br><span class="line">                saveAsImage:&#123;</span><br><span class="line">                    show:true</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#x2F;&#x2F;图例-每一条数据的名字叫销量</span><br><span class="line">        legend:&#123;</span><br><span class="line">            data:[&#39;销量&#39;]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#x2F;&#x2F;x轴</span><br><span class="line">        xAxis:&#123;</span><br><span class="line">            data:[&quot;苹果&quot;,&quot;橘子&quot;,&quot;橙子&quot;,&quot;香蕉&quot;,&quot;菠萝&quot;,&quot;榴莲&quot;]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#x2F;&#x2F;y轴没有显式设置，根据值自动生成y轴</span><br><span class="line">        yAxis:&#123;&#125;,</span><br><span class="line">        &#x2F;&#x2F;数据-data是最终要显示的数据</span><br><span class="line">        series:[&#123;</span><br><span class="line">            name:&#39;销量&#39;,</span><br><span class="line">            type:&#39;line&#39;,</span><br><span class="line">            data:[40,20,35,60,55,10]</span><br><span class="line">        &#125;]</span><br><span class="line">    &#125;;</span><br><span class="line">    &#x2F;&#x2F;使用刚刚指定的配置项和数据项显示图表</span><br><span class="line">    myChart.setOption(option);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;JS成功后的代码</span><br><span class="line">function lineChart(result)&#123;</span><br><span class="line">    &#x2F;&#x2F;获取dom容器</span><br><span class="line">    var myChart &#x3D; echarts.init(document.getElementById(&#39;box&#39;));</span><br><span class="line">    option &#x3D; &#123;</span><br><span class="line">        title: &#123;</span><br><span class="line">            text: &#39;体温变化图&#39;,</span><br><span class="line">            &#x2F;&#x2F; subtext: &#39;数据来源个人采集&#39;,</span><br><span class="line">        &#125;,</span><br><span class="line">        grid: &#123;</span><br><span class="line">            left: &#39;3%&#39;,</span><br><span class="line">            right: &#39;4%&#39;,</span><br><span class="line">            bottom: &#39;3%&#39;,</span><br><span class="line">            containLabel: true</span><br><span class="line">        &#125;,</span><br><span class="line">        toolbox: &#123;</span><br><span class="line">            feature: &#123;</span><br><span class="line">                saveAsImage: &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        legend: &#123;</span><br><span class="line">            data: [&#39;上午&#39;, &#39;下午&#39;, &#39;晚上&#39;]</span><br><span class="line">        &#125;,</span><br><span class="line">        tooltip: &#123; &#x2F;&#x2F;跟随鼠标显示数值</span><br><span class="line">            trigger: &#39;axis&#39;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;保存图片</span><br><span class="line">        toolbox: &#123;</span><br><span class="line">            feature: &#123;</span><br><span class="line">                saveAsImage: &#123;</span><br><span class="line">                    name:&#39;体温表&#39;, &#x2F;&#x2F;图片名</span><br><span class="line">                    pixelRatio:2</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        xAxis: &#123;</span><br><span class="line">            name:&quot;时间&quot;,</span><br><span class="line">            type: &#39;category&#39;,</span><br><span class="line">            data:(function()&#123;</span><br><span class="line">                var res &#x3D; [];</span><br><span class="line">                for(var i&#x3D;0;i&lt;result.length;i++) &#123;</span><br><span class="line">                    res.push(result[i].time);</span><br><span class="line">                &#125;</span><br><span class="line">                return res;</span><br><span class="line">            &#125;)()</span><br><span class="line">        &#125;,</span><br><span class="line">        yAxis: &#123;</span><br><span class="line">            name:&quot;摄氏度&quot;,</span><br><span class="line">            type: &#39;value&#39;,</span><br><span class="line">             scale : true,</span><br><span class="line">            max : 40,</span><br><span class="line">            min : 35,</span><br><span class="line">            splitNumber : 10,</span><br><span class="line">            boundaryGap : [ 0.2, 0.2 ]</span><br><span class="line">        &#125;,</span><br><span class="line">        series: [</span><br><span class="line">            &#123;</span><br><span class="line">                name:&quot;上午&quot;,</span><br><span class="line">                type: &#39;line&#39;,</span><br><span class="line">                data:(function()&#123;</span><br><span class="line">                    var res &#x3D; [];</span><br><span class="line">                    for(var i&#x3D;0;i&lt;result.length;i++) &#123;</span><br><span class="line">                        res.push(result[i].morning);</span><br><span class="line">                    &#125;</span><br><span class="line">                    return res;</span><br><span class="line">                &#125;)()</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                name: &#39;下午&#39;,</span><br><span class="line">                type: &#39;line&#39;,</span><br><span class="line">                data:(function()&#123;</span><br><span class="line">                    var res &#x3D; [];</span><br><span class="line">                    for(var i&#x3D;0;i&lt;result.length;i++) &#123;</span><br><span class="line">                        res.push(result[i].noon);</span><br><span class="line">                    &#125;</span><br><span class="line">                    return res;</span><br><span class="line">                &#125;)()</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                name: &#39;晚上&#39;,</span><br><span class="line">                type: &#39;line&#39;,</span><br><span class="line">                data:(function()&#123;</span><br><span class="line">                    var res &#x3D; [];</span><br><span class="line">                    for(var i&#x3D;0;i&lt;result.length;i++) &#123;</span><br><span class="line">                        res.push(result[i].evening);</span><br><span class="line">                    &#125;</span><br><span class="line">                    return res;</span><br><span class="line">                &#125;)()</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 使用刚指定的配置项和数据显示图表。</span><br><span class="line">    myChart.setOption(option);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong><em>注意：没有的js百度下载一下！</em></strong></p>
+<h2 id="请求处理"><a href="#请求处理" class="headerlink" title="请求处理"></a>请求处理</h2><p>打开应用的views.py文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line"></span><br><span class="line">from django.http import HttpResponse, Http404, HttpResponseRedirect, JsonResponse</span><br><span class="line">from django.template import loader</span><br><span class="line">from django.shortcuts import get_object_or_404, render, redirect</span><br><span class="line">from django.urls import reverse</span><br><span class="line">from django.views import generic</span><br><span class="line"></span><br><span class="line">from .models import  Temperature</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    pass</span><br><span class="line">    return render(request, &#39;应用名&#x2F;index.html&#39;)</span><br><span class="line"></span><br><span class="line">def addTemperature(request):</span><br><span class="line"></span><br><span class="line">    morning &#x3D; request.POST.get(&#39;morning&#39;, &quot;&quot;);</span><br><span class="line">    noon &#x3D; request.POST.get(&#39;noon&#39;, &quot;&quot;);</span><br><span class="line">    evening &#x3D; request.POST.get(&#39;evening&#39;, &quot;&quot;);</span><br><span class="line">    time &#x3D; request.POST.get(&#39;time&#39;, &quot;&quot;);</span><br><span class="line">    temperature &#x3D; Temperature(morning&#x3D;morning, noon&#x3D;noon,evening&#x3D;evening,time &#x3D; time);</span><br><span class="line">    temperature.save();</span><br><span class="line"></span><br><span class="line">    return render(request, &#39;应用名&#x2F;success.html&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def look(request):</span><br><span class="line">    data &#x3D; &#123;&#125;</span><br><span class="line"></span><br><span class="line">    book &#x3D; Temperature.objects.values()</span><br><span class="line"></span><br><span class="line">    data[&#39;list&#39;] &#x3D; list(book)</span><br><span class="line"></span><br><span class="line">    return JsonResponse(data)</span><br><span class="line">    # if request.is_ajax():</span><br><span class="line">    #</span><br><span class="line">    #     &quot;&quot;&quot;以json形式返回列表&quot;&quot;&quot;</span><br><span class="line">    #     # 1. 获取所有对象</span><br><span class="line">    #     # objects.all()  queryset类型的对象，不能直接json</span><br><span class="line">    #     queryset &#x3D; Temperature.objects.all().values(&#39;morning&#39;,&quot;noon&quot;,&#39;time&#39;,)</span><br><span class="line">    #     # 2. 将数据序列化成json格式   date类型的数据不能直接系列化 ensure_ascii&#x3D;False 修改乱码的现象</span><br><span class="line">    #     ret &#x3D; json.dumps(list(queryset), ensure_ascii&#x3D;False)</span><br><span class="line">    #     # 3. 返回</span><br><span class="line">    #     response &#x3D; JsonResponse(&#123;&quot;ret&quot;:ret&#125;)</span><br><span class="line">    #     return response</span><br><span class="line">    #return HttpResponse(&#123;&quot;temp&quot;:ret&#125;)</span><br><span class="line">    # a &#x3D; Temperature.objects.all()</span><br><span class="line">    # return render(request, &#39;polls&#x2F;success.html&#39;,&#123;</span><br><span class="line">    #     &#39;data&#39;:a</span><br><span class="line">    # &#125;)</span><br><span class="line"></span><br><span class="line">def show(request):</span><br><span class="line">    return render(request, &#39;应用名&#x2F;success.html&#39;)</span><br></pre></td></tr></table></figure>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:8000&#x2F;polls&#x2F;index&#x2F;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/2020070922212264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:8000&#x2F;polls&#x2F;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200709222221904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>大概流程就是这样！</p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/django/" rel="tag"># django</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/22/%E6%A8%A1%E6%8B%9F%E5%BE%AE%E4%BF%A1%E6%8A%A2%E7%BA%A2%E5%8C%85/" rel="prev" title="模拟微信抢红包">
+      <i class="fa fa-chevron-left"></i> 模拟微信抢红包
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/10/%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E8%AF%8D%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/" rel="next" title="实现搜索词补全功能">
+      实现搜索词补全功能 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BADjango%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">创建Django项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92"><span class="nav-number">3.</span> <span class="nav-text">交互</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F-%E5%AE%9E%E7%8E%B0%E8%AE%B0%E5%BD%95%E4%BD%93%E6%B8%A9"><span class="nav-number">3.1.</span> <span class="nav-text">创建应用程序,实现记录体温</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8pycharm%E6%89%93%E5%BC%80%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.2.</span> <span class="nav-text">用pycharm打开应用程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%8D%A2mysql"><span class="nav-number">3.3.</span> <span class="nav-text">更换mysql</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Django%E6%9C%89%E8%87%AA%E5%8A%A8%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86"><span class="nav-number">3.4.</span> <span class="nav-text">Django有自动的后台管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84"><span class="nav-number">3.5.</span> <span class="nav-text">请求路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html%E9%A1%B5%E9%9D%A2"><span class="nav-number">3.6.</span> <span class="nav-text">html页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86"><span class="nav-number">3.7.</span> <span class="nav-text">请求处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">3.8.</span> <span class="nav-text">效果</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

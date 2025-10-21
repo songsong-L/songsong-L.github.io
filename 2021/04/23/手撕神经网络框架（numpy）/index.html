@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="@TOC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手撕神经网络框架（numpy）">
+<meta property="og:url" content="http://songsong.host/2021/04/23/%E6%89%8B%E6%92%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%EF%BC%88numpy%EF%BC%89/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:description" content="@TOC">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210423202441706.png">
+<meta property="article:published_time" content="2021-04-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.879Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210423202441706.png">
+
+<link rel="canonical" href="http://songsong.host/2021/04/23/%E6%89%8B%E6%92%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%EF%BC%88numpy%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>手撕神经网络框架（numpy） | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2021/04/23/%E6%89%8B%E6%92%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%EF%BC%88numpy%EF%BC%89/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          手撕神经网络框架（numpy）
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-23 00:00:00" itemprop="dateCreated datePublished" datetime="2021-04-23T00:00:00+08:00">2021-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/04/23/%E6%89%8B%E6%92%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%EF%BC%88numpy%EF%BC%89/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/23/%E6%89%8B%E6%92%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%EF%BC%88numpy%EF%BC%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>@<a href="%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4">TOC</a></p>
+<p><strong><em>任何神经网络肯定都有这些基本操作过程，每一小步中又会有各种不同的策略。</em></strong><br><em>我是跟着<strong>吴恩达</strong>大佬做的一些实践，对神经网络的理解特别有用</em></p>
+<h1 id="loaddata"><a href="#loaddata" class="headerlink" title="loaddata"></a>loaddata</h1><p>这一步包括归一化、小批量读取等等操作。这里只做一些最简单的处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def load_dataset():</span><br><span class="line">    train_dataset &#x3D; h5py.File(&#39;D:&#x2F;PyWorkspace&#x2F;DeepLearning&#x2F;datasets&#x2F;train_catvnoncat.h5&#39;, &quot;r&quot;)</span><br><span class="line">    train_set_x_orig &#x3D; np.array(train_dataset[&quot;train_set_x&quot;][:])  # your train set features</span><br><span class="line">    train_set_y_orig &#x3D; np.array(train_dataset[&quot;train_set_y&quot;][:])  # your train set labels</span><br><span class="line"></span><br><span class="line">    test_dataset &#x3D; h5py.File(&#39;D:&#x2F;PyWorkspace&#x2F;DeepLearning&#x2F;datasets&#x2F;test_catvnoncat.h5&#39;, &quot;r&quot;)</span><br><span class="line">    test_set_x_orig &#x3D; np.array(test_dataset[&quot;test_set_x&quot;][:])  # your test set features</span><br><span class="line">    test_set_y_orig &#x3D; np.array(test_dataset[&quot;test_set_y&quot;][:])  # your test set labels</span><br><span class="line"></span><br><span class="line">    classes &#x3D; np.array(test_dataset[&quot;list_classes&quot;][:])  # the list of classes</span><br><span class="line"></span><br><span class="line">    train_set_y_orig &#x3D; train_set_y_orig.reshape((1, train_set_y_orig.shape[0]))</span><br><span class="line">    test_set_y_orig &#x3D; test_set_y_orig.reshape((1, test_set_y_orig.shape[0]))</span><br><span class="line"></span><br><span class="line">    train_set_x_flatten &#x3D; train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T</span><br><span class="line">    test_set_x_flatten &#x3D; test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T</span><br><span class="line">    train_set_x &#x3D; train_set_x_flatten &#x2F; 255.</span><br><span class="line">    test_set_x &#x3D; test_set_x_flatten &#x2F; 255.</span><br><span class="line"></span><br><span class="line">    return train_set_x, train_set_y_orig, test_set_x, test_set_y_orig, classes</span><br></pre></td></tr></table></figure>
+
+<h1 id="initialize"><a href="#initialize" class="headerlink" title="initialize"></a>initialize</h1><p>初始化主要就是初始化每一层之间的那些权重，即 <strong><em>w</em></strong> 和 <strong><em>b</em></strong> ，TensorFlow等框架的高级API会根据神经元的个数推算每层之间 <strong><em>w</em></strong> 和 <strong><em>b</em></strong> 的形状。</p>
+<p>初始化有不同的策略，比如，随机初始化、何凯明提出的一种初始化等等。这里一次性把所有参数都初始化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: initialize_parameters_he</span><br><span class="line">def initialize_parameters_he(layers_dims):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Arguments:</span><br><span class="line">    layer_dims -- python array (list) containing the size of each layer.</span><br><span class="line"></span><br><span class="line">    Returns:</span><br><span class="line">    parameters -- python dictionary containing your parameters &quot;W1&quot;, &quot;b1&quot;, ..., &quot;WL&quot;, &quot;bL&quot;:</span><br><span class="line">                    W1 -- weight matrix of shape (layers_dims[1], layers_dims[0])</span><br><span class="line">                    b1 -- bias vector of shape (layers_dims[1], 1)</span><br><span class="line">                    ...</span><br><span class="line">                    WL -- weight matrix of shape (layers_dims[L], layers_dims[L-1])</span><br><span class="line">                    bL -- bias vector of shape (layers_dims[L], 1)</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    np.random.seed(3)</span><br><span class="line">    parameters &#x3D; &#123;&#125;</span><br><span class="line">    L &#x3D; len(layers_dims) - 1  # integer representing the number of layers</span><br><span class="line"></span><br><span class="line">    for l in range(1, L + 1):</span><br><span class="line">        ### START CODE HERE ### (≈ 2 lines of code)</span><br><span class="line">        parameters[&#39;W&#39; + str(l)] &#x3D; np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(2.0 &#x2F; layers_dims[l - 1])</span><br><span class="line">        parameters[&#39;b&#39; + str(l)] &#x3D; np.zeros((layers_dims[l], 1))</span><br><span class="line">        ### END CODE HERE ###</span><br><span class="line"></span><br><span class="line">    return parameters</span><br></pre></td></tr></table></figure>
+
+<h1 id="forward"><a href="#forward" class="headerlink" title="forward"></a>forward</h1><p>前向传播比较简单，就是：<br>                *<em>W * X + b*</em><br>矩阵相乘的过程，只是激活单元非线性函数再做一个处理。<br>最终到输出层，输出值与真实标签算一个损失。</p>
+<p>算损失又有不同的策略，常见的交叉熵损失，平方损失等等。</p>
+<p><strong><em>注意：绝对值损失不怎么用的原因就是因为不好求导，而平方便于求导</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def compute_cost(AL, Y):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Implement the cost function defined by equation (7).</span><br><span class="line">    Arguments:</span><br><span class="line">    AL -- probability vector corresponding to your label predictions,</span><br><span class="line">    shape (1, number of examples)</span><br><span class="line">    Y -- true &quot;label&quot; vector (for example: containing 0 if non-cat, 1</span><br><span class="line">    if cat), shape (1, number of examples)</span><br><span class="line">    Returns:</span><br><span class="line">    cost -- cross-entropy cost</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    m &#x3D; Y.shape[1]</span><br><span class="line">    # Compute loss from aL and y.</span><br><span class="line">    ### START CODE HERE ### (￿ 1 lines of code)</span><br><span class="line">    cost &#x3D; -(np.dot(Y,np.log(AL.T))+np.dot(1-Y,np.log(1-AL).T))&#x2F;m</span><br><span class="line">    ### END CODE HERE ###</span><br><span class="line">    cost &#x3D; np.squeeze(cost) # To make sure your cost&#39;s shape is what we expect (e.g. this turns [[17]] into 17)</span><br><span class="line">    assert(cost.shape &#x3D;&#x3D; ())</span><br><span class="line">    return cost</span><br></pre></td></tr></table></figure>
+
+<h1 id="backward"><a href="#backward" class="headerlink" title="backward"></a>backward</h1><p>反向传播应该是神经网络里最难的部分，各种神经网络框架也都屏蔽了反向传播的过程，自动微分机制。</p>
+<p>主要用到的数学知识是链式法则，将误差从最后输出层逐渐传播到输入层。</p>
+<p>这里不做理论推导，但要知道反向传播的四大公式：<br><img src="https://img-blog.csdnimg.cn/20210423202441706.png" alt="在这里插入图片描述"><br>BP1算出最后一层的误差<br>BP2即可实现传递误差<br>BP3与BP4主要用来更新各层之间的权重。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">def L_model_backward(AL, Y, caches):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Implement the backward propagation for the [LINEAR-&gt;RELU] * (L-1) -&gt; LINEAR -&gt; SIGMOID group</span><br><span class="line"></span><br><span class="line">    Arguments:</span><br><span class="line">    AL -- probability vector, output of the forward propagation (L_model_forward())</span><br><span class="line">    Y -- true &quot;label&quot; vector (containing 0 if non-cat, 1 if cat)</span><br><span class="line">    caches -- list of caches containing:</span><br><span class="line">                every cache of linear_activation_forward() with &quot;relu&quot; (it&#39;s caches[l], for l in range(L-1) i.e l &#x3D; 0...L-2)</span><br><span class="line">                the cache of linear_activation_forward() with &quot;sigmoid&quot; (it&#39;s caches[L-1])</span><br><span class="line"></span><br><span class="line">    Returns:</span><br><span class="line">    grads -- A dictionary with the gradients</span><br><span class="line">             grads[&quot;dA&quot; + str(l)] &#x3D; ...</span><br><span class="line">             grads[&quot;dW&quot; + str(l)] &#x3D; ...</span><br><span class="line">             grads[&quot;db&quot; + str(l)] &#x3D; ...</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    grads &#x3D; &#123;&#125;</span><br><span class="line">    L &#x3D; len(caches)  # the number of layers</span><br><span class="line">    m &#x3D; AL.shape[1]</span><br><span class="line">    Y &#x3D; Y.reshape(AL.shape)  # after this line, Y is the same shape as AL</span><br><span class="line"></span><br><span class="line">    # Initializing the backpropagation</span><br><span class="line">    ### START CODE HERE ### (1 line of code)</span><br><span class="line">    dAL &#x3D; - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL))</span><br><span class="line">    ### END CODE HERE ###</span><br><span class="line"></span><br><span class="line">    # Lth layer (SIGMOID -&gt; LINEAR) gradients. Inputs: &quot;AL, Y, caches&quot;. Outputs: &quot;grads[&quot;dAL&quot;], grads[&quot;dWL&quot;], grads[&quot;dbL&quot;]</span><br><span class="line">    ### START CODE HERE ### (approx. 2 lines)</span><br><span class="line">    current_cache &#x3D; caches[L - 1]</span><br><span class="line">    grads[&quot;dA&quot; + str(L)], grads[&quot;dW&quot; + str(L)], grads[&quot;db&quot; + str(L)] &#x3D; linear_activation_backward(dAL, current_cache,</span><br><span class="line">                                                                                                  &#39;sigmoid&#39;)</span><br><span class="line">    ### END CODE HERE ###</span><br><span class="line"></span><br><span class="line">    for l in reversed(range(L - 1)):</span><br><span class="line">        # lth layer: (RELU -&gt; LINEAR) gradients.</span><br><span class="line">        # Inputs: &quot;grads[&quot;dA&quot; + str(l + 2)], caches&quot;.</span><br><span class="line">        # Outputs: &quot;grads[&quot;dA&quot; + str(l + 1)] , grads[&quot;dW&quot; + str(l + 1)] , grads[&quot;db&quot; + str(l + 1)]</span><br><span class="line">        ### START CODE HERE ### (approx. 5 lines)</span><br><span class="line">        current_cache &#x3D; caches[l]</span><br><span class="line">        dA_prev_temp, dW_temp, db_temp &#x3D; linear_activation_backward(grads[&quot;dA&quot; + str(l + 2)], current_cache, &#39;relu&#39;)</span><br><span class="line">        grads[&quot;dA&quot; + str(l + 1)] &#x3D; dA_prev_temp</span><br><span class="line">        grads[&quot;dW&quot; + str(l + 1)] &#x3D; dW_temp</span><br><span class="line">        grads[&quot;db&quot; + str(l + 1)] &#x3D; db_temp</span><br><span class="line">        ### END CODE HERE ###</span><br><span class="line"></span><br><span class="line">    return grads</span><br></pre></td></tr></table></figure>
+
+<h1 id="update"><a href="#update" class="headerlink" title="update"></a>update</h1><p>迭代过程中更新参数，逐渐优化模型。优化的策略又有多种，梯度下降、随机梯度下降、小批量梯度下降等等。<br>它们之间的区别主要是用于正向传播的数据量。<br>其中，**<em>小批量的小批量取一，则可理解为随机梯度下降。**</em></p>
+<p>大名鼎鼎的优化器有moment、Adam等等，具体知识自行学习。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: update_parameters</span><br><span class="line">def update_parameters(parameters, grads, learning_rate):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Update parameters using gradient descent</span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters</span><br><span class="line">    grads -- python dictionary containing your gradients, output of</span><br><span class="line">    L_model_backward , →</span><br><span class="line">    Returns:</span><br><span class="line">    parameters -- python dictionary containing your updated parameters</span><br><span class="line">    parameters[&quot;W&quot; + str(l)] &#x3D; ...</span><br><span class="line">    parameters[&quot;b&quot; + str(l)] &#x3D; ...</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    L &#x3D; len(parameters) &#x2F;&#x2F; 2 # number of layers in the neural network</span><br><span class="line">    # Update rule for each parameter. Use a for loop.</span><br><span class="line">    ### START CODE HERE ### (￿ 3 lines of code)</span><br><span class="line">    for l in range(L):</span><br><span class="line">        parameters[&quot;W&quot; + str(l+1)] &#x3D; parameters[&quot;W&quot; + str(l+1)] - learning_rate * grads[&quot;dW&quot; + str(l + 1)]</span><br><span class="line">        parameters[&quot;b&quot; + str(l+1)] &#x3D; parameters[&quot;b&quot; + str(l+1)] - learning_rate * grads[&quot;db&quot; + str(l + 1)]</span><br><span class="line">    ### END CODE HERE ###</span><br><span class="line">    return parameters</span><br></pre></td></tr></table></figure>
+
+<p>是不是感觉也没那么难。这里分享一下代码，及吴恩达教程。仅供参考，自行完善。<br>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1iGQZyL1HVQak_f7AJD_KRQ">https://pan.baidu.com/s/1iGQZyL1HVQak_f7AJD_KRQ</a><br>提取码：k0hu<br>复制这段内容后打开百度网盘手机App，操作更方便哦</p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 神经网络</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/25/TensorFlow%E8%AE%AD%E7%BB%83%E5%A5%BD%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%A7%BB%E6%A4%8D%E5%88%B0tensorrt/" rel="prev" title="TensorFlow训练好的模型移植到tensorrt">
+      <i class="fa fa-chevron-left"></i> TensorFlow训练好的模型移植到tensorrt
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" rel="next" title="知识图谱">
+      知识图谱 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#loaddata"><span class="nav-number">1.</span> <span class="nav-text">loaddata</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#initialize"><span class="nav-number">2.</span> <span class="nav-text">initialize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#forward"><span class="nav-number">3.</span> <span class="nav-text">forward</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#backward"><span class="nav-number">4.</span> <span class="nav-text">backward</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#update"><span class="nav-number">5.</span> <span class="nav-text">update</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

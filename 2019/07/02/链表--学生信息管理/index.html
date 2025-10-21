@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="链表--学生信息管理">
+<meta property="og:url" content="http://songsong.host/2019/07/02/%E9%93%BE%E8%A1%A8--%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190702123004642.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190702123503260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190702125922405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-07-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.856Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="链表">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190702123004642.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://songsong.host/2019/07/02/%E9%93%BE%E8%A1%A8--%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>链表--学生信息管理 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2019/07/02/%E9%93%BE%E8%A1%A8--%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          链表--学生信息管理
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-02 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-02T00:00:00+08:00">2019-07-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/07/02/%E9%93%BE%E8%A1%A8--%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/02/%E9%93%BE%E8%A1%A8--%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+         <body >
+    <div id="topAnchor"></div>
+</body>
+
+
+<h1 id="链表结构"><a href="#链表结构" class="headerlink" title="链表结构"></a>链表结构</h1><ul>
+<li>逻辑结构：线性表</li>
+<li>存储结构：链式存储</li>
+<li>基本运算：<pre><code>  1. 初始化
+  2. 查找节点
+  3. 插入节点
+  4. 删除节点
+  5. 创建单链表</code></pre>
+<h2 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h2>其中，节点包含两部分的内容：</li>
+</ul>
+<p><strong>数据域：</strong> 保存该节点的实际数据。<br><strong>指针域：</strong> 保存的是下一节点的地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">struct Student			&#x2F;&#x2F;学生结构</span><br><span class="line">&#123;</span><br><span class="line">	char Name[10];		&#x2F;&#x2F;姓名</span><br><span class="line">	int No;				&#x2F;&#x2F;学号</span><br><span class="line">	float Score[3];		&#x2F;&#x2F;三科的成绩</span><br><span class="line">	float Total;		&#x2F;&#x2F;总分</span><br><span class="line">	float Ave;			&#x2F;&#x2F;平均分</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">typedef struct Node		&#x2F;&#x2F;结点</span><br><span class="line">&#123;</span><br><span class="line">	struct Student st;	&#x2F;&#x2F;数据域</span><br><span class="line">	struct Node *next;	&#x2F;&#x2F;指针域</span><br><span class="line">&#125;NODE, *PNODE;			&#x2F;&#x2F;NODE等价于struct Student st||PNODE等价于struct Node *next</span><br><span class="line">						&#x2F;&#x2F;NODE * P&#x3D;&#x3D;PNODE P。为了提高可读性用NODE定义指向其他任意节点。用PNODE专指向头结点 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>初始化一个头结点，它不存储学生信息，也可以不存任何信息，也可以存附加信息，如存表长。它的指针域指向第一个节点。之所以引入头结点，就是为了方便，即使不用头结点，也能完成相同的功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PNODE InitList(PNODE pHead)</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p&#x3D;pHead;</span><br><span class="line">	p &#x3D; (PNODE)malloc(sizeof(NODE));&#x2F;&#x2F;为头结点分配内存</span><br><span class="line">	if(NULL &#x3D;&#x3D; p)	&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">		exit(-1);</span><br><span class="line">	&#125;</span><br><span class="line">	p-&gt;next &#x3D; NULL;&#x2F;&#x2F;清空指针域</span><br><span class="line">	return p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><p>查找可以按不同的域去查找，这里以按姓名查找为例，核心代码都一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void SearchStudent(PNODE pHead)			&#x2F;&#x2F;查找学生信息</span><br><span class="line">&#123;</span><br><span class="line">	char Name[10];</span><br><span class="line">	printf(&quot;请输入你需要查找的学生的姓名:&quot;);</span><br><span class="line">	scanf(&quot;%s&quot;,Name);</span><br><span class="line">	PNODE p &#x3D; pHead-&gt;next;				&#x2F;&#x2F;p指向第一个节点 </span><br><span class="line">	while(p)</span><br><span class="line">	&#123;</span><br><span class="line">		if(0 &#x3D;&#x3D; strcmp(Name,p-&gt;st.Name))</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;%s %d %g %g %g %g %g\n&quot;,p-&gt;st.Name, p-&gt;st.No, p-&gt;st.Score[0], p-&gt;st.Score[1], p-&gt;st.Score[2], p-&gt;st.Total, p-&gt;st.Ave);</span><br><span class="line">		&#125;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">void InsertStudent(PNODE pHead)		&#x2F;&#x2F;插入学生信息</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p &#x3D; pHead;</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	struct Student stu;				&#x2F;&#x2F;学生结构，为数据域</span><br><span class="line">	int pos;						&#x2F;&#x2F;插入结点的位置</span><br><span class="line">	printf(&quot;请输入插入学生的位置:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;pos);</span><br><span class="line">	while(p &amp;&amp; i&lt;pos-1)</span><br><span class="line">	&#123;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	if(p &#x3D;&#x3D; NULL || i&gt;pos)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;插入结点的位置不存在!\n&quot;);</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;你将在第%d个学生后面插入一个学生\n&quot;,pos-1);</span><br><span class="line">	printf(&quot;请输入第%d个学生的姓名:&quot;,pos);</span><br><span class="line">	scanf(&quot;%s&quot;,stu.Name);</span><br><span class="line">	printf(&quot;请输入第%d个学生的学号:&quot;,pos);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;stu.No);</span><br><span class="line">	printf(&quot;请输入第%d个学生的语文成绩:&quot;,pos);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;stu.Score[0]);</span><br><span class="line">	printf(&quot;请输入第%d个学生的数学成绩:&quot;,pos);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;stu.Score[1]);</span><br><span class="line">	printf(&quot;请输入第%d个学生的英语成绩:&quot;,pos);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;stu.Score[2]);</span><br><span class="line"></span><br><span class="line">	stu.Total &#x3D; stu.Score[0] + stu.Score[1] + stu.Score[2];&#x2F;&#x2F;计算总分	</span><br><span class="line">	stu.Ave &#x3D; stu.Total &#x2F; 3.0f;&#x2F;&#x2F;计算平均分</span><br><span class="line">	PNODE pNew &#x3D; (PNODE)malloc(sizeof(NODE));</span><br><span class="line">	if(NULL &#x3D;&#x3D; pNew)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;动态内存分配失败,程序终止!\n&quot;);</span><br><span class="line">		exit(-1);</span><br><span class="line">	&#125;</span><br><span class="line">	pNew-&gt;st &#x3D; stu;</span><br><span class="line">	PNODE q &#x3D; p-&gt;next;			&#x2F;&#x2F;先把后继存起来 </span><br><span class="line">	p-&gt;next &#x3D; pNew;				&#x2F;&#x2F;然后把要插的插进来 </span><br><span class="line">	pNew-&gt;next &#x3D; q;				&#x2F;&#x2F;将刚刚保存的节点挂上 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>删除与插入其实差不多，主要就是改变指针的指向，使其指向合适的位置即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void DeleteStudent(PNODE pHead)				&#x2F;&#x2F;删除学生信息</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p &#x3D; pHead;</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	int pos;</span><br><span class="line">	printf(&quot;请输入你需要删除的学生的编号:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;pos);</span><br><span class="line">	while(p &amp;&amp; i&lt;pos-1)</span><br><span class="line">	&#123;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	if(p &#x3D;&#x3D; NULL || i&gt;pos-1)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;没找到需要删除的学生的编号!\n&quot;);</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	PNODE q &#x3D; p-&gt;next;</span><br><span class="line">	p-&gt;next &#x3D; q-&gt;next;</span><br><span class="line">	free(q);</span><br><span class="line">	q &#x3D;&#x3D; NULL;</span><br><span class="line">	printf(&quot;你已经成功删除了第%d个学生的信息!\n&quot;,pos);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+<h2 id="创建单链表"><a href="#创建单链表" class="headerlink" title="创建单链表"></a>创建单链表</h2><p>链表的形成，有两种策略：有点栈和队列的意味。<br><strong>前插法创建单链表：</strong> 后插入的值在链表的前面。<br><strong>后插法创建单链表：</strong> 后插入的就挂在链尾即可。</p>
+<ol>
+<li>采用后插法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">void InputStudent(PNODE pHead)			&#x2F;&#x2F;采用后插法创建单链表 </span><br><span class="line">&#123;</span><br><span class="line">	NODE stu;</span><br><span class="line">	PNODE p&#x3D;pHead;</span><br><span class="line">	PNODE pTail&#x3D;NULL;</span><br><span class="line">	while(NULL !&#x3D; p-&gt;next)</span><br><span class="line">	&#123;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	pTail&#x3D;p; </span><br><span class="line"></span><br><span class="line">	printf(&quot;请输入学生的人数:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;len);</span><br><span class="line">	int i;</span><br><span class="line">	for(i&#x3D;0; i&lt;len; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		system(&quot;cls&quot;);				&#x2F;&#x2F;清屏</span><br><span class="line">		&#x2F;&#x2F;下面得到数据域</span><br><span class="line">		printf(&quot;请输入第%d个学生的姓名:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%s&quot;, stu.st.Name);</span><br><span class="line">		printf(&quot;请输入第%d个学生的学号:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%d&quot;, &amp;stu.st.No);</span><br><span class="line">		printf(&quot;请输入第%d个学生的语文成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[0]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的数学成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[1]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的英语成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[2]);</span><br><span class="line"></span><br><span class="line">		stu.st.Total &#x3D; stu.st.Score[0] + stu.st.Score[1] + stu.st.Score[2];	&#x2F;&#x2F;计算总分</span><br><span class="line">		stu.st.Ave &#x3D; stu.st.Total &#x2F; 3.0f;									&#x2F;&#x2F;计算平均分</span><br><span class="line"></span><br><span class="line">		PNODE pNew &#x3D; (PNODE)malloc(sizeof(NODE));							&#x2F;&#x2F;为新节点分配内存</span><br><span class="line">		if(NULL &#x3D;&#x3D; pNew)															&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">			exit(-1);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		pNew-&gt;st &#x3D; stu.st;													&#x2F;&#x2F;初始化结点的数据域	</span><br><span class="line">		pNew-&gt;next &#x3D; NULL;													&#x2F;&#x2F;清空新结点的指针域</span><br><span class="line">		&#x2F;&#x2F;以上两步构建了新的尾巴 </span><br><span class="line">		</span><br><span class="line">		pTail-&gt;next &#x3D; pNew;													&#x2F;&#x2F;将新结点挂在了链上 </span><br><span class="line">		&#x2F;&#x2F;后插法，插入的位置就是即将成为尾部的位置 </span><br><span class="line">		pTail &#x3D; pNew;																&#x2F;&#x2F;将pTail移到新的尾结点上</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>采用前插法</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">PNODE InputStudent()									&#x2F;&#x2F;采用前插法创建单链表 </span><br><span class="line">&#123;</span><br><span class="line">	int len;&#x2F;&#x2F;学生的人数</span><br><span class="line">	NODE stu;</span><br><span class="line">	PNODE pHead &#x3D; (PNODE)malloc(sizeof(NODE));		&#x2F;&#x2F;定义一个头结点并且为头结点分配内存</span><br><span class="line">	if(NULL &#x3D;&#x3D; pHead)	&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">		exit(-1);</span><br><span class="line">	&#125;</span><br><span class="line">	pHead.next &#x3D; NULL;&#x2F;&#x2F;清空指针域</span><br><span class="line">	printf(&quot;请输入学生的人数:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;len);</span><br><span class="line">	for(int i&#x3D;0; i&lt;len; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		system(&quot;cls&quot;);		&#x2F;&#x2F;清屏</span><br><span class="line">		&#x2F;&#x2F;下面得到数据域</span><br><span class="line">		printf(&quot;请输入第%d个学生的姓名:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%s&quot;, stu.st.Name);</span><br><span class="line">		printf(&quot;请输入第%d个学生的年龄:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%d&quot;, &amp;stu.st.Age);</span><br><span class="line">		printf(&quot;请输入第%d个学生的学号:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%d&quot;, &amp;stu.st.No);</span><br><span class="line">		printf(&quot;请输入第%d个学生的语文成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[0]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的数学成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[1]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的英语成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[2]);</span><br><span class="line"></span><br><span class="line">		stu.st.Total &#x3D; stu.st.Score[0] + stu.st.Score[1] + stu.st.Score[2];&#x2F;&#x2F;计算总分</span><br><span class="line">		stu.st.Ave &#x3D; stu.st.Total &#x2F; 3.0f;			&#x2F;&#x2F;计算平均分</span><br><span class="line"></span><br><span class="line">		PNODE pNew &#x3D; (PNODE)malloc(sizeof(NODE));	&#x2F;&#x2F;为新节点分配内存</span><br><span class="line">		if(NULL &#x3D;&#x3D; pNew)							&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">			exit(-1);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		pNew.st &#x3D; stu.st;	&#x2F;&#x2F;初始化结点的数据域	</span><br><span class="line">		pNew.next &#x3D; pHead.next;	&#x2F;&#x2F;新结点的指针域为头结点的指针域 。</span><br><span class="line">&#x2F;&#x2F;		前插法插入的位置就是即将取代当前头结点的位置。</span><br><span class="line">&#x2F;&#x2F;		因为 pNew与pHead数据域不一样，所以不能 pNew&#x3D;pHead。 </span><br><span class="line">		pHead.next&#x3D;pNew;	&#x2F;&#x2F;更新头结点</span><br><span class="line">	&#125;</span><br><span class="line">	return pHead;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+<h1 id="总的代码如下："><a href="#总的代码如下：" class="headerlink" title="总的代码如下："></a>总的代码如下：</h1><p>代码中将初始化嵌套在了输入函数中，也可以拿出开成为独立的功能函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">struct Student			&#x2F;&#x2F;学生结构</span><br><span class="line">&#123;</span><br><span class="line">	char Name[10];		&#x2F;&#x2F;姓名</span><br><span class="line">	int No;				&#x2F;&#x2F;学号</span><br><span class="line">	float Score[3];		&#x2F;&#x2F;三科的成绩</span><br><span class="line">	float Total;		&#x2F;&#x2F;总分</span><br><span class="line">	float Ave;			&#x2F;&#x2F;平均分</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">typedef struct Node		&#x2F;&#x2F;结点</span><br><span class="line">&#123;</span><br><span class="line">	struct Student st;	&#x2F;&#x2F;数据域</span><br><span class="line">	struct Node *next;	&#x2F;&#x2F;指针域</span><br><span class="line">&#125;NODE, *PNODE;			&#x2F;&#x2F;NODE等价于struct Student st||PNODE等价于struct Node *next</span><br><span class="line">						&#x2F;&#x2F;NODE * P&#x3D;&#x3D;PNODE P。为了提高可读性用NODE定义指向其他任意节点。用PNODE专指向头结点 </span><br><span class="line"></span><br><span class="line">PNODE InputStudent2();	&#x2F;&#x2F;输入函数,用于输入学生信息(前插法) </span><br><span class="line">PNODE InputStudent(PNODE pHead);	&#x2F;&#x2F;输入函数,用于输入学生信息(后插法) </span><br><span class="line">void OutputStudent(PNODE pHead);	&#x2F;&#x2F;输出学生信息</span><br><span class="line">void DeleteStudent(PNODE pHead);	&#x2F;&#x2F;删除学生信息</span><br><span class="line">void SearchStudent(PNODE pHead);	&#x2F;&#x2F;查找学生信息</span><br><span class="line">void ChangeStudent(PNODE pHead);	&#x2F;&#x2F;修改学生信息</span><br><span class="line">void InsertStudent(PNODE pHead);	&#x2F;&#x2F;增加学生信息</span><br><span class="line">void ScortByChinese(PNODE pHead);	&#x2F;&#x2F;对学生的语文成绩排序</span><br><span class="line">void ScortByMath(PNODE pHead);		&#x2F;&#x2F;对学生的数学成绩排序</span><br><span class="line">void ScortByEnglish(PNODE pHead);	&#x2F;&#x2F;对学生的英语成绩排序</span><br><span class="line">void ScortByTotal(PNODE pHead);		&#x2F;&#x2F;对学生的总分排序</span><br><span class="line"></span><br><span class="line">void welcome()&#123;</span><br><span class="line">	printf(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n\n&quot;);</span><br><span class="line">	printf(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n\n&quot;);</span><br><span class="line">	printf(&quot;**************欢迎使用学生成绩管理系统******************\n\n&quot;);</span><br><span class="line">	printf(&quot;--------------------------------------------------------\n\n&quot;);</span><br><span class="line">	printf(&quot;********************************************************\n\n&quot;);</span><br><span class="line">	printf(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n\n&quot;);</span><br><span class="line">	printf(&quot;请按任意将进入学生管理系统:\n&quot;);</span><br><span class="line">	getchar();</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">void menu()&#123;</span><br><span class="line">	printf(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n\n&quot;);</span><br><span class="line">	printf(&quot;------------- 请选择要操作的命令：------------------\n\n&quot;);</span><br><span class="line">	printf(&quot;------ 1  输入学生信息-------  2  输出学生信息------\n\n&quot;);</span><br><span class="line">	printf(&quot;------ 3  删除学生信息-------  4  查找学生信息------\n\n&quot;);</span><br><span class="line">	printf(&quot;------ 5  修改学生信息-------  6  增加学生信息------\n\n&quot;);</span><br><span class="line">	printf(&quot;------ 7  将学生的语文成绩按从大到小排--------------\n\n&quot;);</span><br><span class="line">	printf(&quot;------ 8  将学生的数学成绩按从大到小排--------------\n\n&quot;);</span><br><span class="line">	printf(&quot;------ 9  将学生的英语成绩按从大到小排--------------\n\n&quot;);</span><br><span class="line">    printf(&quot;------ 10 将学生的总成绩按从大到小排----------------\n\n&quot;);</span><br><span class="line">	printf(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n\n&quot;);</span><br><span class="line">	printf(&quot;------ ¤¤¤¤   其他键退出系统    ¤¤¤¤   ------\n\n&quot;);</span><br><span class="line">	printf(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	welcome();	</span><br><span class="line">	system(&quot;cls&quot;);</span><br><span class="line">	int Item;</span><br><span class="line">	PNODE pHead &#x3D; NULL;&#x2F;&#x2F;定义一个指针</span><br><span class="line">	while(1)</span><br><span class="line">	&#123;</span><br><span class="line">		menu();</span><br><span class="line">		printf(&quot;请选择操作命令:&quot;);</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;Item);</span><br><span class="line">		system(&quot;cls&quot;);</span><br><span class="line">		switch(Item)</span><br><span class="line">		&#123;</span><br><span class="line">		    case 1:pHead &#x3D; InputStudent(pHead);break;</span><br><span class="line">			case 2:OutputStudent(pHead);break;</span><br><span class="line">			case 3:DeleteStudent(pHead);break;</span><br><span class="line">			case 4:SearchStudent(pHead);break;</span><br><span class="line">			case 5:ChangeStudent(pHead);break;</span><br><span class="line">			case 6:InsertStudent(pHead);break;</span><br><span class="line">			case 7:ScortByChinese(pHead);</span><br><span class="line">				   OutputStudent(pHead);break;</span><br><span class="line">			case 8:ScortByMath(pHead);</span><br><span class="line">				   OutputStudent(pHead);break;</span><br><span class="line">			case 9:ScortByEnglish(pHead);</span><br><span class="line">				   OutputStudent(pHead);break;</span><br><span class="line">			case 10:ScortByTotal(pHead);</span><br><span class="line">				    OutputStudent(pHead);break;</span><br><span class="line">			default:printf(&quot;系统已经退出，欢迎再次使用！\n&quot;),exit(1); </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	system(&quot;pause&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PNODE InputStudent(PNODE pHead)			&#x2F;&#x2F;输入函数,用于输入学生信息。采用后插法创建单链表 </span><br><span class="line">&#123;</span><br><span class="line">	int len;							&#x2F;&#x2F;学生的人数</span><br><span class="line">	NODE stu;</span><br><span class="line">	</span><br><span class="line">	PNODE p&#x3D;pHead;</span><br><span class="line">	PNODE pTail&#x3D;NULL;</span><br><span class="line">	if(NULL &#x3D;&#x3D; p)						&#x2F;&#x2F;判断之前是否录入过数据 </span><br><span class="line">	&#123;</span><br><span class="line">		p &#x3D; (PNODE)malloc(sizeof(NODE));&#x2F;&#x2F;为头结点分配内存</span><br><span class="line">		if(NULL &#x3D;&#x3D; p)					&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">			exit(-1);</span><br><span class="line">		&#125;</span><br><span class="line">		pTail &#x3D; p;						&#x2F;&#x2F;尾指针初始时指向头结点</span><br><span class="line">		pTail-&gt;next &#x3D; NULL;				&#x2F;&#x2F;清空指针域</span><br><span class="line">	&#125;</span><br><span class="line">	else&#123;</span><br><span class="line">		PNODE temp &#x3D; p;	</span><br><span class="line">		while(NULL !&#x3D; temp-&gt;next)</span><br><span class="line">		&#123;</span><br><span class="line">			temp &#x3D; temp-&gt;next;</span><br><span class="line">		&#125;</span><br><span class="line">		pTail&#x3D;temp; </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	printf(&quot;请输入学生的人数:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;len);</span><br><span class="line">	int i;</span><br><span class="line">	for(i&#x3D;0; i&lt;len; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		system(&quot;cls&quot;);&#x2F;&#x2F;清屏</span><br><span class="line">		printf(&quot;请输入第%d个学生的姓名:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%s&quot;, stu.st.Name);</span><br><span class="line">		printf(&quot;请输入第%d个学生的学号:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%d&quot;, &amp;stu.st.No);</span><br><span class="line">		printf(&quot;请输入第%d个学生的语文成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[0]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的数学成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[1]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的英语成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[2]);</span><br><span class="line"></span><br><span class="line">		stu.st.Total &#x3D; stu.st.Score[0] + stu.st.Score[1] + stu.st.Score[2];&#x2F;&#x2F;计算总分</span><br><span class="line">		stu.st.Ave &#x3D; stu.st.Total &#x2F; 3.0f;		&#x2F;&#x2F;计算平均分</span><br><span class="line"></span><br><span class="line">		PNODE pNew &#x3D; (PNODE)malloc(sizeof(NODE));	&#x2F;&#x2F;为新节点分配内存</span><br><span class="line">		if(NULL &#x3D;&#x3D; pNew)	&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">			exit(-1);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		pNew-&gt;st &#x3D; stu.st;	&#x2F;&#x2F;初始化结点的数据域	</span><br><span class="line">		pNew-&gt;next &#x3D; NULL;	&#x2F;&#x2F;清空新结点的指针域</span><br><span class="line">		&#x2F;&#x2F;以上两步构建了新的尾巴 </span><br><span class="line">		</span><br><span class="line">		pTail-&gt;next &#x3D; pNew;	&#x2F;&#x2F;将新结点挂在了链上 </span><br><span class="line">		&#x2F;&#x2F;后插法，插入的位置就是即将成为尾部的位置 </span><br><span class="line">		pTail &#x3D; pNew;	&#x2F;&#x2F;将pTail移到新的尾结点上</span><br><span class="line">	&#125;</span><br><span class="line">	return p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PNODE InputStudent2()&#x2F;&#x2F;输入函数,用于输入学生信息。采用前插法创建单链表 </span><br><span class="line">&#123;</span><br><span class="line">	int len;&#x2F;&#x2F;学生的人数</span><br><span class="line">	NODE stu;</span><br><span class="line">	PNODE pHead &#x3D; (PNODE)malloc(sizeof(NODE));&#x2F;&#x2F;定义一个头结点并且为头结点分配内存</span><br><span class="line">	if(NULL &#x3D;&#x3D; pHead)	&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">		exit(-1);</span><br><span class="line">	&#125;</span><br><span class="line">	pHead-&gt;next &#x3D; NULL;&#x2F;&#x2F;清空指针域</span><br><span class="line">	printf(&quot;请输入学生的人数:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;len);</span><br><span class="line">	int i;</span><br><span class="line">	for(i&#x3D;0; i&lt;len; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		system(&quot;cls&quot;);&#x2F;&#x2F;清屏</span><br><span class="line">		printf(&quot;请输入第%d个学生的姓名:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%s&quot;, stu.st.Name);</span><br><span class="line">		printf(&quot;请输入第%d个学生的学号:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%d&quot;, &amp;stu.st.No);</span><br><span class="line">		printf(&quot;请输入第%d个学生的语文成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[0]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的数学成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[1]);</span><br><span class="line">		printf(&quot;请输入第%d个学生的英语成绩:\n&quot;, i+1);</span><br><span class="line">		scanf(&quot;%f&quot;, &amp;stu.st.Score[2]);</span><br><span class="line"></span><br><span class="line">		stu.st.Total &#x3D; stu.st.Score[0] + stu.st.Score[1] + stu.st.Score[2];&#x2F;&#x2F;计算总分</span><br><span class="line">		stu.st.Ave &#x3D; stu.st.Total &#x2F; 3.0f;		&#x2F;&#x2F;计算平均分</span><br><span class="line"></span><br><span class="line">		PNODE pNew &#x3D; (PNODE)malloc(sizeof(NODE));	&#x2F;&#x2F;为新节点分配内存</span><br><span class="line">		if(NULL &#x3D;&#x3D; pNew)	&#x2F;&#x2F;判断内存是否为空</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;内存分配失败,程序终止!\n&quot;);</span><br><span class="line">			exit(-1);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		pNew-&gt;st &#x3D; stu.st;	&#x2F;&#x2F;初始化结点的数据域	</span><br><span class="line">		pNew-&gt;next &#x3D; pHead-&gt;next;	&#x2F;&#x2F;新结点的指针域为头结点的指针域 。</span><br><span class="line">&#x2F;&#x2F;		前插法插入的位置就是即将取代当前头结点的位置。</span><br><span class="line">&#x2F;&#x2F;		因为 pNew与pHead数据域不一样，所以不能 pNew&#x3D;pHead。 </span><br><span class="line">		pHead-&gt;next&#x3D;pNew;	&#x2F;&#x2F;更新头结点</span><br><span class="line">	&#125;</span><br><span class="line">	return pHead;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void InsertStudent(PNODE pHead)&#x2F;&#x2F;增加学生信息</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p &#x3D; pHead;</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	struct Student stu;&#x2F;&#x2F;学生结构</span><br><span class="line">	int pos;&#x2F;&#x2F;插入结点的位置</span><br><span class="line">	printf(&quot;请输入插入学生的位置:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;pos);</span><br><span class="line">	while(p &amp;&amp; i&lt;pos-1)</span><br><span class="line">	&#123;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	if(p &#x3D;&#x3D; NULL || i&gt;pos)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;插入结点的位置不存在!\n&quot;);</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;你将在第%d个学生后面插入一个学生\n&quot;,pos-1);</span><br><span class="line">	printf(&quot;请输入第%d个学生的姓名:&quot;,pos);</span><br><span class="line">	scanf(&quot;%s&quot;,stu.Name);</span><br><span class="line">	printf(&quot;请输入第%d个学生的学号:&quot;,pos);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;stu.No);</span><br><span class="line">	printf(&quot;请输入第%d个学生的语文成绩:&quot;,pos);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;stu.Score[0]);</span><br><span class="line">	printf(&quot;请输入第%d个学生的数学成绩:&quot;,pos);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;stu.Score[1]);</span><br><span class="line">	printf(&quot;请输入第%d个学生的英语成绩:&quot;,pos);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;stu.Score[2]);</span><br><span class="line"></span><br><span class="line">	stu.Total &#x3D; stu.Score[0] + stu.Score[1] + stu.Score[2];&#x2F;&#x2F;计算总分	</span><br><span class="line">	stu.Ave &#x3D; stu.Total &#x2F; 3.0f;&#x2F;&#x2F;计算平均分</span><br><span class="line">	PNODE pNew &#x3D; (PNODE)malloc(sizeof(NODE));</span><br><span class="line">	if(NULL &#x3D;&#x3D; pNew)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;动态内存分配失败,程序终止!\n&quot;);</span><br><span class="line">		exit(-1);</span><br><span class="line">	&#125;</span><br><span class="line">	pNew-&gt;st &#x3D; stu;</span><br><span class="line">	PNODE q &#x3D; p-&gt;next;	&#x2F;&#x2F;先把后继存起来 </span><br><span class="line">	p-&gt;next &#x3D; pNew;		&#x2F;&#x2F;然后把要插的插进来 </span><br><span class="line">	pNew-&gt;next &#x3D; q;		&#x2F;&#x2F;将刚刚保存的节点挂上 </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void OutputStudent(PNODE pHead)&#x2F;&#x2F;输出学生信息</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p &#x3D; pHead-&gt;next;&#x2F;&#x2F;定义一个指针用于遍历学生信息，p指向第一个节点 </span><br><span class="line">	printf(&quot;   姓名    学号    语文    数学    英语     总分    平均分\n&quot;);	</span><br><span class="line">	while(p)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;%6s  %8d  %6g  %6g  %6g  %6g  %10g\n&quot;, p-&gt;st.Name,p-&gt;st.No, p-&gt;st.Score[0], p-&gt;st.Score[1], p-&gt;st.Score[2], p-&gt;st.Total, p-&gt;st.Ave);</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void DeleteStudent(PNODE pHead)&#x2F;&#x2F;删除学生信息</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p &#x3D; pHead;</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	int pos;</span><br><span class="line">	printf(&quot;请输入你需要删除的学生的编号:&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;pos);</span><br><span class="line">	while(p &amp;&amp; i&lt;pos-1)</span><br><span class="line">	&#123;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	if(p &#x3D;&#x3D; NULL || i&gt;pos-1)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;没找到需要删除的学生的编号!\n&quot;);</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	PNODE q &#x3D; p-&gt;next;</span><br><span class="line">	p-&gt;next &#x3D; q-&gt;next;</span><br><span class="line">	free(q);</span><br><span class="line">	q &#x3D;&#x3D; NULL;</span><br><span class="line">	printf(&quot;你已经成功删除了第%d个学生的信息!\n&quot;,pos);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void SearchStudent(PNODE pHead)&#x2F;&#x2F;查找学生信息</span><br><span class="line">&#123;</span><br><span class="line">	char Name[10];</span><br><span class="line">	printf(&quot;请输入你需要查找的学生的姓名:&quot;);</span><br><span class="line">	scanf(&quot;%s&quot;,Name);</span><br><span class="line">	PNODE p &#x3D; pHead-&gt;next;&#x2F;&#x2F;p指向第一个节点 </span><br><span class="line">	while(p)</span><br><span class="line">	&#123;</span><br><span class="line">		if(0 &#x3D;&#x3D; strcmp(Name,p-&gt;st.Name))</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;%s %d %g %g %g %g %g\n&quot;,p-&gt;st.Name, p-&gt;st.No, p-&gt;st.Score[0], p-&gt;st.Score[1], p-&gt;st.Score[2], p-&gt;st.Total, p-&gt;st.Ave);</span><br><span class="line">		&#125;</span><br><span class="line">		p &#x3D; p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ChangeStudent(PNODE pHead)&#x2F;&#x2F;修改学生信息</span><br><span class="line">&#123;</span><br><span class="line">	char Name[10];</span><br><span class="line">	printf(&quot;请输入你需要修改的学生的姓名:&quot;);</span><br><span class="line">	scanf(&quot;%s&quot;,&amp;Name);</span><br><span class="line">	PNODE p &#x3D; pHead-&gt;next;&#x2F;&#x2F;定义一个指针用于遍历学生信息</span><br><span class="line">	while(p)</span><br><span class="line">	&#123;</span><br><span class="line">		if(0 &#x3D;&#x3D; strcmp(Name, p-&gt;st.Name))</span><br><span class="line">		&#123;	</span><br><span class="line">			printf(&quot;姓名 年龄  学号  语文  数学  英语  总分 平均分\n&quot;);			</span><br><span class="line">			printf(&quot;修改前的学生信息!\n&quot;);</span><br><span class="line">			printf(&quot;%s %d %g %g %g %g %g\n&quot;,p-&gt;st.Name, p-&gt;st.No, p-&gt;st.Score[0], p-&gt;st.Score[1], p-&gt;st.Score[2], p-&gt;st.Total, p-&gt;st.Ave);</span><br><span class="line">			system(&quot;pause&quot;);</span><br><span class="line">			system(&quot;cls&quot;);&#x2F;&#x2F;清屏</span><br><span class="line">			printf(&quot;请输入新的学生姓名:&quot;);</span><br><span class="line">			scanf(&quot;%s&quot;, p-&gt;st.Name);</span><br><span class="line">			printf(&quot;请输入新的学生学号:&quot;);</span><br><span class="line">			scanf(&quot;%d&quot;, &amp;p-&gt;st.No);</span><br><span class="line">			printf(&quot;请输入新的学生的语文成绩:&quot;);</span><br><span class="line">			scanf(&quot;%f&quot;, &amp;p-&gt;st.Score[0]);</span><br><span class="line">			printf(&quot;请输入新的学生的数学成绩:&quot;);</span><br><span class="line">			scanf(&quot;%f&quot;, &amp;p-&gt;st.Score[1]);		</span><br><span class="line">			printf(&quot;请输入新的学生的英语成绩:&quot;);</span><br><span class="line">			scanf(&quot;%f&quot;, &amp;p-&gt;st.Score[2]);</span><br><span class="line">						</span><br><span class="line">			p-&gt;st.Total &#x3D; p-&gt;st.Score[0] + p-&gt;st.Score[1] + p-&gt;st.Score[2];&#x2F;&#x2F;计算总分		</span><br><span class="line">			p-&gt;st.Ave &#x3D; p-&gt;st.Total &#x2F; 3.0f;	&#x2F;&#x2F;计算平均分</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	  p &#x3D; p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ScortByChinese(PNODE pHead)&#x2F;&#x2F;对学生的语文成绩排序</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p, q;&#x2F;&#x2F;定义两个指针	</span><br><span class="line">	NODE temp;</span><br><span class="line">	for(p&#x3D;pHead-&gt;next; NULL !&#x3D; p; p&#x3D;p-&gt;next)</span><br><span class="line">	&#123;</span><br><span class="line">		for(q&#x3D;p-&gt;next; NULL !&#x3D;q; q&#x3D;q-&gt;next)</span><br><span class="line">		&#123;</span><br><span class="line">			if(p-&gt;st.Score[0] &lt; q-&gt;st.Score[0])&#x2F;&#x2F;当前一个学生的语文成绩小于后一个学生的语文成绩时</span><br><span class="line">			&#123;</span><br><span class="line">				temp.st  &#x3D; p-&gt;st;&#x2F;&#x2F;交换学生的位置</span><br><span class="line">				p-&gt;st &#x3D;  q-&gt;st;</span><br><span class="line">				q-&gt;st &#x3D; temp.st;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ScortByMath(PNODE pHead)&#x2F;&#x2F;对学生的数学成绩排序</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p, q;&#x2F;&#x2F;定义两个指针	</span><br><span class="line">	NODE temp;</span><br><span class="line">	for(p&#x3D;pHead-&gt;next; NULL !&#x3D; p; p&#x3D;p-&gt;next)</span><br><span class="line">	&#123;</span><br><span class="line">		for(q&#x3D;p-&gt;next; NULL !&#x3D;q; q&#x3D;q-&gt;next)</span><br><span class="line">		&#123;</span><br><span class="line">			if(p-&gt;st.Score[1] &lt; q-&gt;st.Score[1])&#x2F;&#x2F;当前一个学生的数学成绩小于后一个学生的数学成绩时</span><br><span class="line">			&#123;</span><br><span class="line">				temp.st  &#x3D; p-&gt;st;&#x2F;&#x2F;交换学生的位置</span><br><span class="line">				p-&gt;st &#x3D;  q-&gt;st;</span><br><span class="line">				q-&gt;st &#x3D; temp.st;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ScortByEnglish(PNODE pHead)&#x2F;&#x2F;对学生的英语成绩排序</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p, q;&#x2F;&#x2F;定义两个指针	</span><br><span class="line">	NODE temp;</span><br><span class="line">	for(p&#x3D;pHead-&gt;next; NULL !&#x3D; p; p&#x3D;p-&gt;next)</span><br><span class="line">	&#123;</span><br><span class="line">		for(q&#x3D;p-&gt;next; NULL !&#x3D;q; q&#x3D;q-&gt;next)</span><br><span class="line">		&#123;</span><br><span class="line">			if(p-&gt;st.Score[2] &lt; q-&gt;st.Score[2])&#x2F;&#x2F;当前一个学生的英语成绩小于后一个学生的英语成绩时</span><br><span class="line">			&#123;</span><br><span class="line">				temp.st  &#x3D; p-&gt;st;&#x2F;&#x2F;交换学生的位置</span><br><span class="line">				p-&gt;st &#x3D;  q-&gt;st;</span><br><span class="line">				q-&gt;st &#x3D; temp.st;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ScortByTotal(PNODE pHead)&#x2F;&#x2F;对学生的总分排序</span><br><span class="line">&#123;</span><br><span class="line">	PNODE p, q;&#x2F;&#x2F;定义两个指针	</span><br><span class="line">	NODE temp;</span><br><span class="line">	for(p&#x3D;pHead-&gt;next; NULL !&#x3D; p; p&#x3D;p-&gt;next)</span><br><span class="line">	&#123;</span><br><span class="line">		for(q&#x3D;p-&gt;next; NULL !&#x3D;q; q&#x3D;q-&gt;next)</span><br><span class="line">		&#123;</span><br><span class="line">			if(p-&gt;st.Total &lt; q-&gt;st.Total)&#x2F;&#x2F;当前一个学生的总分小于后一个学生的总分时</span><br><span class="line">			&#123;</span><br><span class="line">				temp.st  &#x3D; p-&gt;st;&#x2F;&#x2F;交换学生的位置</span><br><span class="line">				p-&gt;st &#x3D;  q-&gt;st;</span><br><span class="line">				q-&gt;st &#x3D; temp.st;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h1><p>后插法得到的如下：<br><img src="https://img-blog.csdnimg.cn/20190702123004642.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>前插法得到的如下：<br><img src="https://img-blog.csdnimg.cn/20190702123503260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从上面可以看出前插法与后插法得到的顺序相反。</p>
+<p><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+<h1 id="顺序表与链表的比较"><a href="#顺序表与链表的比较" class="headerlink" title="顺序表与链表的比较"></a>顺序表与链表的比较</h1><p><img src="https://img-blog.csdnimg.cn/20190702125922405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><a href="#topAnchor" style="position:fixed;right:0;bottom:0">回到目录</a></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag"># 链表</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0/" rel="prev" title="数据结构概述">
+      <i class="fa fa-chevron-left"></i> 数据结构概述
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/03/%E6%A0%88--%E9%A1%BA%E5%BA%8F%E6%A0%88%E4%B8%8E%E9%93%BE%E6%A0%88/" rel="next" title="栈--顺序栈与链栈">
+      栈--顺序栈与链栈 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">链表结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE"><span class="nav-number">1.1.</span> <span class="nav-text">准备数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">1.3.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E5%85%A5"><span class="nav-number">1.4.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">1.5.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8"><span class="nav-number">1.6.</span> <span class="nav-text">创建单链表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%9A%84%E4%BB%A3%E7%A0%81%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">总的代码如下：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">运行结果：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E8%A1%A8%E4%B8%8E%E9%93%BE%E8%A1%A8%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number">4.</span> <span class="nav-text">顺序表与链表的比较</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

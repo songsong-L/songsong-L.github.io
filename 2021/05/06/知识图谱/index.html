@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识图谱">
+<meta property="og:url" content="http://songsong.host/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:description" content="随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3">
+<meta property="og:image" content="http://t10.baidu.com/it/u=3524701362,4051137342&fm=173&app=25&f=JPEG?w=640&h=331&s=05B0EC32552245090070A459020040F3">
+<meta property="og:image" content="http://t10.baidu.com/it/u=3848596317,2706783691&fm=173&app=25&f=JPEG?w=640&h=275&s=CC90E81A9FE144824AE598C2020070B3">
+<meta property="og:image" content="http://t11.baidu.com/it/u=2261386009,2555456406&fm=173&app=25&f=JPEG?w=640&h=262&s=0C40FC128BF074821CE900DA0200D0B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=2616873605,1175169232&fm=173&app=25&f=JPEG?w=640&h=233&s=CC90E81ADFD548C20070F0CA010010B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=712907711,4221552733&fm=173&app=25&f=JPEG?w=639&h=242&s=0AAE7C2287846D435ADD35CA0000C0B1">
+<meta property="og:image" content="http://t11.baidu.com/it/u=626952808,2562026971&fm=173&app=25&f=JPEG?w=639&h=227&s=0470E432BDB04C035450E4D8000060B3">
+<meta property="og:image" content="http://t11.baidu.com/it/u=1461973663,1466794736&fm=173&app=25&f=JPEG?w=639&h=184&s=6AAE3C624B6249321EFDB4CA000080B1">
+<meta property="og:image" content="http://t10.baidu.com/it/u=4101688044,1856892679&fm=173&app=25&f=JPEG?w=640&h=289&s=C006DC1A85C46D43095554CA020050B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=1965742121,2969045495&fm=173&app=25&f=JPEG?w=639&h=219&s=0AAA7E228B8049431A7DB4CA0000E0B1">
+<meta property="og:image" content="http://t10.baidu.com/it/u=2903476509,3457739770&fm=173&app=25&f=JPEG?w=639&h=272&s=8DB0EC128F904CC054516C56020080F2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=33644744,766651579&fm=173&app=25&f=JPEG?w=640&h=250&s=4AAC3C628FD04CC25C7505DE000080B1">
+<meta property="og:image" content="http://t11.baidu.com/it/u=1843334557,961909614&fm=173&app=25&f=JPEG?w=640&h=272&s=25B2EC32CB604C0348C070D80000D0B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=2571953264,527713124&fm=173&app=25&f=JPEG?w=639&h=328&s=4D803C72137061824840F8C8020030F3">
+<meta property="og:image" content="http://t12.baidu.com/it/u=226327970,1562893738&fm=173&app=25&f=JPEG?w=640&h=318&s=CDA0AC520530F42949E80D52020040F2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=302720116,1354414349&fm=173&app=25&f=JPEG?w=640&h=322&s=69203C720F70448A506130D2000080B1">
+<meta property="og:image" content="http://t11.baidu.com/it/u=2086250224,504274614&fm=173&app=25&f=JPEG?w=640&h=355&s=A012EC325F0254C2566F58D80200D0B2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=1060578160,1139020907&fm=173&app=25&f=JPEG?w=639&h=364&s=2032EC325F0264C0446978DA020050B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=3828566894,715445935&fm=173&app=25&f=JPEG?w=640&h=325&s=05F2EC329B8340C208C13D52020080F2">
+<meta property="og:image" content="http://t10.baidu.com/it/u=480692214,290401441&fm=173&app=25&f=JPEG?w=640&h=327&s=61728472DF324580425830D90200C0B2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=3112136647,1918214170&fm=173&app=25&f=JPEG?w=640&h=392&s=A036EC328F026EC05CFCCDDA0200D0B3">
+<meta property="og:image" content="http://t12.baidu.com/it/u=621530735,2369132207&fm=173&app=25&f=JPEG?w=639&h=302&s=6172A47297F3658044C084CE000010B2">
+<meta property="og:image" content="http://t11.baidu.com/it/u=2915145958,428470587&fm=173&app=25&f=JPEG?w=639&h=229&s=617284721134F6217FFE45D90200D0B2">
+<meta property="og:image" content="http://t12.baidu.com/it/u=819872987,394960907&fm=173&app=25&f=JPEG?w=640&h=278&s=1832EC12093153825FF4C54B0300F0B1">
+<meta property="article:published_time" content="2021-05-06T13:16:06.000Z">
+<meta property="article:modified_time" content="2022-11-29T15:52:14.541Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3">
+
+<link rel="canonical" href="http://songsong.host/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>知识图谱 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识图谱
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <i class="fa fa-thumb-tack"></i>
+            <font color=green>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-06 21:16:06" itemprop="dateCreated datePublished" datetime="2021-05-06T21:16:06+08:00">2021-05-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-29 23:52:14" itemprop="dateModified" datetime="2022-11-29T23:52:14+08:00">2022-11-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/06/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>22 分钟</span>
+            </span>
+            <div class="post-description">随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="如何从零开始搭建知识图谱？"><a href="#如何从零开始搭建知识图谱？" class="headerlink" title="如何从零开始搭建知识图谱？"></a>如何从零开始搭建知识图谱？</h2><p>发布时间: 18-07-0223:43</p>
+<p>\1. 概论</p>
+<p>随着移动互联网的发展，万物互联成为了可能，这种互联所产生的数据也在爆发式地增长，而且这些数据恰好可以作为分析关系的有效原料。如果说以往的智能分析专注在每一个个体上，在移动互联网时代则除了个体，这种个体之间的关系也必然成为我们需要深入分析的很重要一部分。 在一项任务中，只要有关系分析的需求，知识图谱就“有可能”派的上用场。<br><img src="http://t12.baidu.com/it/u=3463516904,1082940717&fm=173&app=25&f=JPEG?w=640&h=278&s=88B4ED12D7F16D921269A4CB0200C0B3" alt="img"></p>
+<p>\2. 知识抽取</p>
+<p>知识图谱的构建是后续应用的基础，而且构建的前提是需要把数据从不同的数据源中抽取出来。对于垂直领域的知识图谱来说，<strong>它们的数据源主要来自两种渠道：一种是业务本身的数据，这部分数据通常包含在公司内的数据库表并以结构化的方式存储；另一种是网络上公开、抓取的数据，这些数据通常是以网页的形式存在所以是非结构化的数据。</strong></p>
+<p>前者一般只需要简单预处理即可以作为后续 AI 系统的输入，但后者一般需要借助于自然语言处理等技术来提取出结构化信息。比如在上面的搜索例子里，Bill Gates 和 Malinda Gate 的关系就可以从非结构化数据中提炼出来，比如维基百科等数据源。</p>
+<p><img src="http://t10.baidu.com/it/u=3524701362,4051137342&fm=173&app=25&f=JPEG?w=640&h=331&s=05B0EC32552245090070A459020040F3" alt="img"></p>
+<p>信息抽取的难点在于处理非结构化数据。在下面的图中，我们给出了一个实例。左边是一段非结构化的英文文本，右边是从这些文本中抽取出来的实体和关系。在构建类似的图谱过程当中，主要涉及以下几个方面的自然语言处理技术：</p>
+<p>a. 实体命名识别（Name Entity Recognition）b. 关系抽取（Relation Extraction）c. 实体统一（Entity Resolution）d. 指代消解（Coreference Resolution）</p>
+<p>下面针对每一项技术解决的问题做简单的描述，以至于这些是具体怎么实现的，不在这里一一展开。</p>
+<p><img src="http://t10.baidu.com/it/u=3848596317,2706783691&fm=173&app=25&f=JPEG?w=640&h=275&s=CC90E81A9FE144824AE598C2020070B3" alt="img"></p>
+<p>首先是实体命名识别，就是从文本里提取出实体并对每个实体做分类 / 打标签：比如从上述文本里，我们可以提取出实体 -“NYC”，并标记实体类型为 “Location”；我们也可以从中提取出“Virgil’s BBQ”，并标记实体类型为“Restarant”。这种过程称之为实体命名识别，这是一项相对比较成熟的技术，有一些现成的工具可以用来做这件事情。其次，我们可以通过关系抽取技术，把实体间的关系从文本中提取出来，比如实体“hotel”和“Hilton property”之间的关系为“in”；“hotel”和“Time Square”的关系为“near”等等。</p>
+<p><img src="http://t11.baidu.com/it/u=2261386009,2555456406&fm=173&app=25&f=JPEG?w=640&h=262&s=0C40FC128BF074821CE900DA0200D0B2" alt="img"></p>
+<p>另外，在实体命名识别和关系抽取过程中，有两个比较棘手的问题：一个是实体统一，也就是说有些实体写法上不一样，但其实是指向同一个实体。比如“NYC”和“New York”表面上是不同的字符串，但其实指的都是纽约这个城市，需要合并。实体统一不仅可以减少实体的种类，也可以降低图谱的稀疏性（Sparsity）；另一个问题是指代消解，也是文本中出现的“it”, “he”, “she”这些词到底指向哪个实体，比如在本文里两个被标记出来的“it”都指向“hotel”这个实体。</p>
+<p><img src="http://t12.baidu.com/it/u=2616873605,1175169232&fm=173&app=25&f=JPEG?w=640&h=233&s=CC90E81ADFD548C20070F0CA010010B2" alt="img"></p>
+<p>实体统一和指代消解问题相对于前两个问题更具有挑战性。</p>
+<p>\3. 知识图谱的存储</p>
+<p><strong>知识图谱主要有两种存储方式：一种是基于 RDF 的存储；另一种是基于图数据库的存储。</strong>它们之间的区别如下图所示。RDF 一个重要的设计原则是数据的易发布以及共享，图数据库则把重点放在了高效的图查询和搜索上。其次，RDF 以三元组的方式来存储数据而且不包含属性信息，但图数据库一般以属性图为基本的表示形式，所以实体和关系可以包含属性，这就意味着更容易表达现实的业务场景。</p>
+<p><img src="http://t12.baidu.com/it/u=712907711,4221552733&fm=173&app=25&f=JPEG?w=639&h=242&s=0AAE7C2287846D435ADD35CA0000C0B1" alt="img"></p>
+<p>根据最新的统计（2018 年上半年），图数据库仍然是增长最快的存储系统。相反，关系型数据库的增长基本保持在一个稳定的水平。同时，我们也列出了常用的图数据库系统以及他们最新使用情况的排名。 其中 Neo4j 系统目前仍是使用率最高的图数据库，它拥有活跃的社区，而且系统本身的查询效率高，但唯一的不足就是不支持准分布式。相反，OrientDB 和 JanusGraph（原 Titan）支持分布式，但这些系统相对较新，社区不如 Neo4j 活跃，这也就意味着使用过程当中不可避免地会遇到一些刺手的问题。如果选择使用 RDF 的存储系统，Jena 或许一个比较不错的选择。</p>
+<p><img src="http://t11.baidu.com/it/u=626952808,2562026971&fm=173&app=25&f=JPEG?w=639&h=227&s=0470E432BDB04C035450E4D8000060B3" alt="img"></p>
+<p>\4. 金融知识图谱的搭建</p>
+<p>接下来我们看一个实际的具体案例，讲解怎么一步步搭建可落地的金融风控领域的知识图谱系统。 首先需要说明的一点是，有可能不少人认为搭建一个知识图谱系统的重点在于算法和开发。但事实并不是想象中的那样，<strong>其实最重要的核心在于对业务的理解以及对知识图谱本身的设计</strong>，这就类似于对于一个业务系统，数据库表的设计尤其关键，而且这种设计绝对离不开对业务的深入理解以及对未来业务场景变化的预估。 当然，在这里我们先不讨论数据的重要性。</p>
+<p><img src="http://t11.baidu.com/it/u=1461973663,1466794736&fm=173&app=25&f=JPEG?w=639&h=184&s=6AAE3C624B6249321EFDB4CA000080B1" alt="img"></p>
+<p>一个完整的知识图谱的构建包含以下几个步骤：<strong>1. 定义具体的业务问题 2. 数据的收集 &amp; 预处理 3. 知识图谱的设计 4. 把数据存入知识图谱 5. 上层应用的开发，以及系统的评估。</strong>下面我们就按照这个流程来讲一下每个步骤所需要做的事情以及需要思考的问题。</p>
+<p>4.1 定义具体的业务问题</p>
+<p>在 P2P 网贷环境下，最核心的问题是风控，也就是怎么去评估一个借款人的风险。在线上的环境下，欺诈风险尤其为严重，而且很多这种风险隐藏在复杂的关系网络之中，而且知识图谱正好是为这类问题所设计的，所以我们“有可能”期待它能在欺诈，这个问题上带来一些价值。</p>
+<p><img src="http://t10.baidu.com/it/u=4101688044,1856892679&fm=173&app=25&f=JPEG?w=640&h=289&s=C006DC1A85C46D43095554CA020050B2" alt="img"></p>
+<p>在进入下一个话题的讨论之前，<strong>要明确的一点是，对于自身的业务问题到底需不需要知识图谱系统的支持。</strong>因为在很多的实际场景，即使对关系的分析有一定的需求，实际上也可以利用传统数据库来完成分析的。所以为了避免使用知识图谱而选择知识图谱，以及更好的技术选型，以下给出了几点总结，供参考。</p>
+<p><img src="http://t12.baidu.com/it/u=1965742121,2969045495&fm=173&app=25&f=JPEG?w=639&h=219&s=0AAA7E228B8049431A7DB4CA0000E0B1" alt="img"></p>
+<p>4.2 数据收集 &amp; 预处理</p>
+<p>下一步就是要确定数据源以及做必要的数据预处理。针对于数据源，我们需要考虑以下几点：1. 我们已经有哪些数据？ 2. 虽然现在没有，但有可能拿到哪些数据？ 3. 其中哪部分数据可以用来降低风险？ 4. 哪部分数据可以用来构建知识图谱？在这里需要说明的一点是，并不是所有跟反欺诈相关的数据都必须要进入知识图谱，对于这部分的一些决策原则在接下来的部分会有比较详细的介绍。</p>
+<p>对于反欺诈，有几个数据源是我们很容易想得到的，包括用户的基本信息、行为数据、运营商数据、网络上的公开信息等等。假设我们已经有了一个数据源的列表清单，则下一步就要看哪些数据需要进一步的处理，比如对于非结构化数据我们或多或少都需要用到跟自然语言处理相关的技术。 用户填写的基本信息基本上会存储在业务表里，除了个别字段需要进一步处理，很多字段则直接可以用于建模或者添加到知识图谱系统里。对于行为数据来说，我们则需要通过一些简单的处理，并从中提取有效的信息比如“用户在某个页面停留时长”等等。 对于网络上公开的网页数据，则需要一些信息抽取相关的技术。</p>
+<p>举个例子，对于用户的基本信息，我们很可能需要如下的操作。一方面，用户信息比如姓名、年龄、学历等字段可以直接从结构化数据库中提取并使用。但另一方面，对于填写的公司名来说，我们有可能需要做进一步的处理。比如部分用户填写“北京贪心科技有限公司”，另外一部分用户填写“北京望京贪心科技有限公司”，其实指向的都是同一家公司。所以，这时候我们需要做公司名的对齐，用到的技术细节可以参考前面讲到的实体对齐技术。</p>
+<p><img src="http://t10.baidu.com/it/u=2903476509,3457739770&fm=173&app=25&f=JPEG?w=639&h=272&s=8DB0EC128F904CC054516C56020080F2" alt="img"></p>
+<p>4.3 知识图谱的设计</p>
+<p>图谱的设计是一门艺术，不仅要对业务有很深的理解、也需要对未来业务可能的变化有一定预估，从而设计出最贴近现状并且性能高效的系统。在知识图谱设计的问题上，我们肯定会面临以下几个常见的问题：<strong>1. 需要哪些实体、关系和属性？ 2. 哪些属性可以做为实体，哪些实体可以作为属性？ 3. 哪些信息不需要放在知识图谱中？</strong></p>
+<p>基于这些常见的问题，我们从以往的设计经验中抽象出了一系列的设计原则。这些设计原则就类似于传统数据库设计中的范式，来引导相关人员设计出更合理的知识图谱系统，同时保证系统的高效性。</p>
+<p><img src="http://t12.baidu.com/it/u=33644744,766651579&fm=173&app=25&f=JPEG?w=640&h=250&s=4AAC3C628FD04CC25C7505DE000080B1" alt="img"></p>
+<p>接下来，我们举几个简单的例子来说明其中的一些原则。 首先是，业务原则（Business Principle），它的含义是 “<strong>一切要从业务逻辑出发，并且通过观察知识图谱的设计也很容易推测其背后业务的逻辑，而且设计时也要想好未来业务可能的变化</strong>”。</p>
+<p>举个例子，可以观察一下下面这个图谱，并试问自己背后的业务逻辑是什么。通过一番观察，其实也很难看出到底业务流程是什么样的。做个简单的解释，这里的实体 -“申请”意思就是 application，如果对这个领域有所了解，其实就是进件实体。在下面的图中，申请和电话实体之间的“has_phone”，“parent phone”是什么意思呢？</p>
+<p><img src="http://t11.baidu.com/it/u=1843334557,961909614&fm=173&app=25&f=JPEG?w=640&h=272&s=25B2EC32CB604C0348C070D80000D0B2" alt="img"></p>
+<p>接下来再看一下下面的图，跟之前的区别在于我们把申请人从原有的属性中抽取出来并设置成了一个单独的实体。在这种情况下，整个业务逻辑就变得很清晰，我们很容易看出张三申请了两个贷款，而且张三拥有两个手机号，在申请其中一个贷款的时候他填写了父母的电话号。总而言之，一个好的设计很容易让人看到业务本身的逻辑。</p>
+<p><img src="http://t12.baidu.com/it/u=2571953264,527713124&fm=173&app=25&f=JPEG?w=639&h=328&s=4D803C72137061824840F8C8020030F3" alt="img"></p>
+<p>接下来再看一个原则叫做效率原则（Efficiency Principle）。<strong>效率原则让知识图谱尽量轻量化、并决定哪些数据放在知识图谱，哪些数据不需要放在知识图谱</strong>。在这里举一个简单的类比，在经典的计算机存储系统中，我们经常会谈论到内存和硬盘，内存作为高效的访问载体，作为所有程序运行的关键。这种存储上的层次结构设计源于数据的局部性 -“locality”，也就是说经常被访问到的数据集中在某一个区块上，所以这部分数据可以放到内存中来提升访问的效率。 类似的逻辑也可以应用到知识图谱的设计上：我们把常用的信息存放在知识图谱中，把那些访问频率不高，对关系分析无关紧要的信息放在传统的关系型数据库当中。 <strong>效率原则的核心在于把知识图谱设计成小而轻的存储载体。</strong></p>
+<p><img src="http://t12.baidu.com/it/u=226327970,1562893738&fm=173&app=25&f=JPEG?w=640&h=318&s=CDA0AC520530F42949E80D52020040F2" alt="img"></p>
+<p>比如在下面的知识图谱中，我们完全可以把一些信息比如“年龄”，“家乡”放到传统的关系型数据库当中，因为这些数据对于：a. 分析关系来说没有太多作用 b. 访问频率低，放在知识图谱上反而影响效率</p>
+<p><img src="http://t11.baidu.com/it/u=302720116,1354414349&fm=173&app=25&f=JPEG?w=640&h=322&s=69203C720F70448A506130D2000080B1" alt="img"></p>
+<p>另外，从分析原则（Analytics Principle）的角度，我们不需要把跟关系分析无关的实体放在图谱当中；从冗余原则（Redundancy Principle）的角度，有些重复性信息、高频信息可以放到传统数据库当中。</p>
+<p>4.4 把数据存入知识图谱</p>
+<p>存储上我们要面临存储系统的选择，但由于我们设计的知识图谱带有属性，图数据库可以作为首选。但至于选择哪个图数据库也要看业务量以及对效率的要求。如果数据量特别庞大，则 Neo4j 很可能满足不了业务的需求，这时候不得不去选择支持准分布式的系统比如 OrientDB, JanusGraph 等，或者通过效率、冗余原则把信息存放在传统数据库中，从而减少知识图谱所承载的信息量。 通常来讲，对于 10 亿节点以下规模的图谱来说 Neo4j 已经足够了。</p>
+<p>4.5 上层应用的开发</p>
+<p>等我们构建好知识图谱之后，接下来就要使用它来解决具体的问题。对于风控知识图谱来说，首要任务就是挖掘关系网络中隐藏的欺诈风险。<strong>从算法的角度来讲，有两种不同的场景：一种是基于规则的；另一种是基于概率的。</strong>鉴于目前 AI 技术的现状，基于规则的方法论还是在垂直领域的应用中占据主导地位，但随着数据量的增加以及方法论的提升，基于概率的模型也将会逐步带来更大的价值。</p>
+<p>4.5.1 基于规则的方法论</p>
+<p>首先，我们来看几个基于规则的应用，分别是不一致性验证、基于规则的特征提取、基于模式的判断。</p>
+<p><strong>不一致性验证</strong></p>
+<p>为了判断关系网络中存在的风险，一种简单的方法就是做不一致性验证，也就是通过一些规则去找出潜在的矛盾点。这些规则是以人为的方式提前定义好的，所以在设计规则这个事情上需要一些业务的知识。比如在下面的这个图中，李明和李飞两个人都注明了同样的公司电话，但实际上从数据库中判断这俩人其实在不同的公司上班，这就是一个矛盾点。 类似的规则其实可以有很多，不在这里一一列出。</p>
+<p><img src="http://t11.baidu.com/it/u=2086250224,504274614&fm=173&app=25&f=JPEG?w=640&h=355&s=A012EC325F0254C2566F58D80200D0B2" alt="img"></p>
+<p><strong>基于规则提取特征</strong></p>
+<p>我们也可以基于规则从知识图谱中提取一些特征，而且这些特征一般基于深度的搜索比如 2 度，3 度甚至更高维度。比如我们可以问一个这样的问题：“申请人二度关系里有多少个实体触碰了黑名单？”，从图中我们很容观察到二度关系中有两个实体触碰了黑名单（黑名单由红色来标记）。等这些特征被提取之后，一般可以作为风险模型的输入。在此还是想说明一点，如果特征并不涉及深度的关系，其实传统的关系型数据库则足以满足需求。</p>
+<p><img src="http://t11.baidu.com/it/u=1060578160,1139020907&fm=173&app=25&f=JPEG?w=639&h=364&s=2032EC325F0264C0446978DA020050B2" alt="img"></p>
+<p><strong>基于模式的判断</strong></p>
+<p>这种方法比较适用于找出团体欺诈，它的核心在于通过一些模式来找到有可能存在风险的团体或者子图（sub-graph），然后对这部分子图做进一步的分析。 这种模式有很多种，在这里举几个简单的例子。 比如在下图中，三个实体共享了很多其他的信息，我们可以看做是一个团体，并对其做进一步的分析。</p>
+<p><img src="http://t12.baidu.com/it/u=3828566894,715445935&fm=173&app=25&f=JPEG?w=640&h=325&s=05F2EC329B8340C208C13D52020080F2" alt="img"></p>
+<p>再比如，我们也可以从知识图谱中找出强连通图，并把它标记出来，然后做进一步风险分析。强连通图意味着每一个节点都可以通过某种路径达到其他的点，也就说明这些节点之间有很强的关系。</p>
+<p><img src="http://t10.baidu.com/it/u=480692214,290401441&fm=173&app=25&f=JPEG?w=640&h=327&s=61728472DF324580425830D90200C0B2" alt="img"></p>
+<p>4.5.2 基于概率的方法</p>
+<p>除了基于规则的方法，也可以使用概率统计的方法。 比如社区挖掘、标签传播、聚类等技术都属于这个范畴。 对于这类技术，在本文里不做详细的讲解，感兴趣的读者可以参考相关文献。</p>
+<p>社区挖掘算法的目的在于从图中找出一些社区。对于社区，我们可以有多种定义，但直观上可以理解为社区内节点之间关系的密度要明显大于社区之间的关系密度。下面的图表示社区发现之后的结果，图中总共标记了三个不同的社区。一旦我们得到这些社区之后，就可以做进一步的风险分析。</p>
+<p>由于社区挖掘是基于概率的方法论，好处在于不需要人为地去定义规则，特别是对于一个庞大的关系网络来说，定义规则这事情本身是一件很复杂的事情。</p>
+<p><img src="http://t11.baidu.com/it/u=3112136647,1918214170&fm=173&app=25&f=JPEG?w=640&h=392&s=A036EC328F026EC05CFCCDDA0200D0B3" alt="img"></p>
+<p>标签传播算法的核心思想在于节点之间信息的传递。这就类似于，跟优秀的人在一起自己也会逐渐地变优秀是一个道理。因为通过这种关系会不断地吸取高质量的信息，最后使得自己也会不知不觉中变得更加优秀。具体细节不在这里做更多解释。</p>
+<p>相比规则的方法论，基于概率的方法的缺点在于：需要足够多的数据。如果数据量很少，而且整个图谱比较稀疏（Sparse），基于规则的方法可以成为我们的首选。尤其是对于金融领域来说，数据标签会比较少，这也是为什么基于规则的方法论还是更普遍地应用在金融领域中的主要原因。</p>
+<p>4.5.3 基于动态网络的分析</p>
+<p>以上所有的分析都是基于静态的关系图谱。所谓的静态关系图谱，意味着我们不考虑图谱结构本身随时间的变化，只是聚焦在当前知识图谱结构上。然而，我们也知道图谱的结构是随时间变化的，而且这些变化本身也可以跟风险有所关联。</p>
+<p>在下面的图中，我们给出了一个知识图谱 T 时刻和 T+1 时刻的结构，我们很容易看出在这两个时刻中间，图谱结构（或者部分结构）发生了很明显的变化，这其实暗示着潜在的风险。那怎么去判断这些结构上的变化呢？ 感兴趣的读者可以查阅跟“dynamic network mining”相关的文献。</p>
+<p><img src="http://t12.baidu.com/it/u=621530735,2369132207&fm=173&app=25&f=JPEG?w=639&h=302&s=6172A47297F3658044C084CE000010B2" alt="img"></p>
+<p>\5. 知识图谱在其他行业中的应用</p>
+<p>除了金融领域，知识图谱的应用可以涉及到很多其他的行业，包括医疗、教育、证券投资、推荐等等。其实，只要有关系存在，则有知识图谱可发挥价值的地方。 在这里简单举几个垂直行业中的应用。</p>
+<p>比如对于教育行业，我们经常谈论个性化教育、因材施教的理念。其核心在于理解学生当前的知识体系，而且这种知识体系依赖于我们所获取到的数据比如交互数据、评测数据、互动数据等等。为了分析学习路径以及知识结构，我们则需要针对于一个领域的概念知识图谱，简单来讲就是概念拓扑结构。在下面的图中，我们给出了一个非常简单的概念图谱：比如为了学习逻辑回归则需要先理解线性回归；为了学习 CNN，得对神经网络有所理解等等。所有对学生的评测、互动分析都离不开概念图谱这个底层的数据。</p>
+<p><img src="http://t11.baidu.com/it/u=2915145958,428470587&fm=173&app=25&f=JPEG?w=639&h=229&s=617284721134F6217FFE45D90200D0B2" alt="img"></p>
+<p>在证券领域，我们经常会关心比如“一个事件发生了，对哪些公司产生什么样的影响？” 比如有一个负面消息是关于公司 1 的高管，而且我们知道公司 1 和公司 2 有种很密切的合作关系，公司 2 有个主营产品是由公司 3 提供的原料基础上做出来的。</p>
+<p><img src="http://t12.baidu.com/it/u=819872987,394960907&fm=173&app=25&f=JPEG?w=640&h=278&s=1832EC12093153825FF4C54B0300F0B1" alt="img"></p>
+<p>其实有了这样的一个知识图谱，我们很容易回答哪些公司有可能会被这次的负面事件所影响。当然，仅仅是“有可能”，具体会不会有强相关性必须由数据来验证。所以在这里，知识图谱的好处就是把我们所需要关注的范围很快给我们圈定。接下来的问题会更复杂一些，比如既然我们知道公司 3 有可能被这次事件所影响，那具体影响程度有多大？ 对于这个问题，光靠知识图谱是很难回答的，必须要有一个影响模型、以及需要一些历史数据才能在知识图谱中做进一步推理以及计算。</p>
+<p>\6. 实践上的几点建议</p>
+<p>首先，知识图谱是一个比较新的工具，它的主要作用还是在于分析关系，尤其是深度的关系。所以在业务上，首先要确保它的必要性，其实很多问题可以用非知识图谱的方式来解决。</p>
+<p>知识图谱领域一个最重要的话题是知识的推理。 而且知识的推理是走向强人工智能的必经之路。但很遗憾的，目前很多语义网络的角度讨论的推理技术（比如基于深度学习，概率统计）很难在实际的垂直应用中落地。其实目前最有效的方式还是基于一些规则的方法论，除非我们有非常庞大的数据集。</p>
+<p>最后，还是要强调一点，<strong>知识图谱工程本身还是业务为重心，以数据为中心。不要低估业务和数据的重要性。</strong></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/23/%E6%89%8B%E6%92%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%EF%BC%88numpy%EF%BC%89/" rel="prev" title="手撕神经网络框架（numpy）">
+      <i class="fa fa-chevron-left"></i> 手撕神经网络框架（numpy）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/06/06/%E9%9F%B3%E6%A0%87/" rel="next" title="发音">
+      发音 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">如何从零开始搭建知识图谱？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

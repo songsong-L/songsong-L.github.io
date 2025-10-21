@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"songsong.host","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python实现视频转字符">
+<meta property="og:url" content="http://songsong.host/2019/08/11/python%E5%AE%9E%E7%8E%B0%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6/index.html">
+<meta property="og:site_name" content="songsong的垃圾堆">
+<meta property="og:description" content="抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190811221154805.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-08-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T12:34:12.911Z">
+<meta property="article:author" content="songsong">
+<meta property="article:tag" content="python实现视频转字符">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190811221154805.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://songsong.host/2019/08/11/python%E5%AE%9E%E7%8E%B0%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>python实现视频转字符 | songsong的垃圾堆</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?252cd4eb7b89c9ca642359b3afc2d527";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">songsong的垃圾堆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">收废铜烂铁~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">59</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">80</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://songsong.host/2019/08/11/python%E5%AE%9E%E7%8E%B0%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6/">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/face.jpg">
+      <meta itemprop="name" content="songsong">
+      <meta itemprop="description" content="我就是我，不一样的烟火">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="songsong的垃圾堆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python实现视频转字符
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-11 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-11T00:00:00+08:00">2019-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-26 20:34:12" itemprop="dateModified" datetime="2022-03-26T20:34:12+08:00">2022-03-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读" id="busuanzi_container_page_pv" style="">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/08/11/python%E5%AE%9E%E7%8E%B0%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/08/11/python%E5%AE%9E%E7%8E%B0%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。"><a href="#抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。" class="headerlink" title="抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。"></a><em>抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。</em></h3><p>![在这里插入图片描述](<a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/2019081121230937.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/2019081121230937.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70</a> =300x)</p>
+<h3 id="大概思路："><a href="#大概思路：" class="headerlink" title="大概思路："></a>大概思路：</h3><ol>
+<li>先将原视频分割为一张一张的图片</li>
+<li>再将这些图片转换为字符型的</li>
+<li>又将这些字符型的图片串成视频即可</li>
+</ol>
+<h3 id="废话不多说，完整代码如下，有注释说明，只需更改一下视频路径及其存储路径即可。"><a href="#废话不多说，完整代码如下，有注释说明，只需更改一下视频路径及其存储路径即可。" class="headerlink" title="废话不多说，完整代码如下，有注释说明，只需更改一下视频路径及其存储路径即可。"></a><em>废话不多说，完整代码如下，有注释说明，只需更改一下视频路径及其存储路径即可。</em></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Created on Sun Aug 11 20:55:29 2019</span><br><span class="line"></span><br><span class="line">@author: Administrator</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import cv2</span><br><span class="line">import os</span><br><span class="line">from PIL import Image, ImageDraw, ImageFont</span><br><span class="line"></span><br><span class="line">WIDTH &#x3D; 80  #定义输出画面的宽度</span><br><span class="line">HEIGHT &#x3D; 45  #定义</span><br><span class="line">ascii_char &#x3D; list(&quot;$@B%8&amp;WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft&#x2F;\|()1&#123;&#125;[]?-_+~&lt;&gt;i!lI;:,\&quot;^&#96;&#39;. &quot;)  #所用字符列表</span><br><span class="line"></span><br><span class="line"># 将256灰度映射到70个字符上</span><br><span class="line">def get_char(r, g, b, alpha&#x3D;256):  # alpha透明度</span><br><span class="line">    if alpha &#x3D;&#x3D; 0:</span><br><span class="line">        return &#39; &#39;</span><br><span class="line">    length &#x3D; len(ascii_char)</span><br><span class="line">    gray &#x3D; int(0.2126 * r + 0.7152 * g + 0.0722 * b)  # 计算灰度</span><br><span class="line">    unit &#x3D; (256.0 + 1) &#x2F; length</span><br><span class="line">    return ascii_char[int(gray &#x2F; unit)]  # 不同的灰度对应着不同的字符</span><br><span class="line"></span><br><span class="line">#通过灰度来区分色块</span><br><span class="line">#该部分以下和灰度值字符画区别所在</span><br><span class="line">def PictureToChar(sourcePath,storagePath):</span><br><span class="line">    print(&quot;开始将图片转为字符型：&quot;)</span><br><span class="line">    # 循环最多读取1100张图片，自己可更改</span><br><span class="line">    for icount in range(1, 1100):</span><br><span class="line">        IMG &#x3D; sourcePath+str(icount)+&#39;.jpg&#39; #文件路径</span><br><span class="line">        if os.path.exists(IMG):</span><br><span class="line">            im &#x3D; Image.open(IMG)</span><br><span class="line">            #视频分割后图片的长与宽，与合成视频时要相统一,保存下来，合成字符视频时用到</span><br><span class="line">            sourceImage&#x3D;im</span><br><span class="line">            WIDTH &#x3D; int(im.width&#x2F;6) #高度比例为原图的1&#x2F;6较好，由于字体宽度</span><br><span class="line">            HEIGHT &#x3D; int(im.height&#x2F;15)  #高度比例为原图的1&#x2F;15较好，由于字体高度</span><br><span class="line">            im_txt &#x3D; Image.new(&quot;RGB&quot;,(im.width,im.height),(255,255,255))</span><br><span class="line">            im &#x3D; im.resize((WIDTH,HEIGHT),Image.NEAREST)</span><br><span class="line">            txt &#x3D; &quot;&quot;</span><br><span class="line">            colors &#x3D; []</span><br><span class="line">            for i in range(HEIGHT):</span><br><span class="line">                for j in range(WIDTH):</span><br><span class="line">                    pixel &#x3D; im.getpixel((j,i))</span><br><span class="line">                    colors.append((pixel[0],pixel[1],pixel[2]))#记录像素颜色信息</span><br><span class="line">                    if(len(pixel) &#x3D;&#x3D; 4):</span><br><span class="line">                        txt +&#x3D; get_char(pixel[0],pixel[1],pixel[2],pixel[3])</span><br><span class="line">                    else:</span><br><span class="line">                        txt +&#x3D; get_char(pixel[0],pixel[1],pixel[2])</span><br><span class="line">                txt +&#x3D; &#39;\n&#39;</span><br><span class="line">                colors.append((255,255,255))</span><br><span class="line">            dr &#x3D; ImageDraw.Draw(im_txt)</span><br><span class="line">            font&#x3D;ImageFont.load_default().font#获取字体</span><br><span class="line">            x&#x3D;y&#x3D;0</span><br><span class="line">            #获取字体的宽高</span><br><span class="line">            font_w,font_h&#x3D;font.getsize(txt[1])</span><br><span class="line">            font_h *&#x3D; 1.37 #调整后更佳</span><br><span class="line">            #ImageDraw为每个ascii码进行上色</span><br><span class="line">            for i in range(len(txt)):</span><br><span class="line">                if(txt[i]&#x3D;&#x3D;&#39;\n&#39;):</span><br><span class="line">                    x+&#x3D;font_h</span><br><span class="line">                    y&#x3D;-font_w</span><br><span class="line">                dr.text([y,x],txt[i],colors[i])</span><br><span class="line">                y+&#x3D;font_w</span><br><span class="line">            #输出</span><br><span class="line">            name &#x3D; str(icount) + &#39;.jpg&#39;</span><br><span class="line">            print(name)</span><br><span class="line">            im_txt.save(storagePath + str(icount) + &#39;.jpg&#39;)</span><br><span class="line">    return sourceImage</span><br><span class="line"></span><br><span class="line">def charToVideo(storagePath,sourceImage): </span><br><span class="line">    # 设置视频编码器,这里使用使用MJPG编码器</span><br><span class="line">    #fourcc &#x3D; cv2.VideoWriter_fourcc(*&#39;MJPG&#39;)</span><br><span class="line">    </span><br><span class="line">    #这里是mp4格式</span><br><span class="line">    fourcc &#x3D; cv2.VideoWriter_fourcc(&#39;D&#39;, &#39;I&#39;, &#39;V&#39;, &#39;X&#39;)#不同视频编码对应不同视频格式（例：&#39;I&#39;,&#39;4&#39;,&#39;2&#39;,&#39;0&#39; 对应avi格式）</span><br><span class="line"> </span><br><span class="line">    print(&quot;开始将字符型图片变为视频：&quot;)</span><br><span class="line">    #输出视频参数设置,包含视频文件名、编码器、帧率、视频宽高(此处参数需和字符图片大小一致)</span><br><span class="line">    videoWriter &#x3D; cv2.VideoWriter(storagePath+&#39;test.mp4&#39;, fourcc, 30.0, (sourceImage.width,sourceImage.height))</span><br><span class="line">     </span><br><span class="line">    #循环最多读取1100张图片，自己可更改</span><br><span class="line">    for i in range(1, 1100):</span><br><span class="line">        filename &#x3D; storagePath +str(i)+&#39;.jpg&#39;</span><br><span class="line">        # 判断图片是否存在</span><br><span class="line">        if os.path.exists(filename):</span><br><span class="line">            img &#x3D; cv2.imread(filename&#x3D;filename)</span><br><span class="line">            # 在一个给定的时间内(单位ms)等待用户按键触发,100ms</span><br><span class="line">            cv2.waitKey(100)</span><br><span class="line">            # 将图片写入视频中</span><br><span class="line">            videoWriter.write(img)</span><br><span class="line">            print(str(i) + &#39;.jpg&#39; + &#39; done!&#39;)</span><br><span class="line">    # 视频释放</span><br><span class="line">    videoWriter.release()</span><br><span class="line">    print(&quot;字符视频已成功生成!!!&quot;)</span><br><span class="line">    </span><br><span class="line">def VideoToPicture(path):</span><br><span class="line">    # 在当前目录下新建文件夹</span><br><span class="line">    folder_path &#x3D; &quot;imgbear&#x2F;&quot;</span><br><span class="line">    os.makedirs(folder_path)</span><br><span class="line">    # 进行视频的载入</span><br><span class="line">    vc &#x3D; cv2.VideoCapture(path)</span><br><span class="line">    print(&quot;开始将原视频分割为图片：&quot;)</span><br><span class="line">    c &#x3D; 0</span><br><span class="line">    # 判断载入的视频是否可以打开</span><br><span class="line">    ret &#x3D; vc.isOpened()</span><br><span class="line">    # 循环读取视频帧</span><br><span class="line">    while ret:</span><br><span class="line">        c &#x3D; c + 1</span><br><span class="line">        # 进行单张图片的读取,ret的值为True或者Flase,frame表示读入的图片</span><br><span class="line">        ret, frame &#x3D; vc.read()</span><br><span class="line">        if ret:</span><br><span class="line">            # 存储为图像</span><br><span class="line">            cv2.imwrite(folder_path+str(c) + &#39;.jpg&#39;, frame)</span><br><span class="line">            # 输出图像名称</span><br><span class="line">            print(folder_path+str(c) + &#39;.jpg&#39;)</span><br><span class="line">            # 在一个给定的时间内(单位ms)等待用户按键触发,1ms</span><br><span class="line">            cv2.waitKey(1)</span><br><span class="line">        else:</span><br><span class="line">            break</span><br><span class="line">    # 视频释放</span><br><span class="line">    vc.release()</span><br><span class="line">    return folder_path</span><br><span class="line">    </span><br><span class="line">if __name__&#x3D;&#x3D;&#39;__main__&#39;:  </span><br><span class="line">    </span><br><span class="line">    #视频所在路径</span><br><span class="line">    path&#x3D;&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;Administrator&#x2F;&#x2F;Desktop&#x2F;&#x2F;aa.mp4&#39;</span><br><span class="line">    #存储路径，路径上的文件夹必须已经存在</span><br><span class="line">    storagePath&#x3D;&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;Administrator&#x2F;&#x2F;Desktop&#x2F;&#x2F;1&#x2F;&#x2F;&#39;</span><br><span class="line">    sourcePath &#x3D; VideoToPicture(path)</span><br><span class="line">    sourceImage &#x3D; PictureToChar(sourcePath,storagePath) </span><br><span class="line">    charToVideo(storagePath,sourceImage)</span><br></pre></td></tr></table></figure>
+<h3 id="最后结果如下："><a href="#最后结果如下：" class="headerlink" title="最后结果如下："></a>最后结果如下：</h3><p><img src="https://img-blog.csdnimg.cn/20190811221154805.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nvbmdzb25nTA==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+    </div>
+
+    
+    
+    <!-- 文章末尾分割线 -->
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------
+        <i class="fa fa-paw"></i>Thank you for reading<i class="fa fa-paw"></i>
+        -------------
+    </div>
+<div>
+    <hr/>
+</div>
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python%E5%AE%9E%E7%8E%B0%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6/" rel="tag"># python实现视频转字符</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/11/%E6%95%A3%E5%88%97%E8%A1%A8/" rel="prev" title="散列表">
+      <i class="fa fa-chevron-left"></i> 散列表
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/15/scanf%E5%87%BD%E6%95%B0/" rel="next" title="scanf函数">
+      scanf函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%96%E9%9F%B3%E4%B8%8A%E7%9C%8B%E5%88%B0%E9%82%A3%E7%A7%8D%E6%8A%8A%E8%88%9E%E8%B9%88%E5%8F%98%E6%88%90%E5%AD%97%E7%AC%A6%E5%9E%8B%E7%9A%84%E5%B0%8F%E8%A7%86%E9%A2%91%EF%BC%8C%E5%A6%82%E4%B8%8B%E5%9B%BE%E9%82%A3%E7%A7%8D%E3%80%82%E5%B0%B1%E4%B8%80%E7%9B%B4%E6%83%B3%E5%BC%84%E4%B8%80%E4%B8%AA%E3%80%82%E5%8F%82%E8%80%83%E4%BA%86%E7%BD%91%E4%B8%8A%E5%86%99%E7%9A%84%E5%A5%BD%E5%A4%9A%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86%E4%BA%86%E4%B8%80%E4%B8%AA%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">抖音上看到那种把舞蹈变成字符型的小视频，如下图那种。就一直想弄一个。参考了网上写的好多代码，自己整理了一个。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%A6%82%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">大概思路：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%9F%E8%AF%9D%E4%B8%8D%E5%A4%9A%E8%AF%B4%EF%BC%8C%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%E5%A6%82%E4%B8%8B%EF%BC%8C%E6%9C%89%E6%B3%A8%E9%87%8A%E8%AF%B4%E6%98%8E%EF%BC%8C%E5%8F%AA%E9%9C%80%E6%9B%B4%E6%94%B9%E4%B8%80%E4%B8%8B%E8%A7%86%E9%A2%91%E8%B7%AF%E5%BE%84%E5%8F%8A%E5%85%B6%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84%E5%8D%B3%E5%8F%AF%E3%80%82"><span class="nav-number">3.</span> <span class="nav-text">废话不多说，完整代码如下，有注释说明，只需更改一下视频路径及其存储路径即可。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">最后结果如下：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="songsong"
+      src="/images/face.jpg">
+  <p class="site-author-name" itemprop="name">songsong</p>
+  <div class="site-description" itemprop="description">我就是我，不一样的烟火</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:songsong@whut.edu.cn" title="E-Mail → mailto:songsong@whut.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15287480608" title="WeChat → 15287480608"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+  </div>
+
+
+      </div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2611717571&auto=1&height=66"></iframe>
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="200" height="200" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BDD/" rel="tag">BDD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BugBash/" rel="tag">BugBash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingPages/" rel="tag">CodingPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GithubPages/" rel="tag">GithubPages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Next/" rel="tag">Next</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OWASP/" rel="tag">OWASP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TED/" rel="tag">TED</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/" rel="tag">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6%E5%8D%95/" rel="tag">书单</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F/" rel="tag">人生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92/" rel="tag">人生规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6/" rel="tag">告别拖延</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95/" rel="tag">敏捷开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%85%E8%A1%8C/" rel="tag">旅行</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AA%E6%9D%A5/" rel="tag">未来</a><span 
+        </canvas>
+    </div>
+</div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="" style="text-align:center;">
+        
+
+        
+
+<div class="copyright" color="#fff">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">songsong</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:35</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+<style>
+.comments {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ .v {
+  opacity: 1; 
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.vpower{
+  display: none;
+}
+ .txt-right {
+  display: none;
+}
+</style>
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'pNwyIX9xDf3XglQVPG38RGQj-gzGzoHsz',
+      appKey     : 'Ie0iqVSpNsVRau5BDLh7jbvn',
+      placeholder: "说点什么。。。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<div id="QPlayer">
+			<div id="pContent">
+				<div id="player">
+					<span class="cover"></span>
+					<div class="ctrl">
+						<div class="musicTag marquee">
+							<strong>Title</strong>
+							 <span> - </span>
+							<span class="artist">Artist</span>
+						</div>
+						<div class="progress">
+							<div class="timer left">0:00</div>
+							<div class="contr">
+								<div class="rewind icon"></div>
+								<div class="playback icon"></div>
+								<div class="fastforward icon"></div>
+							</div>
+							<div class="right">
+								<div class="liebiao icon"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ssBtn">
+					
+					<div class="adf">
+						
+					</div>
+				</div>
+			</div>
+			<ol id="playlist"></ol>
+		</div>
+		<script>
+		  var playlist = [];
+
+  playlist.push({title:'&#x8FD8;&#x6709;&#x6211;',artist:'&#x5411;&#x6587;&#x6D9B;',mp3:'https://music.163.com/song/media/outer/url?id=1403774242.mp3',cover:'http://p1.music.126.net/IcXlFwqDL127QI3oHvyeRg==/109951164489393810.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x613F;',artist:'&#x8471;&#x9999;&#x79D1;&#x5B66;&#x5BB6;',mp3:'https://music.163.com/song/media/outer/url?id=1922701695.mp3',cover:'http://p1.music.126.net/3quyghcGASgwNjjXZfqqhg==/109951167081686500.jpg'})
+		  
+		  playlist.push({title:'&#x5982;&#x679C;&#x8FD9;&#x5C31;&#x662F;&#x7231;&#x60C5;',artist:'&#x5F20;&#x9753;&#x9896;',mp3:'https://music.163.com/song/media/outer/url?id=1444086303.mp3',cover:'https://p1.music.126.net/GK7EB01AIEE9-qHkBi-3vg==/89060441862562.jpg'})
+		  
+		  playlist.push({title:'&#x5343;&#x79A7;',artist:'&#x5F90;&#x79C9;&#x9F99;',mp3:'https://music.163.com/song/media/outer/url?id=522510615.mp3',cover:'https://y.gtimg.cn/music/photo_new/T002R300x300M000004UOSJ5117bcd.jpg'})
+		  
+		  playlist.push({title:'&#x5E74;&#x5EA6;&#x4E4B;&#x6B4C;',artist:'&#x8C22;&#x5B89;&#x742A;',mp3:'https://music.163.com/song/media/outer/url?id=308169.mp3',cover:'http://p1.music.126.net/SkSda5laDTH73h_a9ZYEig==/109951164146248533.jpg'})
+		  
+		  playlist.push({title:'&#x8FB9;&#x8D70;&#x8FB9;&#x5531;',artist:'&#x674E;&#x8363;&#x6D69;',mp3:'https://music.163.com/song/media/outer/url?id=31134197.mp3',cover:'https://p1.music.126.net/4Pu7M0q88fVVoo1ZFS_nmw==/3408486047237011.jpg'})
+		
+		  var isRotate = true;
+		  var autoplay = false;
+		</script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":300},"mobile":{"show":false},"react":{"opacityDefault":1,"opacityOnHover":1},"log":false,"tagMode":false});</script></body>
+</html>
+		<script src="/js/jquery-1.11.0.min.js"></script>
+		<script src="/js/player.js"></script>
+<!-- ҳ����С���� -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
